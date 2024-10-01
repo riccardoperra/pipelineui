@@ -12,7 +12,7 @@ const getWorkflow = cache(async () => {
   'use server';
 
   return readFile(
-    join(import.meta.dirname, '../../../public/node.js.yml'),
+    join(import.meta.dirname, '../../../public/codeimage-prod-deploy.yml'),
     'utf-8',
   );
 }, 'nodejs');
