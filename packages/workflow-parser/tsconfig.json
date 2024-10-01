@@ -2,6 +2,7 @@
   "include": [
     "src",
     "scripts",
+    "test",
     "workflow-parser/node.ts"
   ],
   "compilerOptions": {

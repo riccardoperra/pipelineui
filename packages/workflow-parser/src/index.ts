@@ -3,7 +3,32 @@ import {
   NoOperationTraceWriter,
   parseWorkflow,
   TraceWriter,
+  isString,
+  isBoolean,
+  isLiteral,
+  isMapping,
+  isNumber,
+  isScalar,
+  WorkflowTemplate,
+  isSequence,
+  ParseWorkflowResult,
+  isBasicExpression,
 } from '@actions/workflow-parser';
+
+export {
+  isString,
+  isBoolean,
+  isLiteral,
+  isMapping,
+  isNumber,
+  isScalar,
+  isSequence,
+  isBasicExpression,
+};
+
+export * as Tokens from '@actions/workflow-parser/templates/tokens/index';
+
+export type {WorkflowTemplate, ParseWorkflowResult};
 
 const trace: TraceWriter = new NoOperationTraceWriter();
 

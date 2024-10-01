@@ -12,5 +12,10 @@
   "license": "ISC",
   "devDependencies": {
     "prettier": "^3.3.3"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@actions/workflow-parser@0.3.13": "patches/@actions__workflow-parser@0.3.13.patch"
+    }
   }
 }

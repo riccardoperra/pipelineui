@@ -1,0 +1,144 @@
+{
+  "events": {
+    "push": {
+      "branches": [
+        "$default-branch"
+      ]
+    },
+    "pull_request": {
+      "branches": [
+        "$default-branch"
+      ]
+    }
+  },
+  "jobs": [
+    {
+      "type": "job",
+      "id": "test",
+      "name": "test",
+      "if": {
+        "type": 3,
+        "expr": "success()"
+      },
+      "runs-on": "ubuntu-latest",
+      "steps": [
+        {
+          "id": "__actions_checkout",
+          "if": {
+            "type": 3,
+            "expr": "success()"
+          },
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "id": "__actions_setup-node",
+          "name": {
+            "type": 3,
+            "expr": "format('Use Node.js {0}', matrix.node-version)"
+          },
+          "if": {
+            "type": 3,
+            "expr": "success()"
+          },
+          "uses": "actions/setup-node@v4"
+        },
+        {
+          "id": "__run",
+          "if": {
+            "type": 3,
+            "expr": "success()"
+          },
+          "run": "npm ci"
+        },
+        {
+          "id": "__run_2",
+          "if": {
+            "type": 3,
+            "expr": "success()"
+          },
+          "run": "npm run build --if-present"
+        },
+        {
+          "id": "__run_3",
+          "if": {
+            "type": 3,
+            "expr": "success()"
+          },
+          "run": "npm test"
+        }
+      ]
+    },
+    {
+      "type": "job",
+      "id": "build",
+      "name": "build",
+      "if": {
+        "type": 3,
+        "expr": "success()"
+      },
+      "strategy": {
+        "type": 2,
+        "map": [
+          {
+            "Key": "matrix",
+            "Value": {
+              "type": 2,
+              "map": [
+                {
+                  "Key": "node-version",
+                  "Value": {
+                    "type": 1,
+                    "seq": [
+                      "18.x",
+                      "20.x",
+                      "22.x"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "runs-on": "ubuntu-latest",
+      "steps": [
+        {
+          "id": "__actions_checkout",
+          "if": {
+            "type": 3,
+            "expr": "success()"
+          },
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "id": "__actions_setup-node",
+          "name": {
+            "type": 3,
+            "expr": "format('Use Node.js {0}', matrix.node-version)"
+          },
+          "if": {
+            "type": 3,
+            "expr": "success()"
+          },
+          "uses": "actions/setup-node@v4"
+        },
+        {
+          "id": "__run",
+          "if": {
+            "type": 3,
+            "expr": "success()"
+          },
+          "run": "npm ci"
+        },
+        {
+          "id": "__run_2",
+          "if": {
+            "type": 3,
+            "expr": "success()"
+          },
+          "run": "npm run build --if-present"
+        }
+      ]
+    }
+  ]
+}
