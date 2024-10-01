@@ -1,0 +1,42 @@
+diff --git a/dist/model/converter/job.js b/dist/model/converter/job.js
+index 691b3776ca03c5dc6e489c62b2f22ca4cacac8fd..9f6ecf2db5b88ba626674a43350e4f95b83a9827 100644
+--- a/dist/model/converter/job.js
++++ b/dist/model/converter/job.js
+@@ -19,6 +19,7 @@ export function convertJob(context, jobKey, token) {
+     let workflowJobInputs;
+     let inheritSecrets = false;
+     let workflowJobSecrets;
++    let ifValue = 'success()';
+     for (const item of token) {
+         const propertyName = item.key.assertString("job property name");
+         switch (propertyName.value) {
+@@ -83,6 +84,11 @@ export function convertJob(context, jobKey, token) {
+                     workflowJobInputs = item.value.assertMapping("uses-with value");
+                 });
+                 break;
++            case "if": 
++                handleTemplateTokenErrors(item.value, context, undefined, () => {
++                    ifValue = item.value.expr;
++                });
++                break;    
+             case "secrets":
+                 if (isString(item.value) && item.value.value === "inherit") {
+                     inheritSecrets = true;
+@@ -101,7 +107,7 @@ export function convertJob(context, jobKey, token) {
+             id: jobKey,
+             name: jobName(name, jobKey),
+             needs: needs || [],
+-            if: new BasicExpressionToken(undefined, undefined, "success()", undefined, undefined, undefined),
++            if: new BasicExpressionToken(undefined, undefined, ifValue, undefined, undefined, undefined),
+             ref: workflowJobRef,
+             "input-definitions": undefined,
+             "input-values": workflowJobInputs,
+@@ -119,7 +125,7 @@ export function convertJob(context, jobKey, token) {
+             id: jobKey,
+             name: jobName(name, jobKey),
+             needs,
+-            if: new BasicExpressionToken(undefined, undefined, "success()", undefined, undefined, undefined),
++            if: new BasicExpressionToken(undefined, undefined, ifValue, undefined, undefined, undefined),
+             env,
+             concurrency,
+             environment,
