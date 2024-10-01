@@ -13,7 +13,7 @@ export function Editor(props: EditorProps) {
     <div class={styles.editor}>
       <LeftSidebar>Content</LeftSidebar>
 
-      <Canvas />
+      <Canvas template={props.template} />
 
       <LeftSidebar>
         <JobPanelEditor />
