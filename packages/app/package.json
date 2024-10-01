@@ -8,9 +8,13 @@
     "version": "vinxi version"
   },
   "dependencies": {
+    "@codeui/kit": "^0.1.2",
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.14.7",
     "@solidjs/start": "^1.0.8",
+    "@vanilla-extract/css": "^1.16.0",
+    "@vanilla-extract/recipes": "^0.5.5",
+    "@vanilla-extract/vite-plugin": "^4.0.16",
     "solid-js": "^1.9.1",
     "vinxi": "^0.4.3"
   },
