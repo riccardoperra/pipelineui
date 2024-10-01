@@ -12,3 +12,8 @@ workflows. Main issues are also related to the exported format, which seems to h
 
 - Package is now re-bundled with ESM and cjs interop, in order to be used across different environments.
 - Update the `if` expression parsing, which now returns the raw text instead of a `success()` placeholder.
+
+## Development
+
+This package contains a `local` folder which is a snapshot of @actions/workflow-parser@0.3.13.
+In order to apply patch to the package, develop on it, then call the `patch-parser` command.
