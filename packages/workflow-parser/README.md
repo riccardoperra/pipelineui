@@ -1,6 +1,6 @@
 # @pipelineui/workflow-parser
 
-> NOTE: this is just a patch of the
+> Note: this is just a patch of the
 > existing package [@actions/workflow-parser](https://github.com/actions/languageservices/tree/main/workflow-parser)
 
 ## Motivation
