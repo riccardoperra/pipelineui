@@ -22,6 +22,9 @@ importers:
       '@codeui/kit':
         specifier: ^0.1.2
         version: 0.1.2(@types/node@22.7.4)(solid-js@1.9.1)(terser@5.34.1)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
+      '@pipelineui/workflow-parser':
+        specifier: workspace:*
+        version: link:../workflow-parser
       '@solidjs/meta':
         specifier: ^0.29.4
         version: 0.29.4(solid-js@1.9.1)
@@ -72,7 +75,7 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1(@types/node@22.7.4)(jsdom@25.0.1)(terser@5.34.1)
 
-  packages/workflow-parser/local:
+  packages/workflow-parser/snapshot:
     dependencies:
       '@actions/expressions':
         specifier: ^0.3.13
