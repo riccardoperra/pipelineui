@@ -16,5 +16,5 @@ workflows. Main issues are also related to the exported format, which seems to h
 
 ## Development
 
-This package contains a `local` folder which is a snapshot of @actions/workflow-parser@0.3.13.
+This package contains a `snapshot` folder which is a snapshot of @actions/workflow-parser@0.3.13.
 In order to apply patch to the package, develop on it, then call the `patch-parser` command.

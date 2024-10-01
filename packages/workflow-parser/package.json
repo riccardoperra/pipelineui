@@ -13,7 +13,7 @@
   "scripts": {
     "build": "tsup",
     "test": "vitest",
-    "patch-parser": "pnpm patch-commit ./local"
+    "patch-parser": "pnpm patch-commit ./snapshot"
   },
   "keywords": [],
   "author": "",
