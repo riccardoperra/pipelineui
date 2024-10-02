@@ -6,9 +6,11 @@ import {Canvas} from './Canvas/Canvas';
 import {EditorHeader} from './Header/Header';
 import {provideState} from 'statebuilder';
 import {EditorUiStore} from './store/ui.store';
-import {Show} from 'solid-js';
+import {Match, Show, Switch} from 'solid-js';
+import {YamlEditor} from './YamlEditor/YamlEditor';
 
 interface EditorProps {
+  content: string;
   template: WorkflowTemplate;
 }
 
@@ -19,9 +21,17 @@ export function Editor(props: EditorProps) {
     <div>
       <EditorHeader />
       <div class={styles.editor}>
-        <Show when={editorUi.get.leftPanel !== 'none' && editorUi.get}>
+        <Show
+          when={editorUi.get.leftPanel !== 'none' && editorUi.get.leftPanel}
+        >
           {leftPanel => (
             <LeftSidebar>
+              <Switch>
+                <Match when={leftPanel() === 'code'}>
+                  <YamlEditor code={props.content} setCode={() => {}} />
+                </Match>
+              </Switch>
+
               <JobPanelEditor />
             </LeftSidebar>
           )}

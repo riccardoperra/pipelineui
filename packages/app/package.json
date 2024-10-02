@@ -8,7 +8,12 @@
     "version": "vinxi version"
   },
   "dependencies": {
+    "@codemirror/lang-yaml": "^6.1.1",
+    "@codemirror/language": "^6.10.3",
+    "@codemirror/state": "^6.4.1",
+    "@codemirror/view": "^6.34.1",
     "@codeui/kit": "^0.1.2",
+    "@lezer/highlight": "^1.2.1",
     "@pipelineui/workflow-parser": "workspace:*",
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.14.7",
@@ -16,6 +21,7 @@
     "@vanilla-extract/css": "^1.16.0",
     "@vanilla-extract/recipes": "^0.5.5",
     "@vanilla-extract/vite-plugin": "^4.0.16",
+    "solid-codemirror": "^2.3.1",
     "solid-js": "^1.9.1",
     "statebuilder": "^0.6.0",
     "vinxi": "^0.4.3"

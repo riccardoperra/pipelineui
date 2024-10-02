@@ -5,7 +5,7 @@ import {} from '@codeui/kit';
 import {appTheme} from '../../../ui/theme.css';
 
 export const [sidebarTheme, sidebarVars] = createTheme({
-  width: '260px',
+  width: '450px',
   topOffset: '40px',
 });
 

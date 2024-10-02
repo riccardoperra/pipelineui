@@ -32,7 +32,9 @@ export default function EditorPage() {
 
   return (
     <Show when={template()}>
-      {template => <Editor template={template()} />}
+      {template => (
+        <Editor content={workflowContent() ?? ''} template={template()} />
+      )}
     </Show>
   );
 }
