@@ -11,7 +11,7 @@ export interface CanvasProps {
 export function Canvas(props: CanvasProps) {
   return (
     <div class={styles.canvasContainer}>
-      <FlowContainer>
+      <FlowContainer template={props.template}>
         <For each={props.template.jobs}>{job => <FlowItem job={job} />}</For>
       </FlowContainer>
     </div>

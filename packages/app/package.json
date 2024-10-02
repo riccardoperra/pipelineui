@@ -9,15 +9,18 @@
   },
   "dependencies": {
     "@codeui/kit": "^0.1.2",
+    "@pipelineui/workflow-parser": "workspace:*",
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.14.7",
     "@solidjs/start": "^1.0.8",
     "@vanilla-extract/css": "^1.16.0",
     "@vanilla-extract/recipes": "^0.5.5",
     "@vanilla-extract/vite-plugin": "^4.0.16",
-    "@pipelineui/workflow-parser": "workspace:*",
+    "elkjs": "^0.9.3",
     "solid-js": "^1.9.1",
-    "vinxi": "^0.4.3"
+    "statebuilder": "^0.6.0",
+    "vinxi": "^0.4.3",
+    "web-worker": "^1.3.0"
   },
   "engines": {
     "node": ">=18"
