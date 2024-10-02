@@ -1,6 +1,19 @@
-import {flowContainer} from './FlowContainer.css';
-import type {ParentProps} from 'solid-js';
+import * as styles from './FlowContainer.css';
+import {onMount, type ParentProps} from 'solid-js';
+import {provideState} from 'statebuilder';
+import {CanvasStore} from '../store/canvas.store';
 
 export function FlowContainer(props: ParentProps) {
-  return <div class={flowContainer}>{props.children}</div>;
+  const canvasStore = provideState(CanvasStore);
+  let ref!: HTMLDivElement;
+
+  onMount(() => {
+    canvasStore.connectRef(ref);
+  });
+
+  return (
+    <div class={styles.flowContainer} ref={ref}>
+      {props.children}
+    </div>
+  );
 }

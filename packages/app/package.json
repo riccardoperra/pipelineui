@@ -21,6 +21,7 @@
     "@vanilla-extract/css": "^1.16.0",
     "@vanilla-extract/recipes": "^0.5.5",
     "@vanilla-extract/vite-plugin": "^4.0.16",
+    "panzoom": "^9.4.3",
     "solid-codemirror": "^2.3.1",
     "solid-js": "^1.9.1",
     "statebuilder": "^0.6.0",

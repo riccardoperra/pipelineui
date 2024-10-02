@@ -8,6 +8,8 @@ import {provideState} from 'statebuilder';
 import {EditorUiStore} from './store/ui.store';
 import {Match, Show, Switch} from 'solid-js';
 import {YamlEditor} from './YamlEditor/YamlEditor';
+import {EditorStatusBar} from './StatusBar/StatusBar';
+import {wrapper} from './Editor.css';
 
 interface EditorProps {
   content: string;
@@ -18,7 +20,7 @@ export function Editor(props: EditorProps) {
   const editorUi = provideState(EditorUiStore);
 
   return (
-    <div>
+    <div class={styles.wrapper}>
       <EditorHeader />
       <div class={styles.editor}>
         <Show
@@ -39,6 +41,7 @@ export function Editor(props: EditorProps) {
 
         <Canvas template={props.template} />
       </div>
+      <EditorStatusBar />
     </div>
   );
 }

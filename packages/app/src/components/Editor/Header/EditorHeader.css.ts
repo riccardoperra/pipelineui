@@ -9,7 +9,7 @@ export const header = style({
   paddingLeft: appTheme.spacing['4'],
   paddingRight: appTheme.spacing['4'],
   alignItems: 'center',
-  borderBottom: `1px solid ${themeVars.accent3}`,
+  backgroundColor: themeVars.accent1,
 });
 
 export const subHeader = style({
@@ -19,7 +19,8 @@ export const subHeader = style({
   paddingLeft: appTheme.spacing['2'],
   paddingRight: appTheme.spacing['2'],
   alignItems: 'center',
-  backgroundColor: themeVars.accent1,
+  backgroundColor: themeVars.accent2,
+  borderBottom: `1px solid ${themeVars.accent6}`,
 });
 
 export const headerRightSide = style({
