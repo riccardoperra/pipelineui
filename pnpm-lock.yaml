@@ -46,6 +46,9 @@ importers:
       solid-js:
         specifier: ^1.9.1
         version: 1.9.1
+      statebuilder:
+        specifier: ^0.6.0
+        version: 0.6.0
       vinxi:
         specifier: ^0.4.3
         version: 0.4.3(@types/node@22.7.4)(ioredis@5.4.1)(terser@5.34.1)

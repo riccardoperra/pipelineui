@@ -6,5 +6,9 @@ interface FlowItemProps {
 }
 
 export function FlowItem(props: FlowItemProps) {
-  return <div class={styles.flowItem}>{props.job.name?.toString()}</div>;
+  return (
+    <div class={styles.flowItem}>
+      <div class={styles.flowItemHeader}>{props.job.name?.toString()}</div>
+    </div>
+  );
 }

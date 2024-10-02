@@ -8,9 +8,9 @@ export const flowItem = style({
   vars: {
     [flowItemPadding]: appTheme.spacing['4'],
   },
-  backgroundColor: themeVars.accent3,
-  borderRadius: '4px',
-  padding: '12px',
+  backgroundColor: '#0a0a0a',
+  // backgroundColor: themeVars.accent2,
+  borderRadius: '6px',
   fontSize: '13px',
   paddingBottom: '12px',
   width: '250px',
@@ -19,10 +19,26 @@ export const flowItem = style({
   position: 'relative',
   display: 'inline-flex',
   flexDirection: 'column',
-  selectors: {},
-
+  overflow: 'hidden',
+  content: '',
   ':before': {
-    boxShadow:
-      'rgba(21, 21, 29, 0.12) 0px 1px 0px, rgba(21, 21, 29, 0.08) 0px 1px 3px, rgba(0, 0, 0, 0.08) 0px 2px 4px, rgba(0, 0, 0, 0.05) 0px 4px 8px',
+    content: '',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    borderRadius: '6px',
+    left: 0,
+    top: 0,
+    border: '1px solid #30363d',
   },
+});
+
+export const flowItemHeader = style({
+  height: '36px',
+  display: 'flex',
+  alignItems: 'center',
+  color: 'rgb(161,161,161)',
+  paddingLeft: appTheme.spacing['4'],
+  paddingRight: appTheme.spacing['4'],
+  // borderBottom: `1px solid hsla(0,0%,100%,.14)`,
 });
