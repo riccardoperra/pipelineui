@@ -8,7 +8,7 @@ export const canvasContainer = style({
   height: '100%',
   alignItems: 'flex-start',
   minWidth: 0,
-  backgroundImage: `radial-gradient(circle at 1px 1px, ${themeVars.accent4} 1px, ${themeVars.accent1} 0)`,
-  backgroundSize: '15px 15px',
+  backgroundImage: `radial-gradient(circle at 1px 1px, ${themeVars.accent3} 1px, ${themeVars.background} 0)`,
+  backgroundSize: '20px 20px',
   padding: '2rem',
 });

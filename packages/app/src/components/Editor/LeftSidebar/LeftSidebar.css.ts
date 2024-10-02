@@ -15,7 +15,7 @@ export const sidebar = recipe({
     {
       height: '100%',
       width: sidebarVars.width,
-      backgroundColor: themeVars.accent2,
+      backgroundColor: themeVars.accent1,
       color: themeVars.accent10,
       zIndex: 1,
       transition: 'background-color .2s, border .2s',
