@@ -3,161 +3,165 @@ import YAML, {
   Document,
   type ParsedNode,
   parseDocument,
-  Schema,
+  Scalar,
   YAMLMap,
   YAMLSeq,
-  Scalar,
-  YAMLSet,
 } from 'yaml';
-import {createMemo, createSignal} from 'solid-js';
-import {createStore, reconcile} from 'solid-js/store';
+import {createMemo, createSignal, untrack} from 'solid-js';
+import {reconcile} from 'solid-js/store';
 import {
   getWorkflowJson,
   type WorkflowTemplate,
 } from '@pipelineui/workflow-parser';
-import type {JobEnvironment} from '../Jobs/JobPanelEditor/Environment/EnvironmentControl';
-import type {WorkflowDispatchInput} from '../Properties/WorkflowDispatchForm/WorkflowDispatchForm';
+import type {WorkflowConcurrency} from '../Properties/WorkflowConcurrencyForm/WorkflowConcurrencyForm';
+import {withGithubYamlManager} from './plugins/githubYamlManager';
+import {withYamlDocumentSession} from './plugins/yamlSession';
+import {getStructureFromWorkflow} from './utils/getStructureFromWorkflow';
+
+export interface WorkflowDispatchInput {
+  name?: string;
+  type?: 'string' | 'choice' | 'boolean' | 'number' | 'environment';
+  deprecationMessage?: string;
+  required?: boolean;
+  // TODO: better type. also support expression!
+  default?: any;
+  description?: string;
+  options?: string[];
+}
+
+export interface WorkflowStructureEvents {
+  workflowDispatch: WorkflowDispatchInput[];
+}
+
+export type JobEnvironment = {
+  type: 'value' | 'reference';
+  name?: string;
+  url?: string;
+};
+
+export interface WorkflowStructureJob {
+  name: string;
+  runsOn: string;
+  needs: string[];
+  environment: JobEnvironment | null | undefined;
+}
+
+export interface WorkflowStructure {
+  name: string;
+  events: WorkflowStructureEvents;
+  jobs: WorkflowStructureJob[];
+}
 
 export interface EditorState {
   selectedJobId: string | null;
   template: WorkflowTemplate | null;
+  structure: WorkflowStructure;
+}
+
+export function getInitialWorkflowStructureState(): WorkflowStructure {
+  return {
+    name: '',
+    events: {
+      workflowDispatch: [],
+    },
+    jobs: [],
+  };
 }
 
 export const EditorStore = defineStore<EditorState>(() => ({
   selectedJobId: null,
   template: null,
-})).extend(_ => {
-  const [session, setSession] =
-    createSignal<Document.Parsed<ParsedNode, true>>();
+  structure: getInitialWorkflowStructureState(),
+}))
+  .extend(withYamlDocumentSession())
+  .extend(withGithubYamlManager())
+  .extend(_ => {
+    const [session, setSession] =
+      createSignal<Document.Parsed<ParsedNode, true>>();
 
-  const [notifier, setNotifier] = createSignal([], {equals: false});
+    const [notifier, setNotifier] = createSignal([], {equals: false});
 
-  const [jsonCode, setJsonCode] = createStore({});
-
-  const yamlCode = createMemo(() => {
-    notifier();
-    return session()?.toString() ?? '';
-  });
-
-  const yamlUpdater = (cb: () => void) => {
-    cb();
-    setNotifier([]);
-    setJsonCode(reconcile(session()!.toJSON()));
-    queueMicrotask(() => {
-      getWorkflowJson('./yaml.json', session()!.toString()!).template.then(
-        response => {
-          _.set('template', reconcile(response));
-        },
-      );
+    const yamlCode = createMemo(() => {
+      notifier();
+      return session()?.toString() ?? '';
     });
-  };
 
-  const findJob = (jobId: string) => {
-    const yaml = session()!;
-    const jobs = yaml.get('jobs') as YAMLMap<String, YAMLMap>;
-
-    return jobs.get(jobId);
-  };
-
-  return {
-    session,
-
-    sessionUpdate: {
-      setJobName: (jobId: string, name: string) => {
-        const job = findJob(jobId)!;
-        yamlUpdater(() => {
-          job.set('name', name);
-        });
-      },
-      setNeeds: (jobId: string, needs: string[]) => {
-        const job = findJob(jobId)!;
-        yamlUpdater(() => {
-          if (!job.has('needs')) {
-            job.set('needs', needs);
-          } else {
-            const needsSeq = job.get('needs') as YAMLSeq;
-            const jsonSeq = needsSeq.toJSON();
-            for (let i = 0; i < jsonSeq.length; i++) {
-              needsSeq.delete(0);
-            }
-            needs.forEach(need => needsSeq.add(need));
-          }
-        });
-      },
-      setEnvironment: (jobId: string, environment: JobEnvironment) => {
-        const job = findJob(jobId)!;
-        yamlUpdater(() => {
-          let node: YAMLMap | Scalar;
-          if (environment.type === 'value') {
-            node = new Scalar(environment.name);
-          } else {
-            node = new YAMLMap();
-            node.set('name', environment.name);
-            node.set('url', environment.url);
-          }
-          job.set('environment', node);
-        });
-      },
-      setWorkflowDispatch: (index: number, data: WorkflowDispatchInput) => {
-        const workflow = session()!;
-        yamlUpdater(() => {
-          let on = workflow.get('on') as YAMLMap<Scalar, YAMLMap> | null;
-          if (!on) {
-            on = new YAMLMap();
-            // TODO: should reorder
-            workflow.set(new Scalar('on'), on);
-            return;
-          }
-          let workflowDispatch = on.get('workflow_dispatch') as YAMLMap | null;
-          if (!workflowDispatch) {
-            workflowDispatch = new YAMLMap();
-            on.add(
-              new YAML.Pair(new Scalar('workflow_dispatch'), workflowDispatch),
-            );
-          }
-          let inputs = workflowDispatch.get('inputs') as YAMLMap<
-            Scalar,
-            YAMLMap
-          > | null;
-          if (!inputs) {
-            inputs = new YAMLMap();
-            workflowDispatch.add(new YAML.Pair(new Scalar('inputs'), inputs));
-          }
-          const {name, ...others} = data;
-          const inputAtIndex = inputs.items.at(index);
-          const input = new YAMLMap();
-          const pair = new YAML.Pair(new Scalar(name), input);
-          for (const [key, value] of Object.entries(others)) {
-            if (value !== null && value !== undefined) {
-              input.set(key, value);
-            }
-          }
-          if (!inputAtIndex) {
-            inputs.add(new YAML.Pair(new Scalar(name), input));
-          } else {
-            inputs.items[index] = pair;
-          }
-        });
-      },
-    },
-
-    yamlCode,
-    initEditSession(source: string): void {
-      setSession(
-        parseDocument(source, {
-          merge: false,
-          toStringDefaults: {
-            simpleKeys: true,
-            collectionStyle: 'any',
-            flowCollectionPadding: true,
+    const yamlUpdater = (cb: () => void) => {
+      cb();
+      setNotifier([]);
+      queueMicrotask(() => {
+        getWorkflowJson('./yaml.json', session()!.toString()!).template.then(
+          response => {
+            _.set('template', reconcile(response));
           },
-        }),
-      );
-      getWorkflowJson('./yaml.json', session()!.toString()!).template.then(
-        response => {
-          _.set('template', reconcile(response));
+        );
+      });
+    };
+
+    return {
+      session,
+
+      actions: {
+        workflowDispatch: {
+          addNew: (value: WorkflowDispatchInput) => {
+            const length = untrack(
+              () => _().structure.events.workflowDispatch.length,
+            );
+            _.set('structure', 'events', 'workflowDispatch', items => [
+              ...items,
+              value,
+            ]);
+            _.yamlSession.setWorkflowDispatch(length, value);
+          },
+          updateAll: (value: WorkflowDispatchInput[]) => {
+            _.set('structure', 'events', 'workflowDispatch', () => value);
+          },
+          updateByIndex: (index: number, value: WorkflowDispatchInput) => {
+            _.set('structure', 'events', 'workflowDispatch', index, value);
+            _.yamlSession.setWorkflowDispatch(index, value);
+          },
         },
-      );
-    },
-  };
-});
+      },
+
+      sessionUpdate: {
+        setConcurrency: (data: WorkflowConcurrency | null) => {
+          const workflow = session()!;
+          yamlUpdater(() => {
+            if (data === null) {
+              workflow.delete('concurrency');
+            } else {
+              const concurrency = new YAMLMap();
+              concurrency.set('group', data.group);
+              concurrency.set('cancel-in-progress', data.cancelInProgress);
+              workflow.set('concurrency', concurrency);
+            }
+          });
+        },
+      },
+
+      yamlCode,
+      initEditSession(source: string): void {
+        _.yamlSession.init(
+          parseDocument(source, {
+            merge: false,
+            toStringDefaults: {
+              simpleKeys: true,
+              collectionStyle: 'any',
+              flowCollectionPadding: true,
+            },
+          }),
+        );
+        const {result, template} = getWorkflowJson(
+          './yaml.json',
+          _.yamlSession.document()!.toString()!,
+        );
+        template.then(resolvedTemplate => {
+          _.set('template', reconcile(resolvedTemplate));
+          _.set(
+            'structure',
+            reconcile(getStructureFromWorkflow(result, resolvedTemplate)),
+          );
+        });
+      },
+    };
+  });

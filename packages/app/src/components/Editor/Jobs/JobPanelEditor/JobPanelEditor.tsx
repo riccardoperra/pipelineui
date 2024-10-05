@@ -1,24 +1,15 @@
-import {
-  createSelectOptions,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  SegmentedControl,
-  SegmentedControlItem,
-  Select,
-  TextField,
-} from '@codeui/kit';
+import {Select, TextField} from '@codeui/kit';
 import * as styles from './JobPanelEditor.css';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '../../store/editor.store';
 import {PanelHeader} from './Form/PanelHeader';
-import {FullWidthPanelRow, PanelRow, TwoColumnPanelRow} from './Form/PanelRow';
+import {FullWidthPanelRow} from './Form/PanelRow';
 import {PanelDivider} from './Form/PanelDivider';
 import {JobStepsForm} from './JobStepsForm/JobStepsForm';
-import {createEffect, createSignal, Match, onMount, Switch} from 'solid-js';
+import {createEffect, createSignal, Match, Switch} from 'solid-js';
 import {JobStepForm} from './JobStepsForm/JobStep/JobStepForm';
 import {useEditorContext} from '../../editor.context';
-import {createStore, unwrap} from 'solid-js/store';
+import {createStore} from 'solid-js/store';
 import {
   environmentConverters,
   isString,
@@ -127,7 +118,7 @@ export function JobPanelEditor() {
               value={form.name}
               onChange={value => {
                 setForm('name', value);
-                editorStore.sessionUpdate.setJobName(job()!.id.value!, value);
+                editorStore.yamlSession.setJobName(job()!.id.value!, value);
               }}
             />
           </FullWidthPanelRow>
@@ -153,7 +144,7 @@ export function JobPanelEditor() {
               value={form.needs}
               onChange={options => {
                 setForm('needs', options);
-                editorStore.sessionUpdate.setNeeds(job()!.id.value, options);
+                editorStore.yamlSession.setJobNeeds(job()!.id.value, options);
               }}
               size={'sm'}
               theme={'filled'}
@@ -170,30 +161,12 @@ export function JobPanelEditor() {
               value={form.environment}
               onValueChange={value => {
                 setForm('environment', value);
-                editorStore.sessionUpdate.setEnvironment(
+                editorStore.yamlSession.setJobEnvironment(
                   job()!.id.value,
                   value,
                 );
               }}
             />
-            {/*<Popover>*/}
-            {/*  <PopoverTrigger>Content</PopoverTrigger>*/}
-            {/*  <PopoverContent>*/}
-            {/*    <SegmentedControl>*/}
-            {/*      <SegmentedControlItem>Reference</SegmentedControlItem>*/}
-            {/*      <SegmentedControlItem>Value</SegmentedControlItem>*/}
-            {/*    </SegmentedControl>*/}
-            {/*  </PopoverContent>*/}
-            {/*</Popover>*/}
-            {/*<TextField*/}
-            {/*  slotClasses={{*/}
-            {/*    root: styles.inlineInputRoot,*/}
-            {/*    label: styles.inlineInputLabel,*/}
-            {/*  }}*/}
-            {/*  size={'sm'}*/}
-            {/*  theme={'filled'}*/}
-            {/*  label={'Environment'}*/}
-            {/*/>*/}
           </FullWidthPanelRow>
 
           <FullWidthPanelRow>

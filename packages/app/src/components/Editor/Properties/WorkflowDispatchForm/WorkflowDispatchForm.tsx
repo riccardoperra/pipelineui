@@ -1,49 +1,19 @@
 import {PanelHeader} from '../../Jobs/JobPanelEditor/Form/PanelHeader';
 import {IconButton} from '@codeui/kit';
-import {createStore} from 'solid-js/store';
-import {createEffect, For} from 'solid-js';
+import {For} from 'solid-js';
 import {Accordion} from '@kobalte/core/accordion';
 import {workflowDispatchList} from './WorkflowDispatchForm.css';
 import {WorkflowDispatchItemForm} from './WorkflowDispatchItemForm';
 import {provideState} from 'statebuilder';
-import {EditorStore} from '../../store/editor.store';
-import {useEditorContext} from '../../editor.context';
-
-export interface WorkflowDispatchInput {
-  name?: string;
-  type?: 'string' | 'choice' | 'boolean' | 'number' | 'environment';
-  deprecationMessage?: string;
-  required?: boolean;
-  default?: string;
-  description?: string;
-  options?: string[];
-}
+import {
+  EditorStore,
+  type WorkflowDispatchInput,
+} from '../../store/editor.store';
 
 export function WorkflowDispatchForm() {
-  const [inputs, setInputs] = createStore<WorkflowDispatchInput[]>([]);
   const editor = provideState(EditorStore);
-  const {template, context} = useEditorContext();
-
-  createEffect(() => {
-    const workflowDispatch = template.events?.workflow_dispatch?.inputs;
-    if (workflowDispatch) {
-      const initialInputs = [...Object.entries(workflowDispatch)].reduce(
-        (acc, [key, value]) => {
-          acc.push({
-            name: key,
-            type: value.type,
-            default: String(value.default),
-            required: value.required,
-            options: value.options,
-            description: value.description,
-          });
-          return acc;
-        },
-        [] as WorkflowDispatchInput[],
-      );
-      setInputs(() => initialInputs);
-    }
-  });
+  const workflowDispatchInputs = () =>
+    editor.get.structure.events.workflowDispatch;
 
   const addNew = () => {
     const draftInput: WorkflowDispatchInput = {
@@ -55,11 +25,7 @@ export function WorkflowDispatchForm() {
       description: undefined,
       options: undefined,
     };
-    setInputs(inputs => [...inputs, draftInput]);
-  };
-
-  const syncWorkflowDispatchItem = (index: number) => {
-    editor.sessionUpdate.setWorkflowDispatch(index, inputs[index]);
+    editor.actions.workflowDispatch.addNew(draftInput);
   };
 
   return (
@@ -79,15 +45,14 @@ export function WorkflowDispatchForm() {
       />
 
       <Accordion class={workflowDispatchList}>
-        <For each={inputs}>
+        <For each={workflowDispatchInputs()}>
           {(input, index) => {
             return (
               <WorkflowDispatchItemForm
                 value={input}
                 index={index()}
                 onChange={value => {
-                  setInputs(index(), value);
-                  syncWorkflowDispatchItem(index());
+                  editor.actions.workflowDispatch.updateByIndex(index(), value);
                 }}
               />
             );
