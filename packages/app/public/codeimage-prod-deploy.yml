@@ -1,16 +1,16 @@
 name: 'Deploy (Production)'
-#on:
-#  workflow_dispatch:
-#    inputs:
-#      deploy-backend:
-#        type: boolean
-#        description: Deploy backend to Railway
-#      deploy-frontend:
-#        type: boolean
-#        description: Deploy frontend
-#      deploy-website:
-#        type: boolean
-#        description: Deploy website
+on:
+  workflow_dispatch:
+    inputs:
+      deploy-backend:
+        type: boolean
+        description: Deploy backend to Railway
+      deploy-frontend:
+        type: boolean
+        description: Deploy frontend
+      deploy-website:
+        type: boolean
+        description: Deploy website
 
 concurrency:
   group: deploy-${{ github.head_ref }}

@@ -17,7 +17,6 @@ import {
 } from '@pipelineui/workflow-parser';
 import type {JobEnvironment} from '../Jobs/JobPanelEditor/Environment/EnvironmentControl';
 import type {WorkflowDispatchInput} from '../Properties/WorkflowDispatchForm/WorkflowDispatchForm';
-import {workflowDispatchItem} from '../Properties/WorkflowDispatchForm/WorkflowDispatchForm.css';
 
 export interface EditorState {
   selectedJobId: string | null;
@@ -105,6 +104,7 @@ export const EditorStore = defineStore<EditorState>(() => ({
           let on = workflow.get('on') as YAMLMap<Scalar, YAMLMap> | null;
           if (!on) {
             on = new YAMLMap();
+            // TODO: should reorder
             workflow.set(new Scalar('on'), on);
             return;
           }
