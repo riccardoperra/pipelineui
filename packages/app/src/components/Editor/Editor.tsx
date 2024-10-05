@@ -20,6 +20,7 @@ import Resizable from '@corvu/resizable';
 import {EditorResizableHandler} from './Layout/Resizable';
 import {EditorStore} from './store/editor.store';
 import {useEditorContext} from './editor.context';
+import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';
 
 interface EditorProps {
   content: string;
@@ -137,7 +138,12 @@ export function Editor(props: EditorProps) {
                         <EditorSidebar position={'right'}>
                           <Switch>
                             <Match when={rightPanel() === 'properties'}>
-                              {editor.get.selectedJobId && <JobPanelEditor />}
+                              <Show
+                                fallback={<PropertiesPanelEditor />}
+                                when={editor.get.selectedJobId}
+                              >
+                                <JobPanelEditor />
+                              </Show>
                             </Match>
                           </Switch>
                         </EditorSidebar>

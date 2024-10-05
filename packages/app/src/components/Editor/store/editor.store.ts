@@ -16,6 +16,8 @@ import {
   type WorkflowTemplate,
 } from '@pipelineui/workflow-parser';
 import type {JobEnvironment} from '../Jobs/JobPanelEditor/Environment/EnvironmentControl';
+import type {WorkflowDispatchInput} from '../Properties/WorkflowDispatchForm/WorkflowDispatchForm';
+import {workflowDispatchItem} from '../Properties/WorkflowDispatchForm/WorkflowDispatchForm.css';
 
 export interface EditorState {
   selectedJobId: string | null;
@@ -95,6 +97,46 @@ export const EditorStore = defineStore<EditorState>(() => ({
             node.set('url', environment.url);
           }
           job.set('environment', node);
+        });
+      },
+      setWorkflowDispatch: (index: number, data: WorkflowDispatchInput) => {
+        const workflow = session()!;
+        yamlUpdater(() => {
+          let on = workflow.get('on') as YAMLMap<Scalar, YAMLMap> | null;
+          if (!on) {
+            on = new YAMLMap();
+            workflow.set(new Scalar('on'), on);
+            return;
+          }
+          let workflowDispatch = on.get('workflow_dispatch') as YAMLMap | null;
+          if (!workflowDispatch) {
+            workflowDispatch = new YAMLMap();
+            on.add(
+              new YAML.Pair(new Scalar('workflow_dispatch'), workflowDispatch),
+            );
+          }
+          let inputs = workflowDispatch.get('inputs') as YAMLMap<
+            Scalar,
+            YAMLMap
+          > | null;
+          if (!inputs) {
+            inputs = new YAMLMap();
+            workflowDispatch.add(new YAML.Pair(new Scalar('inputs'), inputs));
+          }
+          const {name, ...others} = data;
+          const inputAtIndex = inputs.items.at(index);
+          const input = new YAMLMap();
+          const pair = new YAML.Pair(new Scalar(name), input);
+          for (const [key, value] of Object.entries(others)) {
+            if (value !== null && value !== undefined) {
+              input.set(key, value);
+            }
+          }
+          if (!inputAtIndex) {
+            inputs.add(new YAML.Pair(new Scalar(name), input));
+          } else {
+            inputs.items[index] = pair;
+          }
         });
       },
     },
