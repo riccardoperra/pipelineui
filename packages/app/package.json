@@ -30,7 +30,8 @@
     "solid-codemirror": "^2.3.1",
     "solid-js": "^1.9.1",
     "statebuilder": "^0.6.0",
-    "vinxi": "^0.4.3"
+    "vinxi": "^0.4.3",
+    "yaml": "^2.0.0-8"
   },
   "engines": {
     "node": ">=18"

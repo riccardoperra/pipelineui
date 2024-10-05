@@ -70,11 +70,6 @@ export function JobPanelEditor() {
     },
   });
 
-  const environment = () => {
-    JSON.stringify(form.environment);
-    return form.environment;
-  };
-
   createEffect(() => {
     const workflowJob = job() as WorkflowTemplateTypes.Job | null;
     if (!workflowJob) {
@@ -130,6 +125,10 @@ export function JobPanelEditor() {
               theme={'filled'}
               label={'Name'}
               value={form.name}
+              onChange={value => {
+                setForm('name', value);
+                editorStore.sessionUpdate.setJobName(job()!.id.value!, value);
+              }}
             />
           </FullWidthPanelRow>
 

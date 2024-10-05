@@ -28,6 +28,7 @@ export default function EditorPage() {
   const [template, setTemplate] = createSignal<{
     template: WorkflowTemplate;
     context: any;
+    source: string;
   } | null>(null);
 
   createEffect(() => {
@@ -35,6 +36,7 @@ export default function EditorPage() {
     workflow.template.then(response => {
       setTemplate({
         template: response,
+        source: workflowContent()!,
         context: workflow.result.context,
       });
     });

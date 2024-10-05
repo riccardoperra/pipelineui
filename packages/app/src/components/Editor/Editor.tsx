@@ -17,9 +17,9 @@ import {
 import {YamlEditor} from './YamlEditor/YamlEditor';
 import {EditorStatusBar} from './StatusBar/StatusBar';
 import Resizable from '@corvu/resizable';
-import {cookieStorage, makePersisted} from '@solid-primitives/storage';
 import {EditorResizableHandler} from './Layout/Resizable';
 import {EditorStore} from './store/editor.store';
+import {useEditorContext} from './editor.context';
 
 interface EditorProps {
   content: string;
@@ -29,6 +29,11 @@ interface EditorProps {
 export function Editor(props: EditorProps) {
   const editorUi = provideState(EditorUiStore);
   const editor = provideState(EditorStore);
+  const {source} = useEditorContext();
+
+  onMount(() => {
+    editor.initEditSession(source);
+  });
 
   // createEffect(() => {
   //   const leftPanel = editorUi.get.leftPanel;
@@ -88,7 +93,7 @@ export function Editor(props: EditorProps) {
                           <Switch>
                             <Match when={leftPanel() === 'code'}>
                               <YamlEditor
-                                code={props.content}
+                                code={editor.yamlCode()}
                                 setCode={() => {}}
                               />
                             </Match>
@@ -105,7 +110,9 @@ export function Editor(props: EditorProps) {
                 />
 
                 <Resizable.Panel initialSize={0.58}>
-                  <Canvas template={props.template} />
+                  <Show when={editor.get.template}>
+                    <Canvas template={editor.get.template!} />
+                  </Show>
                 </Resizable.Panel>
 
                 <EditorResizableHandler
@@ -138,32 +145,6 @@ export function Editor(props: EditorProps) {
                     )}
                   </Show>
                 </Resizable.Panel>
-
-                {/*<Show*/}
-                {/*  when={*/}
-                {/*    editorUi.get.rightPanel !== 'none' &&*/}
-                {/*    editorUi.get.rightPanel*/}
-                {/*  }*/}
-                {/*>*/}
-                {/*  {rightPanel => (*/}
-                {/*    <Resizable.Panel>*/}
-                {/*      <Resizable.Handle*/}
-                {/*        class={styles.resizableHandlerContainer}*/}
-                {/*        aria-label="Resize Handle"*/}
-                {/*      >*/}
-                {/*        <div class={styles.resizableHandlers} />*/}
-                {/*      </Resizable.Handle>*/}
-
-                {/*      <LeftSidebar>*/}
-                {/*        <Switch>*/}
-                {/*          <Match when={rightPanel() === 'properties'}>*/}
-                {/*            <JobPanelEditor />*/}
-                {/*          </Match>*/}
-                {/*        </Switch>*/}
-                {/*      </LeftSidebar>*/}
-                {/*    </Resizable.Panel>*/}
-                {/*  )}*/}
-                {/*</Show>*/}
               </>
             );
           }}
