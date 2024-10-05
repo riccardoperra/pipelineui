@@ -1,4 +1,5 @@
 import {
+  Button,
   createBaseFieldProps,
   fieldLabelStyles,
   mergeClasses,
@@ -24,14 +25,82 @@ interface EnvironmentControlProps {
   onValueChange: (value: JobEnvironment) => void;
 }
 
-export function EnvironmentControl(props: EnvironmentControlProps) {
-  const [name, setName] = createSignal<string>();
-  const [url, setUrl] = createSignal<string>();
-  createEffect(() => {
-    setName(props.value?.name);
-    setUrl(props.value?.url);
-  });
+interface EnvironmentControlFormProps {
+  initialName: string;
+  initialUrl: string;
+  initialModality: 'value' | 'reference';
+  onSubmit: (environment: JobEnvironment) => void;
+}
 
+function EnvironmentControlForm(props: EnvironmentControlFormProps) {
+  const [modality, setModality] = createSignal(props.initialModality);
+  const [name, setName] = createSignal<string>(props.initialName);
+  const [url, setUrl] = createSignal<string>(props.initialUrl);
+
+  const submit = () => {
+    props.onSubmit({
+      type: modality() as 'value' | 'reference',
+      name: name() ?? '',
+      url: url() ?? '',
+    });
+  };
+
+  return (
+    <>
+      <div style={{display: 'flex', width: '240px'}}>
+        <SegmentedControl
+          autoWidth={true}
+          style={{width: '100%'}}
+          value={modality()}
+          onChange={value =>
+            setModality(value as EnvironmentControlFormProps['initialModality'])
+          }
+        >
+          <SegmentedControlItem value={'value'}>Value</SegmentedControlItem>
+          <SegmentedControlItem value={'reference'}>
+            Reference
+          </SegmentedControlItem>
+        </SegmentedControl>
+      </div>
+
+      <Switch>
+        <Match when={modality() === 'value'}>
+          <TextField
+            size={'sm'}
+            theme={'filled'}
+            label={'Name'}
+            value={name()}
+            onChange={setName}
+          />
+        </Match>
+
+        <Match when={modality() === 'reference'}>
+          <TextField
+            size={'sm'}
+            theme={'filled'}
+            label={'Name'}
+            value={name()}
+            onChange={setName}
+          />
+
+          <TextField
+            size={'sm'}
+            theme={'filled'}
+            label={'Url'}
+            value={url()}
+            onChange={setUrl}
+          />
+        </Match>
+      </Switch>
+
+      <Button theme={'primary'} onClick={submit} size={'sm'}>
+        Confirm
+      </Button>
+    </>
+  );
+}
+
+export function EnvironmentControl(props: EnvironmentControlProps) {
   const fieldProps = createBaseFieldProps({
     size: 'sm',
     theme: 'filled',
@@ -40,30 +109,18 @@ export function EnvironmentControl(props: EnvironmentControlProps) {
   const inputClasses = () =>
     mergeClasses(fieldProps.baseStyle(), textFieldStyles.textField);
 
-  const [modality, setModality] = createSignal<string>();
-
-  createEffect(() => {
-    const name = props.value?.name;
-    setName(name ?? '');
-  });
-
-  createEffect(() => {
-    const type = props.value?.type;
-    setModality(type ?? 'value');
-  });
-
   return (
     <>
       <Popover>
         <PopoverTrigger
-          as={props => (
+          as={triggerProps => (
             <div
               class={mergeClasses(
                 textFieldStyles.baseFieldContainer,
                 styles.inlineInputRoot,
               )}
               data-field-size={'sm'}
-              {...props}
+              {...triggerProps}
             >
               <label
                 class={mergeClasses(
@@ -73,51 +130,17 @@ export function EnvironmentControl(props: EnvironmentControlProps) {
               >
                 Environment
               </label>
-              <div class={inputClasses()}>{name()}</div>
+              <div class={inputClasses()}>{props.value.name}</div>
             </div>
           )}
         />
         <PopoverContent>
-          <div style={{display: 'flex', width: '240px'}}>
-            <SegmentedControl
-              autoWidth={true}
-              style={{width: '100%'}}
-              value={modality()}
-              onChange={value => setModality(value)}
-            >
-              <SegmentedControlItem value={'value'}>Value</SegmentedControlItem>
-              <SegmentedControlItem value={'reference'}>
-                Reference
-              </SegmentedControlItem>
-            </SegmentedControl>
-          </div>
-
-          <Switch>
-            <Match when={modality() === 'value'}>
-              <TextField
-                size={'sm'}
-                theme={'filled'}
-                label={'Name'}
-                value={name()}
-              />
-            </Match>
-
-            <Match when={modality() === 'reference'}>
-              <TextField
-                size={'sm'}
-                theme={'filled'}
-                label={'Name'}
-                value={name()}
-              />
-
-              <TextField
-                size={'sm'}
-                theme={'filled'}
-                label={'Url'}
-                value={url()}
-              />
-            </Match>
-          </Switch>
+          <EnvironmentControlForm
+            initialModality={props.value.type ?? 'value'}
+            initialName={props.value.name ?? ''}
+            initialUrl={props.value.url ?? ''}
+            onSubmit={props.onValueChange}
+          />
         </PopoverContent>
       </Popover>
     </>

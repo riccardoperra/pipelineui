@@ -151,7 +151,10 @@ export function JobPanelEditor() {
               multiple={true}
               options={needsOptions()}
               value={form.needs}
-              onChange={options => setForm('needs', options)}
+              onChange={options => {
+                setForm('needs', options);
+                editorStore.sessionUpdate.setNeeds(job()!.id.value, options);
+              }}
               size={'sm'}
               theme={'filled'}
               label={'Needs'}
@@ -163,7 +166,16 @@ export function JobPanelEditor() {
           </FullWidthPanelRow>
 
           <FullWidthPanelRow>
-            <EnvironmentControl value={form.environment} />
+            <EnvironmentControl
+              value={form.environment}
+              onValueChange={value => {
+                setForm('environment', value);
+                editorStore.sessionUpdate.setEnvironment(
+                  job()!.id.value,
+                  value,
+                );
+              }}
+            />
             {/*<Popover>*/}
             {/*  <PopoverTrigger>Content</PopoverTrigger>*/}
             {/*  <PopoverContent>*/}
