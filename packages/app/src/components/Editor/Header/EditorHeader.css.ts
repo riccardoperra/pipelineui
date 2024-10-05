@@ -23,6 +23,10 @@ export const subHeader = style({
   borderBottom: `1px solid ${themeVars.accent6}`,
 });
 
+export const subHeaderRightContent = style({
+  marginLeft: 'auto',
+});
+
 export const headerRightSide = style({
   marginLeft: 'auto',
   display: 'flex',

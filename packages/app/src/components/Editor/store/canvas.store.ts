@@ -1,6 +1,11 @@
 import {defineStore} from 'statebuilder';
 import panzoom, {type PanZoom} from 'panzoom';
 import {createEffect, createSignal, on} from 'solid-js';
+import {
+  autocenter,
+  fitToCenter,
+  getScaleByRatio,
+} from '../utils/getScaleByRatio';
 
 interface CanvasState {
   scale: number;
@@ -13,10 +18,17 @@ export const CanvasStore = defineStore<CanvasState>(() => ({
 }))
   .extend(_ => {
     const [instance, setInstance] = createSignal<PanZoom | null>(null);
+    const [ref, setRef] = createSignal<HTMLElement | null>(null);
     return {
       instance,
+      ref,
       connectRef: (el: HTMLDivElement) => {
-        setInstance(panzoom(el));
+        setInstance(
+          panzoom(el, {
+            autocenter: true,
+          }),
+        );
+        setRef(el);
 
         _.set('connected', true);
       },
@@ -37,10 +49,11 @@ export const CanvasStore = defineStore<CanvasState>(() => ({
     return {
       fitToCenter: () => {
         const instance = _.instance()!;
-        instance.centerOn(
-          document.querySelector('.Canvas_canvasContainer__11d9l720'),
-        );
-        instance.moveBy(0, 0, true);
+        const ref = _.ref()!;
+        const {x, y, scale} = autocenter(ref);
+        console.log(x, y, scale);
+        instance.smoothMoveTo(x, y);
+        // instance.smoothZoom(0, 0, scale);
       },
     };
   });

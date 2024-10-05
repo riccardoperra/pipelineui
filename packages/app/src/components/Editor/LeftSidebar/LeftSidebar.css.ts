@@ -5,8 +5,14 @@ import {} from '@codeui/kit';
 import {appTheme} from '../../../ui/theme.css';
 
 export const [sidebarTheme, sidebarVars] = createTheme({
-  width: '450px',
+  width: '100%',
   topOffset: '40px',
+});
+
+export const sidebarWrapper = style({
+  display: 'flex',
+  flexDirection: 'row',
+  width: '100%',
 });
 
 export const sidebar = recipe({
@@ -42,6 +48,13 @@ export const sidebar = recipe({
       },
     },
   },
+});
+
+export const sidebarResizeControl = style({
+  width: '10px',
+  height: '100%',
+  backgroundColor: 'red',
+  cursor: 'col-resize',
 });
 
 export const sidebarLogo = style({

@@ -27,5 +27,5 @@ export function YamlEditor(props: YamlEditorProps) {
   );
   createEditorControlledValue(editorView, () => props.code ?? '');
 
-  return <div ref={setRef} style={{height: '100%'}}></div>;
+  return <div ref={setRef} style={{height: '100%', width: '100%'}}></div>;
 }

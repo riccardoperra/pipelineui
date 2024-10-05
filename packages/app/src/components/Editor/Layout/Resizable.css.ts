@@ -2,34 +2,6 @@ import {style} from '@vanilla-extract/css';
 import {recipe} from '@vanilla-extract/recipes';
 import {themeVars} from '@codeui/kit';
 
-export const wrapper = style({
-  display: 'flex',
-  flexDirection: 'column',
-  overflow: 'hidden',
-  width: '100%',
-  height: '100%',
-});
-
-export const editor = style({
-  display: 'flex',
-  width: '100%',
-  minHeight: 0,
-  flex: 1,
-});
-
-export const editorResizable = style({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'row',
-});
-
-export const canvas = style({
-  display: 'flex',
-  flex: 1,
-  width: '100%',
-  minWidth: 0,
-});
-
 export const resizablePanel = style({
   display: 'flex',
   overflow: 'hidden',
@@ -52,6 +24,28 @@ export const resizableHandlerContainer = recipe({
       true: {
         display: 'none',
       },
+    },
+    position: {
+      left: {
+        // marginLeft: '-4px',
+      },
+      right: {
+        // marginRight: '-4px',
+      },
+    },
+  },
+});
+
+// size-full rounded transition-colors corvu-group-active:bg-corvu-300 corvu-group-dragging:bg-corvu-100
+export const resizableHandlers = style({
+  height: '100%',
+  width: '4px',
+  selectors: {
+    [`[data-active] &`]: {
+      backgroundColor: themeVars.brandSecondary,
+    },
+    [`[data-dragging] &`]: {
+      backgroundColor: themeVars.brand,
     },
   },
 });

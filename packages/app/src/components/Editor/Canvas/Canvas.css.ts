@@ -11,4 +11,6 @@ export const canvasContainer = style({
   backgroundImage: `radial-gradient(circle at 1px 1px, ${themeVars.accent3} 1px, ${themeVars.background} 0)`,
   backgroundSize: '20px 20px',
   padding: '2rem',
+  position: 'relative',
+  overflow: 'auto',
 });
