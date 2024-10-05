@@ -32,6 +32,10 @@ export const panelHeader = style([
   },
 ]);
 
+export const panelHeaderRight = style({
+  marginLeft: 'auto',
+});
+
 export const panelRow = style([
   {
     position: 'relative',
