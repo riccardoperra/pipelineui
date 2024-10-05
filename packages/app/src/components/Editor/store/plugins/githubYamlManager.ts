@@ -119,15 +119,18 @@ export const withGithubYamlManager = () => {
       ) => {
         yamlSession.updater(yaml => {
           const job = findJob(yaml, jobId)!;
-          let node: YAMLMap | Scalar;
           if (environment.type === 'value') {
-            node = new Scalar(environment.name);
+            if (!environment.name) {
+              job.delete('environment');
+              return;
+            }
+            job.set('environment', new Scalar(environment.name));
           } else {
-            node = new YAMLMap();
+            const node = new YAMLMap();
             node.set('name', environment.name);
             node.set('url', environment.url);
+            job.set('environment', node);
           }
-          job.set('environment', node);
         });
       };
 
