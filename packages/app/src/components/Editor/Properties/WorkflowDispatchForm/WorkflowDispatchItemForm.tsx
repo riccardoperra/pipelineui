@@ -7,7 +7,15 @@ import {
   workflowDispatchTrigger,
 } from './WorkflowDispatchForm.css';
 import {FullWidthPanelRow} from '../../Jobs/JobPanelEditor/Form/PanelRow';
-import {Checkbox, NumberField, Select, TextArea, TextField} from '@codeui/kit';
+import {
+  Checkbox,
+  IconButton,
+  NumberField,
+  Select,
+  TextArea,
+  TextField,
+} from '@codeui/kit';
+
 import * as styles from '../../Jobs/JobPanelEditor/JobPanelEditor.css';
 import {Match, Switch} from 'solid-js';
 import {createControllableSignal} from '@kobalte/core';
@@ -17,6 +25,7 @@ export interface WorkflowDispatchItemFormProps {
   value: WorkflowDispatchInput;
   index: number;
   onChange: (value: WorkflowDispatchInput) => void;
+  onDelete: () => void;
 }
 
 export function WorkflowDispatchItemForm(props: WorkflowDispatchItemFormProps) {
@@ -39,6 +48,15 @@ export function WorkflowDispatchItemForm(props: WorkflowDispatchItemFormProps) {
         <Accordion.Trigger class={workflowDispatchTrigger}>
           {props.value.name || `Input #${props.index}`}
         </Accordion.Trigger>
+        <IconButton
+          size={'xs'}
+          variant={'ghost'}
+          theme={'secondary'}
+          aria-label={'Delete'}
+          onClick={props.onDelete}
+        >
+          X
+        </IconButton>
       </Accordion.Header>
       <Accordion.Content class={workflowDispatchContent}>
         <div class={workflowDispatchItemForm}>

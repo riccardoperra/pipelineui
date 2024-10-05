@@ -83,6 +83,12 @@ export const EditorStore = defineStore<EditorState>(() => ({
             _.set('structure', 'events', 'workflowDispatch', index, value);
             _.yamlSession.setWorkflowDispatch(index, value);
           },
+          deleteByIndex: (index: number) => {
+            _.set('structure', 'events', 'workflowDispatch', items =>
+              items.filter((item, i) => i !== index),
+            );
+            _.yamlSession.deleteWorkflowDispatchItem(index);
+          },
         },
       },
 

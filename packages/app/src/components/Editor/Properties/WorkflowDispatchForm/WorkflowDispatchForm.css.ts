@@ -12,6 +12,7 @@ export const workflowDispatchList = style({
   display: 'flex',
   flexDirection: 'column',
   gap: appTheme.spacing['2'],
+  counterReset: 'workflowDispatch',
 });
 
 export const workflowDispatchItem = style({
@@ -23,17 +24,26 @@ export const workflowDispatchItem = style({
 
 export const workflowDispatchHeader = style({
   fontSize: '14px',
+  display: 'flex',
+  height: '36px',
+  alignItems: 'center',
+  flexDirection: 'row',
+  background: `${themeVars.accent2}`,
+  color: themeVars.accent10,
+  position: 'relative',
+  textAlign: 'left',
+  ':hover': {
+    background: `${themeVars.accent5}`,
+  },
 });
 
 export const workflowDispatchTrigger = style({
   border: 'none',
   width: '100%',
-  height: '36px',
-  background: `${themeVars.accent2}`,
+  textAlign: 'left',
+  paddingLeft: appTheme.spacing['3'],
+  background: `transparent`,
   color: themeVars.accent10,
-  ':hover': {
-    background: `${themeVars.accent5}`,
-  },
 });
 
 export const workflowDispatchContent = style({

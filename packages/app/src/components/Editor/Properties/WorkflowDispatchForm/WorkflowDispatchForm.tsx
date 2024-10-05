@@ -42,13 +42,16 @@ export function WorkflowDispatchForm() {
         }
       />
 
-      <Accordion class={workflowDispatchList}>
+      <Accordion class={workflowDispatchList} collapsible>
         <For each={workflowDispatchInputs()}>
           {(input, index) => {
             return (
               <WorkflowDispatchItemForm
                 value={input}
                 index={index()}
+                onDelete={() =>
+                  editor.actions.workflowDispatch.deleteByIndex(index())
+                }
                 onChange={value => {
                   editor.actions.workflowDispatch.updateByIndex(index(), value);
                 }}

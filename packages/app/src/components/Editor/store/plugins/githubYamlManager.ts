@@ -28,9 +28,25 @@ export const withGithubYamlManager = () => {
         updater(onField);
       };
 
+      const deleteWorkflowDispatchItem = (index: number) => {
+        yamlSession.updater(yaml => {
+          const inputs = yaml.getIn([
+            'on',
+            'workflow_dispatch',
+            'inputs',
+          ]) as YAMLMap | null;
+          if (!inputs) {
+            return;
+          }
+          const inputAtIndex = inputs.items.at(index);
+          inputs.delete(inputAtIndex?.key);
+        });
+      };
+
       const setWorkflowDispatch = (
         index: number,
         data: WorkflowDispatchInput,
+        fallbackMissingName = true,
       ) => {
         yamlSession.updater(yaml => {
           modifyOnField(yaml, true, on => {
@@ -56,9 +72,12 @@ export const withGithubYamlManager = () => {
               workflowDispatch.add(new YAML.Pair(new Scalar('inputs'), inputs));
             }
 
-            const {name, ...others} = data;
+            let {name, ...others} = data;
             const inputAtIndex = inputs.items.at(index);
             const input = new YAMLMap<Scalar<string>, unknown>();
+            if (!name && fallbackMissingName) {
+              name = `input-${index}`;
+            }
             if (!name) {
               console.warn(
                 'Missing `name` for workflow_dispatch. Skipping update',
@@ -136,6 +155,7 @@ export const withGithubYamlManager = () => {
 
       return {
         yamlSession: Object.assign(_.yamlSession, {
+          deleteWorkflowDispatchItem,
           setWorkflowDispatch,
           setJobName,
           setJobNeeds,
