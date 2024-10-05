@@ -1,16 +1,22 @@
-import {style} from '@vanilla-extract/css';
+import {createVar, style} from '@vanilla-extract/css';
 import {themeVars} from '@codeui/kit';
 
+const canvasPatternColor = createVar();
+
 export const canvasContainer = style({
+  vars: {
+    [canvasPatternColor]: themeVars.accent1,
+  },
   display: 'flex',
   flex: 1,
   width: '100%',
   height: '100%',
   alignItems: 'flex-start',
   minWidth: 0,
-  backgroundImage: `radial-gradient(circle at 1px 1px, ${themeVars.accent3} 1px, ${themeVars.background} 0)`,
-  backgroundSize: '20px 20px',
   padding: '2rem',
   position: 'relative',
   overflow: 'auto',
+  background: `repeating-linear-gradient(90deg, ${canvasPatternColor} 0, ${canvasPatternColor} 5%, transparent 0, transparent 50%), repeating-linear-gradient(180deg, ${canvasPatternColor} 0, ${canvasPatternColor} 5%, transparent 0, transparent 50%)`,
+  backgroundColor: '#000',
+  backgroundSize: '36px 36px',
 });
