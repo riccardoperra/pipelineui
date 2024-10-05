@@ -6,14 +6,7 @@ import {Canvas} from './Canvas/Canvas';
 import {EditorHeader} from './Header/Header';
 import {provideState} from 'statebuilder';
 import {EditorUiStore} from './store/ui.store';
-import {
-  createEffect,
-  createSignal,
-  Match,
-  onMount,
-  Show,
-  Switch,
-} from 'solid-js';
+import {Match, onMount, Show, Switch} from 'solid-js';
 import {YamlEditor} from './YamlEditor/YamlEditor';
 import {EditorStatusBar} from './StatusBar/StatusBar';
 import Resizable from '@corvu/resizable';
@@ -35,35 +28,6 @@ export function Editor(props: EditorProps) {
   onMount(() => {
     editor.initEditSession(source);
   });
-
-  // createEffect(() => {
-  //   const leftPanel = editorUi.get.leftPanel;
-  //   const resizable = resizableContext();
-  //   if (!resizable) {
-  //     return;
-  //   }
-  //   if (leftPanel === 'none' && resizable.sizes()[0] > 0) {
-  //     resizable.collapse(0);
-  //   } else if (leftPanel !== 'none') {
-  //     resizable.expand(0);
-  //   }
-  // });
-
-  const isLeftCollapsed = () => {
-    const context = resizableContext();
-    if (!context) {
-      return false;
-    }
-    return context.sizes()[0] === 0;
-  };
-
-  // createEffect(() => {
-  //   if (isLeftCollapsed() && editorUi.get.leftPanel !== 'none') {
-  //     editorUi.set('leftPanel', 'none');
-  //   } else if (!isLeftCollapsed() && editorUi.get.leftPanel === 'none') {
-  //     editorUi.set('leftPanel', 'code');
-  //   }
-  // });
 
   return (
     <div class={styles.wrapper}>
@@ -94,7 +58,7 @@ export function Editor(props: EditorProps) {
                           <Switch>
                             <Match when={leftPanel() === 'code'}>
                               <YamlEditor
-                                code={editor.yamlCode()}
+                                code={editor.yamlSession.source()}
                                 setCode={() => {}}
                               />
                             </Match>

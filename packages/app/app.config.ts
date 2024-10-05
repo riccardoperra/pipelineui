@@ -5,7 +5,13 @@ export default defineConfig({
   vite: {
     plugins: [vanillaExtractPlugin()],
     optimizeDeps: {
-      exclude: ['@codemirror/state', '@codemirror/view'],
+      exclude: [
+        '@codemirror/state',
+        '@codemirror/view',
+        '@pipelineui/workflow-parser',
+        'yaml',
+        'web-worker',
+      ],
     },
   },
 });

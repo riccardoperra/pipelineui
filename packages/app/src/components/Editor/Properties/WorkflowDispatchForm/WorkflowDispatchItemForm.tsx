@@ -1,4 +1,3 @@
-import type {WorkflowDispatchInput} from './WorkflowDispatchForm';
 import {Accordion} from '@kobalte/core/accordion';
 import {
   workflowDispatchContent,
@@ -12,6 +11,7 @@ import {Checkbox, NumberField, Select, TextArea, TextField} from '@codeui/kit';
 import * as styles from '../../Jobs/JobPanelEditor/JobPanelEditor.css';
 import {Match, Switch} from 'solid-js';
 import {createControllableSignal} from '@kobalte/core';
+import type {WorkflowDispatchInput} from '../../store/editor.store';
 
 export interface WorkflowDispatchItemFormProps {
   value: WorkflowDispatchInput;
