@@ -11,7 +11,7 @@ import {Checkbox, NumberField, Select, TextArea, TextField} from '@codeui/kit';
 import * as styles from '../../Jobs/JobPanelEditor/JobPanelEditor.css';
 import {Match, Switch} from 'solid-js';
 import {createControllableSignal} from '@kobalte/core';
-import type {WorkflowDispatchInput} from '../../store/editor.store';
+import type {WorkflowDispatchInput} from '../../store/editor.types';
 
 export interface WorkflowDispatchItemFormProps {
   value: WorkflowDispatchInput;

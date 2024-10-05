@@ -1,12 +1,5 @@
 import {defineStore} from 'statebuilder';
-import YAML, {
-  Document,
-  type ParsedNode,
-  parseDocument,
-  Scalar,
-  YAMLMap,
-  YAMLSeq,
-} from 'yaml';
+import {Document, type ParsedNode, parseDocument, YAMLMap} from 'yaml';
 import {createMemo, createSignal, untrack} from 'solid-js';
 import {reconcile} from 'solid-js/store';
 import {
@@ -17,48 +10,18 @@ import type {WorkflowConcurrency} from '../Properties/WorkflowConcurrencyForm/Wo
 import {withGithubYamlManager} from './plugins/githubYamlManager';
 import {withYamlDocumentSession} from './plugins/yamlSession';
 import {getStructureFromWorkflow} from './utils/getStructureFromWorkflow';
-
-export interface WorkflowDispatchInput {
-  name?: string;
-  type?: 'string' | 'choice' | 'boolean' | 'number' | 'environment';
-  deprecationMessage?: string;
-  required?: boolean;
-  // TODO: better type. also support expression!
-  default?: any;
-  description?: string;
-  options?: string[];
-}
-
-export interface WorkflowStructureEvents {
-  workflowDispatch: WorkflowDispatchInput[];
-}
-
-export type JobEnvironment = {
-  type: 'value' | 'reference';
-  name?: string;
-  url?: string;
-};
-
-export interface WorkflowStructureJob {
-  name: string;
-  runsOn: string;
-  needs: string[];
-  environment: JobEnvironment | null | undefined;
-}
-
-export interface WorkflowStructure {
-  name: string;
-  events: WorkflowStructureEvents;
-  jobs: WorkflowStructureJob[];
-}
+import type {
+  EditorWorkflowStructure,
+  WorkflowDispatchInput,
+} from './editor.types';
 
 export interface EditorState {
   selectedJobId: string | null;
   template: WorkflowTemplate | null;
-  structure: WorkflowStructure;
+  structure: EditorWorkflowStructure;
 }
 
-export function getInitialWorkflowStructureState(): WorkflowStructure {
+export function getInitialWorkflowStructureState(): EditorWorkflowStructure {
   return {
     name: '',
     events: {

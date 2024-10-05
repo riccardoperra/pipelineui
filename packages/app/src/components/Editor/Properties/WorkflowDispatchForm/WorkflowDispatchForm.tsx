@@ -5,10 +5,8 @@ import {Accordion} from '@kobalte/core/accordion';
 import {workflowDispatchList} from './WorkflowDispatchForm.css';
 import {WorkflowDispatchItemForm} from './WorkflowDispatchItemForm';
 import {provideState} from 'statebuilder';
-import {
-  EditorStore,
-  type WorkflowDispatchInput,
-} from '../../store/editor.store';
+import {EditorStore} from '../../store/editor.store';
+import type {WorkflowDispatchInput} from '../../store/editor.types';
 
 export function WorkflowDispatchForm() {
   const editor = provideState(EditorStore);

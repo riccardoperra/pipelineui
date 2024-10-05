@@ -1,4 +1,7 @@
-import type {WorkflowDispatchInput, WorkflowStructure} from '../editor.store';
+import type {
+  WorkflowDispatchInput,
+  EditorWorkflowStructure,
+} from '../editor.store';
 import type {
   ParseWorkflowResult,
   WorkflowTemplate,
