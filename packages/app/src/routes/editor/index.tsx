@@ -7,6 +7,7 @@ import {
   getWorkflowJson,
   type WorkflowTemplate,
 } from '@pipelineui/workflow-parser';
+import {EditorContext} from '../../components/Editor/editor.context';
 
 const getWorkflow = cache(async () => {
   'use server';
@@ -24,16 +25,30 @@ export const route = {
 export default function EditorPage() {
   const workflowContent = createAsync(() => getWorkflow());
 
-  const [template, setTemplate] = createSignal<WorkflowTemplate | null>(null);
+  const [template, setTemplate] = createSignal<{
+    template: WorkflowTemplate;
+    context: any;
+  } | null>(null);
 
   createEffect(() => {
-    getWorkflowJson('content.yaml', workflowContent()!).then(setTemplate);
+    const workflow = getWorkflowJson('content.yaml', workflowContent()!);
+    workflow.template.then(response => {
+      setTemplate({
+        template: response,
+        context: workflow.result.context,
+      });
+    });
   });
 
   return (
     <Show when={template()}>
       {template => (
-        <Editor content={workflowContent() ?? ''} template={template()} />
+        <EditorContext.Provider value={template()}>
+          <Editor
+            content={workflowContent() ?? ''}
+            template={template().template}
+          />
+        </EditorContext.Provider>
       )}
     </Show>
   );

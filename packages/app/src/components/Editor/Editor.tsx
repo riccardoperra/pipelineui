@@ -19,6 +19,7 @@ import {EditorStatusBar} from './StatusBar/StatusBar';
 import Resizable from '@corvu/resizable';
 import {cookieStorage, makePersisted} from '@solid-primitives/storage';
 import {EditorResizableHandler} from './Layout/Resizable';
+import {EditorStore} from './store/editor.store';
 
 interface EditorProps {
   content: string;
@@ -27,11 +28,7 @@ interface EditorProps {
 
 export function Editor(props: EditorProps) {
   const editorUi = provideState(EditorUiStore);
-
-  const [sizes, setSizes] = makePersisted(createSignal<number[]>([]), {
-    storage: cookieStorage,
-    name: 'resizable-sizes',
-  });
+  const editor = provideState(EditorStore);
 
   // createEffect(() => {
   //   const leftPanel = editorUi.get.leftPanel;
@@ -107,7 +104,7 @@ export function Editor(props: EditorProps) {
                   position={'left'}
                 />
 
-                <Resizable.Panel minSize={0.5}>
+                <Resizable.Panel initialSize={0.58}>
                   <Canvas template={props.template} />
                 </Resizable.Panel>
 
@@ -117,7 +114,7 @@ export function Editor(props: EditorProps) {
                 />
 
                 <Resizable.Panel
-                  initialSize={0.25}
+                  initialSize={0.17}
                   minSize={0.1}
                   collapsible
                   class={styles.resizablePanel}
@@ -133,7 +130,7 @@ export function Editor(props: EditorProps) {
                         <EditorSidebar position={'right'}>
                           <Switch>
                             <Match when={rightPanel() === 'properties'}>
-                              <JobPanelEditor />
+                              {editor.get.selectedJobId && <JobPanelEditor />}
                             </Match>
                           </Switch>
                         </EditorSidebar>

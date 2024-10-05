@@ -14,6 +14,12 @@ import {
   ParseWorkflowResult,
   isBasicExpression,
 } from '@actions/workflow-parser';
+import type * as WorkflowTemplateTypes from '@actions/workflow-parser/model/workflow-template';
+
+import * as environmentConverters from '../snapshot/dist/model/converter/job/environment';
+import * as inputConverters from '../snapshot/dist/model/converter/job/inputs';
+import * as secretConverters from '../snapshot/dist/model/converter/job/secrets';
+import * as runsOnConverters from '../snapshot/dist/model/converter/job/runs-on';
 
 export {
   isString,
@@ -28,6 +34,14 @@ export {
 
 export * as Tokens from '@actions/workflow-parser/templates/tokens/index';
 
+export type {WorkflowTemplateTypes};
+export {
+  environmentConverters,
+  inputConverters,
+  secretConverters,
+  runsOnConverters,
+};
+
 export type {WorkflowTemplate, ParseWorkflowResult};
 
 const trace: TraceWriter = new NoOperationTraceWriter();
@@ -41,5 +55,8 @@ export function getWorkflowJson(name: string, content: string) {
     trace,
   );
 
-  return convertWorkflowTemplate(result.context, result.value!);
+  return {
+    result,
+    template: convertWorkflowTemplate(result.context, result.value!),
+  };
 }

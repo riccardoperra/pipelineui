@@ -14,6 +14,8 @@
     "@codemirror/view": "^6.34.1",
     "@codeui/kit": "^0.1.2",
     "@corvu/resizable": "^0.2.3",
+    "@kobalte/core": "^0.13.6",
+    "@kobalte/utils": "^0.9.1",
     "@lezer/highlight": "^1.2.1",
     "@pipelineui/workflow-parser": "workspace:*",
     "@solid-primitives/event-listener": "^2.3.3",

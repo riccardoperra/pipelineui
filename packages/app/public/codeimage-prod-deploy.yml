@@ -18,7 +18,10 @@ concurrency:
 
 jobs:
   install:
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest, ubuntu-22]
+    environment:
+      name: production_environment
+      url: https://github.com
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
@@ -30,6 +33,7 @@ jobs:
   lint:
     name: Lint
     needs: ['install']
+    environment: staging_environment
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PR
