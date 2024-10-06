@@ -43,6 +43,7 @@ export function Canvas() {
               const id = `job-${job.id!.toString()}`;
               const data = () =>
                 elkNode()?.children?.find(child => child.id === id);
+              console.log(job);
               return (
                 <Show when={data()}>
                   {data => (
@@ -54,7 +55,17 @@ export function Canvas() {
                           'border-radius': '8px',
                         }}
                       >
-                        {job.steps?.length} steps
+                        {job?.steps?.length} steps
+                      </span>
+
+                      <span
+                        style={{
+                          padding: '2px 6px',
+                          'background-color': '#2d2d2d',
+                          'border-radius': '8px',
+                        }}
+                      >
+                        {job.type === 'job' && job['runs-on']?.['value']}
                       </span>
                     </div>
                   )}

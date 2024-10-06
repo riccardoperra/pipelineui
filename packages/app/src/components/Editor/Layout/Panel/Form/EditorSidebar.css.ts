@@ -25,11 +25,20 @@ export const panelHeader = style([
   },
 ]);
 
-export const panelContent = style([
-  {
+export const panelContent = recipe({
+  base: {
     paddingBottom: appTheme.spacing['4'],
   },
-]);
+  variants: {
+    withGap: {
+      true: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: appTheme.spacing['2'],
+      },
+    },
+  },
+});
 
 export const panelHeaderRight = style({
   marginLeft: 'auto',
