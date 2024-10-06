@@ -1,6 +1,5 @@
 // @refresh reload
 import {createHandler, StartServer} from '@solidjs/start/server';
-import {server} from './mocks/node';
 
 if (import.meta.env.DEV) {
   const {server} = await import('./mocks/node');

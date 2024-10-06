@@ -2,7 +2,6 @@ import * as styles from './EditorHeader.css';
 import {Button} from '@codeui/kit';
 import {provideState} from 'statebuilder';
 import {EditorUiStore} from '../store/ui.store';
-import {subHeaderRightContent} from './EditorHeader.css';
 
 export function EditorHeader() {
   const editorUi = provideState(EditorUiStore);

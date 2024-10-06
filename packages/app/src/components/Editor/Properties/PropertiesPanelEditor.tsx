@@ -1,10 +1,8 @@
 import {WorkflowDispatchForm} from './WorkflowDispatchForm/WorkflowDispatchForm';
-import {PanelDivider} from '../Layout/Panel/Form/PanelDivider';
 import {WorkflowConcurrencyForm} from './WorkflowConcurrencyForm/WorkflowConcurrencyForm';
 import {PanelGroup} from '#editor-layout/Panel/Form/PanelGroup';
 import {EnvironmentVariablesForm} from './EnvironmentVariablesForm/EnvironmentVariablesForm';
-
-interface Form {}
+import {PanelDivider} from '#editor-layout/Panel/Form/PanelDivider';
 
 export function PropertiesPanelEditor() {
   return (

@@ -1,8 +1,8 @@
 import {Editor} from '../../components/Editor/Editor';
-import {cache, createAsync} from '@solidjs/router';
+import {cache, createAsync, type RouteDefinition} from '@solidjs/router';
 import {readFile} from 'node:fs/promises';
 import {join} from 'node:path';
-import {createEffect, createResource, createSignal, Show} from 'solid-js';
+import {createEffect, createSignal, Show} from 'solid-js';
 import {
   getWorkflowJson,
   type WorkflowTemplate,
@@ -13,17 +13,19 @@ const getWorkflow = cache(async () => {
   'use server';
 
   return readFile(
-    join(import.meta.dirname, '../../../public/codeimage-prod-deploy.yml'),
+    join(import.meta.dirname, '../../../public/node.js.yml'),
     'utf-8',
   );
 }, 'nodejs');
 
 export const route = {
   preload: () => getWorkflow(),
-};
+} satisfies RouteDefinition;
 
 export default function EditorPage() {
-  const workflowContent = createAsync(() => getWorkflow());
+  const workflowContent = createAsync(() => {
+    return getWorkflow();
+  });
 
   const [template, setTemplate] = createSignal<{
     template: WorkflowTemplate;

@@ -1,5 +1,5 @@
 import {Select, TextField} from '@codeui/kit';
-import * as formStyles from '#editor-layout//Panel/Form/Form.css';
+import * as formStyles from '#editor-layout/Panel/Form/Form.css';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '../../store/editor.store';
 import {PanelHeader} from '../../Layout/Panel/Form/PanelHeader';
