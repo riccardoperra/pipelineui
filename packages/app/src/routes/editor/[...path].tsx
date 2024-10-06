@@ -43,7 +43,7 @@ const getWorkflowFromUrl = cache(async (path: string) => {
 
 export const route = {
   preload: ({params}) => {
-    return getWorkflowFromUrl(params.id);
+    return getWorkflowFromUrl(params.path);
   },
 } satisfies RouteDefinition;
 
