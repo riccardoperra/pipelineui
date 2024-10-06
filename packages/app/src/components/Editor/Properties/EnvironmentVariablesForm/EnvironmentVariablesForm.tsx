@@ -13,7 +13,7 @@ import {EnvironmentVariablesItemForm} from './EnvironmentVariablesItemForm';
 
 export function EnvironmentVariablesForm() {
   const editor = provideState(EditorStore);
-  const envItems = () => Object.values(editor.get.structure.env.map);
+  const envItems = () => editor.get.structure.env.array;
 
   const addNew = () => {
     const draftInput: WorkflowStructureEnvItem = {

@@ -20,7 +20,7 @@ function getWorkflowStructureEnv(
   result: ParseWorkflowResult,
   template: WorkflowTemplate,
 ): WorkflowStructureEnv {
-  const defaultValue = {map: {}, array: []} satisfies WorkflowStructureEnv;
+  const defaultValue = {array: []} satisfies WorkflowStructureEnv;
   return handleTemplateTokenErrors(
     template.env,
     result.context,
@@ -28,7 +28,7 @@ function getWorkflowStructureEnv(
     () => {
       if (template.env.assertMapping('template env')) {
         const token = template.env as Tokens.MappingToken;
-        const map: Record<string, WorkflowStructureEnvItem> = {};
+        const array: WorkflowStructureEnvItem[] = [];
         for (const pair of token) {
           const name = handleTemplateTokenErrors(
             pair.key,
@@ -75,14 +75,14 @@ function getWorkflowStructureEnv(
             },
           );
 
-          map[name] = {
+          array.push({
             name,
             type,
             value,
-          };
+          });
         }
 
-        return {map};
+        return {array};
       }
     },
   );
