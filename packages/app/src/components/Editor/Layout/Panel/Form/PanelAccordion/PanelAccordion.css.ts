@@ -42,6 +42,7 @@ export const panelAccordionTrigger = style({
   width: '100%',
   textAlign: 'left',
   display: 'flex',
+  height: '36px',
   alignItems: 'center',
   gap: appTheme.spacing['2'],
   paddingLeft: appTheme.spacing['3'],
