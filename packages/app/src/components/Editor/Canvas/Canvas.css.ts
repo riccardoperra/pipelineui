@@ -20,3 +20,11 @@ export const canvasContainer = style({
   backgroundColor: '#000',
   backgroundSize: '36px 36px',
 });
+
+export const canvasSvg = style({
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  width: '100%',
+  height: '100%',
+});

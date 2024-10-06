@@ -76,7 +76,7 @@ export function Editor(props: EditorProps) {
 
                 <Resizable.Panel initialSize={0.58}>
                   <Show when={editor.get.template}>
-                    <Canvas template={editor.get.template!} />
+                    <Canvas />
                   </Show>
                 </Resizable.Panel>
 
@@ -120,7 +120,7 @@ export function Editor(props: EditorProps) {
           }}
         </Resizable>
       </div>
-      <EditorStatusBar />
+      {/*<EditorStatusBar />*/}
     </div>
   );
 }

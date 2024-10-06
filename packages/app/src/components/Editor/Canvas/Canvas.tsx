@@ -1,18 +1,184 @@
 import * as styles from './Canvas.css';
-import {FlowItem} from '../Flow/FlowItem';
 import {FlowContainer} from '../Flow/FlowContainer';
 import type {WorkflowTemplate} from '@pipelineui/workflow-parser';
-import {For} from 'solid-js';
+import {batch, createEffect, createSignal, Show} from 'solid-js';
+import type {ElkNode} from 'elkjs';
+import {useEditorContext} from '../editor.context';
+import {clientOnly} from '@solidjs/start';
 
-export interface CanvasProps {
-  template: WorkflowTemplate;
-}
+const FlowChart = clientOnly(() => import('../Flow/Edge/core'));
 
-export function Canvas(props: CanvasProps) {
+export function Canvas() {
+  const {template} = useEditorContext();
+  const [nodes, setNodes] = createSignal<Node[]>([]);
+  const [edges, setEdges] = createSignal<Edge[]>([]);
+  const [elkNode, setElkNode] = createSignal<ElkNode | null>(null);
+
+  createEffect(() => {
+    const nodes = template.jobs.map(
+      (job, index) =>
+        ({
+          id: `job-${job.id!.toString()}`,
+          position: {
+            x: 50,
+            y: 100 + 50 * index,
+          },
+          data: {
+            get label() {
+              return job.name?.toString() ?? '';
+            },
+            content: () => {
+              const id = `job-${job.id!.toString()}`;
+              const data = () =>
+                elkNode()?.children?.find(child => child.id === id);
+              return (
+                <Show when={data()}>
+                  {data => (
+                    <div
+                      style={{
+                        width: `${data().width! - 44}px`,
+                        height: `60px`,
+                      }}
+                    >
+                      Name: {job.name?.toString()}
+                      <Show when={job.type === 'job' && job}>
+                        {job => <>{job().steps.length} Steps</>}
+                      </Show>
+                    </div>
+                  )}
+                </Show>
+              );
+            },
+          },
+          inputs: 1,
+          outputs: 1,
+        }) satisfies Node,
+    );
+
+    const edges = template.jobs.reduce((acc, job) => {
+      const jobEdge: Edge[] = (job.needs ?? []).reduce((acc, need) => {
+        const cJob = template.jobs.find(
+          n => n.id.toString() === need.toString(),
+        );
+        if (!cJob) {
+          return acc;
+        }
+        return [
+          ...acc,
+          {
+            id: `${Math.random()}`,
+            sourceNode: `job-${cJob.id!.toString()}`,
+            targetNode: `job-${job.id!.toString()}`,
+            sourceOutput: 0,
+            targetInput: 0,
+          } satisfies Edge,
+        ];
+      }, [] as Edge[]);
+
+      return [...acc, ...jobEdge];
+    }, [] as Edge[]);
+
+    import('elkjs').then(({default: ELK}) => {
+      const elk = new ELK({});
+
+      const graph: ElkNode = {
+        id: 'root',
+        layoutOptions: {
+          // "elk.algorithm": "mrtree",
+          'elk.algorithm': 'layered',
+          'elk.direction': 'RIGHT',
+          'elk.alignment': 'TOP',
+          'elk.layered.spacing.edgeNodeBetweenLayers': '40',
+          // "elk.layered.nodePlacement.bk.fixedAlignment": "LEFTUP",
+          // "elk.layered.nodePlacement.favorStraightEdges": 'false',
+          'elk.spacing.nodeNode': '40',
+          'elk.layered.nodePlacement.strategy': 'INTERACTIVE',
+          'elk.layered.crossingMinimization.positionChoiceConstraint': '0',
+          'elk.layered.crossingMinimization.strategy': 'NONE',
+          // 'elk.layered.crossingMinimization.semiInteractive': 'true',
+          'elk.layered.crossingMinimization.forceNodeModelOrder': 'true',
+        },
+        children: [
+          ...nodes.map(node => {
+            return {
+              id: node.id,
+              width: 350,
+              height: 150,
+              properties: {
+                'org.eclipse.elk.portConstraints': 'FIXED_ORDER',
+              },
+            };
+          }),
+        ],
+        edges: nodes.reduce((acc, node, index, array) => {
+          const nodeJob = template.jobs.find(
+            job => node.id === `job-${job.id!.toString()}`,
+          );
+          if (nodeJob && nodeJob.needs?.length) {
+            const targets = nodeJob.needs.reduce((acc, need) => {
+              const job = template.jobs.find(
+                n => n.id.toString() === need.toString(),
+              );
+              if (!job) {
+                return acc;
+              }
+              return [...acc, `job-${job.id!.toString()}`];
+            }, [] as string[]);
+
+            targets.forEach(target => {
+              acc.push({
+                id: `edge-${Math.random()}`,
+                sources: [target],
+                targets: [node.id],
+              });
+            });
+          }
+
+          return acc;
+        }, [] as ElkExtendedEdge[]),
+      };
+
+      elk
+        .layout(graph)
+        .then(layout => {
+          console.log(layout);
+          nodes.forEach(node => {
+            const layoutNode = layout.children?.find(l => l.id === node.id);
+            if (layoutNode) {
+              node.position.x = layoutNode.x!;
+              node.position.y = layoutNode.y!;
+            }
+          });
+          batch(() => {
+            setElkNode(layout);
+            setNodes(nodes);
+            setEdges(edges);
+          });
+        })
+        .catch(console.warn);
+    });
+  });
+
   return (
     <div class={styles.canvasContainer}>
       <FlowContainer>
-        <For each={props.template.jobs}>{job => <FlowItem job={job} />}</For>
+        <FlowChart
+          edges={edges()}
+          nodes={nodes()}
+          onEdgesChange={setEdges}
+          onNodesChange={setNodes}
+        />
+
+        {/*<For each={props.template.jobs}>{job => <FlowItem job={job} />}</For>*/}
+
+        {/*<svg class={styles.canvasSvg}>*/}
+        {/*  <SmoothStep*/}
+        {/*    sourceX={343}*/}
+        {/*    sourceY={309.3865966796875}*/}
+        {/*    targetX={544.4347534179688}*/}
+        {/*    targetY={453.50982666015625}*/}
+        {/*  />*/}
+        {/*</svg>*/}
       </FlowContainer>
     </div>
   );

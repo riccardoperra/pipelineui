@@ -28,17 +28,16 @@ const getWorkflowFromUrl = cache(async (path: string) => {
 
   return await fetch(
     `https://ungh.cc/repos/${owner}/${repoName}/files/${branchName}/${filePath.join('/')}`,
-  ).then(
-    response =>
-      response.json() as Promise<{
-        meta: {
-          url: string;
-        };
-        file: {
-          contents: string;
-        };
-      }>,
-  );
+  ).then(response => {
+    return response.json() as Promise<{
+      meta: {
+        url: string;
+      };
+      file: {
+        contents: string;
+      };
+    }>;
+  });
 }, 'github-workflow');
 
 export const route = {
@@ -60,6 +59,7 @@ export default function EditorPage(props: RouteSectionProps) {
 
   createEffect(() => {
     const fetchedWorkflow = workflowContent();
+    console.log(fetchedWorkflow);
     if (!fetchedWorkflow) {
       return;
     }
