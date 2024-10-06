@@ -1,12 +1,12 @@
 import {PanelHeader} from '../../Layout/Panel/Form/PanelHeader';
-import {IconButton, TextField} from '@codeui/kit';
-import {createStore} from 'solid-js/store';
+import {TextField} from '@codeui/kit';
 import {createEffect} from 'solid-js';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '../../store/editor.store';
 import {useEditorContext} from '../../editor.context';
 import {FullWidthPanelRow} from '../../Layout/Panel/Form/PanelRow';
-import * as styles from '../../Jobs/JobPanelEditor/JobPanelEditor.css';
+import {formStyles} from '#editor-layout/Panel/Form/Form.css';
+import {PanelPlusButton} from '#editor-layout/Panel/Form/PanelPlusButton';
 
 export interface WorkflowConcurrency {
   group?: string;
@@ -14,7 +14,6 @@ export interface WorkflowConcurrency {
 }
 
 export function WorkflowConcurrencyForm() {
-  const [form, setFOrm] = createStore<WorkflowConcurrency>({});
   const editor = provideState(EditorStore);
   const {template, context} = useEditorContext();
 
@@ -31,27 +30,23 @@ export function WorkflowConcurrencyForm() {
       <PanelHeader
         label={'Concurrency'}
         rightContent={
-          <IconButton
-            size={'xs'}
-            theme={'secondary'}
-            aria-label={'Add concurrency groups'}
+          <PanelPlusButton
+            aria-label={'Add concurrency group'}
             onClick={() =>
               setConcurrency({
                 group: 'test',
                 cancelInProgress: `\${{github.test}}}`,
               })
             }
-          >
-            +
-          </IconButton>
+          />
         }
       />
 
       <FullWidthPanelRow>
         <TextField
           slotClasses={{
-            root: styles.inlineInputRoot,
-            label: styles.inlineInputLabel,
+            root: formStyles.inlineInputRoot,
+            label: formStyles.inlineInputLabel,
           }}
           size={'sm'}
           theme={'filled'}
@@ -62,8 +57,8 @@ export function WorkflowConcurrencyForm() {
       <FullWidthPanelRow>
         <TextField
           slotClasses={{
-            root: styles.inlineInputRoot,
-            label: styles.inlineInputLabel,
+            root: formStyles.inlineInputRoot,
+            label: formStyles.inlineInputLabel,
           }}
           size={'sm'}
           theme={'filled'}

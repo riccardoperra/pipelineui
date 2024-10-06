@@ -19,6 +19,7 @@ import * as styles from '#editor-layout/Panel/Form/Form.css';
 import {Match, Switch} from 'solid-js';
 import {createControllableSignal} from '@kobalte/core';
 import type {WorkflowDispatchInput} from '#editor-store/editor.types';
+import {Icon} from '#ui/components/Icon';
 
 export interface WorkflowDispatchItemFormProps {
   value: WorkflowDispatchInput;
@@ -52,9 +53,13 @@ export function WorkflowDispatchItemForm(props: WorkflowDispatchItemFormProps) {
           variant={'ghost'}
           theme={'secondary'}
           aria-label={'Delete'}
-          onClick={props.onDelete}
+          onClick={e => {
+            props.onDelete();
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
-          X
+          <Icon size={'sm'} name={'close_small'} />
         </IconButton>
       </Accordion.Header>
       <Accordion.Content class={workflowDispatchContent}>
@@ -110,8 +115,10 @@ export function WorkflowDispatchItemForm(props: WorkflowDispatchItemFormProps) {
 
           <FullWidthPanelRow>
             <Select
+              aria-label={'Type'}
               options={['string', 'boolean', 'number', 'choice', 'environment']}
               label={'Type'}
+              multiple={false}
               slotClasses={{
                 root: styles.inlineInputRoot,
                 label: styles.inlineInputLabel,

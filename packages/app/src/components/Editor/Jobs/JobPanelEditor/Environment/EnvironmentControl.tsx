@@ -11,8 +11,13 @@ import {
   TextField,
   textFieldStyles,
 } from '@codeui/kit';
-import * as styles from '../JobPanelEditor.css';
-import {createEffect, createSignal, Match, Switch} from 'solid-js';
+import {createSignal, Match, Switch} from 'solid-js';
+import {formStyles} from '#editor-layout/Panel/Form/Form.css';
+import {
+  environmentControlForm,
+  environmentControlInput,
+  environmentControlInputValue,
+} from './EnvironmentControl.css';
 
 export type JobEnvironment = {
   type: 'value' | 'reference';
@@ -47,10 +52,10 @@ function EnvironmentControlForm(props: EnvironmentControlFormProps) {
 
   return (
     <>
-      <div style={{display: 'flex', width: '240px'}}>
+      <div class={environmentControlForm}>
         <SegmentedControl
           autoWidth={true}
-          style={{width: '100%'}}
+          size={'sm'}
           value={modality()}
           onChange={value =>
             setModality(value as EnvironmentControlFormProps['initialModality'])
@@ -61,41 +66,43 @@ function EnvironmentControlForm(props: EnvironmentControlFormProps) {
             Reference
           </SegmentedControlItem>
         </SegmentedControl>
+
+        <Switch>
+          <Match when={modality() === 'value'}>
+            <TextField
+              size={'sm'}
+              theme={'filled'}
+              label={'Name'}
+              value={name()}
+              onChange={setName}
+            />
+          </Match>
+
+          <Match when={modality() === 'reference'}>
+            <TextField
+              size={'sm'}
+              theme={'filled'}
+              label={'Name'}
+              value={name()}
+              onChange={setName}
+            />
+
+            <TextField
+              size={'sm'}
+              theme={'filled'}
+              label={'Url'}
+              value={url()}
+              onChange={setUrl}
+            />
+          </Match>
+        </Switch>
+
+        <div>
+          <Button theme={'primary'} onClick={submit} size={'sm'}>
+            Confirm
+          </Button>
+        </div>
       </div>
-
-      <Switch>
-        <Match when={modality() === 'value'}>
-          <TextField
-            size={'sm'}
-            theme={'filled'}
-            label={'Name'}
-            value={name()}
-            onChange={setName}
-          />
-        </Match>
-
-        <Match when={modality() === 'reference'}>
-          <TextField
-            size={'sm'}
-            theme={'filled'}
-            label={'Name'}
-            value={name()}
-            onChange={setName}
-          />
-
-          <TextField
-            size={'sm'}
-            theme={'filled'}
-            label={'Url'}
-            value={url()}
-            onChange={setUrl}
-          />
-        </Match>
-      </Switch>
-
-      <Button theme={'primary'} onClick={submit} size={'sm'}>
-        Confirm
-      </Button>
     </>
   );
 }
@@ -107,7 +114,11 @@ export function EnvironmentControl(props: EnvironmentControlProps) {
   });
 
   const inputClasses = () =>
-    mergeClasses(fieldProps.baseStyle(), textFieldStyles.textField);
+    mergeClasses(
+      fieldProps.baseStyle(),
+      textFieldStyles.textField,
+      environmentControlInput,
+    );
 
   return (
     <>
@@ -117,7 +128,7 @@ export function EnvironmentControl(props: EnvironmentControlProps) {
             <div
               class={mergeClasses(
                 textFieldStyles.baseFieldContainer,
-                styles.inlineInputRoot,
+                formStyles.inlineInputRoot,
               )}
               data-field-size={'sm'}
               {...triggerProps}
@@ -125,12 +136,16 @@ export function EnvironmentControl(props: EnvironmentControlProps) {
               <label
                 class={mergeClasses(
                   fieldLabelStyles.label,
-                  styles.inlineInputLabel,
+                  formStyles.inlineInputLabel,
                 )}
               >
                 Environment
               </label>
-              <div class={inputClasses()}>{props.value.name}</div>
+              <div class={inputClasses()}>
+                <span class={environmentControlInputValue}>
+                  {props.value.name}
+                </span>
+              </div>
             </div>
           )}
         />
