@@ -1,8 +1,9 @@
 import {Accordion} from '@kobalte/core/accordion';
 import {IconButton} from '@codeui/kit';
-import {type FlowProps} from 'solid-js';
+import {createSignal, type FlowProps, useContext} from 'solid-js';
 import * as styles from './PanelAccordion.css';
 import {Icon} from '#ui/components/Icon';
+import {panelAccordionTriggerIcon} from './PanelAccordion.css';
 
 export interface PanelAccordionItemProps {
   value: string;
@@ -19,10 +20,18 @@ export function PanelAccordion(props: FlowProps) {
 }
 
 export function PanelAccordionItem(props: FlowProps<PanelAccordionItemProps>) {
+  const [] = createSignal();
+
   return (
     <Accordion.Item value={props.value} class={styles.panelAccordionItem}>
       <Accordion.Header class={styles.panelAccordionHeader}>
         <Accordion.Trigger class={styles.panelAccordionTrigger}>
+          <Icon
+            size={'sm'}
+            name={'keyboard_arrow_down'}
+            class={styles.panelAccordionTriggerIcon}
+          />
+
           {props.name}
         </Accordion.Trigger>
         <IconButton

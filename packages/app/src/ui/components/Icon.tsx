@@ -4,6 +4,7 @@ import {mergeClasses} from '../../../../../../codeui/packages/kit';
 type IconName = 'plus' | 'delete' | 'close' | 'fit_screen';
 
 export type IconProps = IconVariants & {
+  class?: string;
   name: IconName | (string & {});
 };
 
@@ -15,6 +16,7 @@ export function Icon(props: IconProps) {
         icon({
           size: props.size,
         }),
+        props.class,
       )}
     >
       {props.name}

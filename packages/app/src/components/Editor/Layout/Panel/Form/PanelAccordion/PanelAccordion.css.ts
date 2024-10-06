@@ -41,9 +41,21 @@ export const panelAccordionTrigger = style({
   border: 'none',
   width: '100%',
   textAlign: 'left',
+  display: 'flex',
+  alignItems: 'center',
+  gap: appTheme.spacing['2'],
   paddingLeft: appTheme.spacing['3'],
   background: `transparent`,
   color: themeVars.accent10,
+});
+
+export const panelAccordionTriggerIcon = style({
+  lineHeight: 1,
+  selectors: {
+    '[data-expanded] > &': {
+      transform: `rotate(180deg)`,
+    },
+  },
 });
 
 export const panelAccordionContent = style({
