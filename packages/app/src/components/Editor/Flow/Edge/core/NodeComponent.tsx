@@ -109,13 +109,6 @@ const NodeComponent: Component<Props> = (props: Props) => {
                   inputRefs[index()] = ref;
                 }}
                 class={styles.nodeInput}
-                onMouseDown={(event: any) => {
-                  event.stopPropagation();
-                }}
-                onMouseUp={(event: any) => {
-                  event.stopPropagation();
-                  if (props.onMouseUpInput) props.onMouseUpInput(index());
-                }}
               ></div>
             )}
           </For>
