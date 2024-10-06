@@ -13,7 +13,6 @@
     "noEmit": true,
     "types": ["vinxi/types/client"],
     "isolatedModules": true,
-    "preserveSymlinks": true,
     "paths": {
       "~/*": ["./src/*"],
       "#editor-layout/*": ["src/components/Editor/Layout/*"],

@@ -1,12 +1,11 @@
 import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
 import {For} from 'solid-js';
-import {Accordion} from '@kobalte/core/accordion';
-import {workflowDispatchList} from './WorkflowDispatchForm.css';
 import {WorkflowDispatchItemForm} from './WorkflowDispatchItemForm';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '../../store/editor.store';
 import type {WorkflowDispatchInput} from '../../store/editor.types';
 import {PanelPlusButton} from '#editor-layout/Panel/Form/PanelPlusButton';
+import {PanelAccordion} from '#editor-layout/Panel/Form/PanelAccordion/PanelAccordion';
 
 export function WorkflowDispatchForm() {
   const editor = provideState(EditorStore);
@@ -38,7 +37,7 @@ export function WorkflowDispatchForm() {
         }
       />
 
-      <Accordion class={workflowDispatchList} collapsible>
+      <PanelAccordion>
         <For each={workflowDispatchInputs()}>
           {(input, index) => {
             return (
@@ -55,7 +54,7 @@ export function WorkflowDispatchForm() {
             );
           }}
         </For>
-      </Accordion>
+      </PanelAccordion>
     </>
   );
 }
