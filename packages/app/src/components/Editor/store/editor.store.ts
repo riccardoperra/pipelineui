@@ -68,6 +68,17 @@ export const EditorStore = defineStore<EditorState>(() => ({
     return {
       session,
 
+      selectedJob: () => {
+        const selectedJobId = _.get.selectedJobId;
+        if (!selectedJobId) {
+          return;
+        }
+        console.log(selectedJobId);
+        return _.get.template?.jobs.find(job => {
+          return job.id.value === selectedJobId;
+        });
+      },
+
       actions: {
         environmentVariables: {
           addNew: (value: WorkflowStructureEnvItem) => {

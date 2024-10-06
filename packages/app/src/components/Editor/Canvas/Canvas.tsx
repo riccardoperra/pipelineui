@@ -5,14 +5,26 @@ import {batch, createEffect, createSignal, Show} from 'solid-js';
 import type {ElkNode} from 'elkjs';
 import {useEditorContext} from '../editor.context';
 import {clientOnly} from '@solidjs/start';
+import {provideState} from 'statebuilder';
+import {EditorUiStore} from '#editor-store/ui.store';
+import {EditorStore} from '#editor-store/editor.store';
+import type {NodeProps} from '../Flow/Edge/core';
 
 const FlowChart = clientOnly(() => import('../Flow/Edge/core'));
 
 export function Canvas() {
   const {template} = useEditorContext();
+  const editor = provideState(EditorStore);
+
   const [nodes, setNodes] = createSignal<Node[]>([]);
   const [edges, setEdges] = createSignal<Edge[]>([]);
   const [elkNode, setElkNode] = createSignal<ElkNode | null>(null);
+
+  const onSelectedChange = (node: NodeProps | null) => {
+    const job = !node ? null : node.id.replace('job-', '');
+    console.log(node);
+    editor.set('selectedJobId', job);
+  };
 
   createEffect(() => {
     const nodes = template.jobs.map(
@@ -167,6 +179,7 @@ export function Canvas() {
           nodes={nodes()}
           onEdgesChange={setEdges}
           onNodesChange={setNodes}
+          onSelectedChange={onSelectedChange}
         />
 
         {/*<For each={props.template.jobs}>{job => <FlowItem job={job} />}</For>*/}

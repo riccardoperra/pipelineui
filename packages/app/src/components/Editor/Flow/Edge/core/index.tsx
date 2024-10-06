@@ -64,6 +64,7 @@ interface Props {
   edges: EdgeProps[];
   onNodesChange: (newNodes: NodeProps[]) => void;
   onEdgesChange: (newEdges: EdgeProps[]) => void;
+  onSelectedChange: (node: NodeProps | null) => void;
 }
 
 function getEdgeId(
@@ -347,6 +348,7 @@ const FlowChart: Component<Props> = (props: Props) => {
             onNodeMount={handleOnNodeMount}
             onNodePress={handleOnNodePress}
             onNodeDelete={handleOnNodeDelete}
+            onSelectedChange={props.onSelectedChange}
           />
           <EdgesBoard
             newEdge={newEdge()}

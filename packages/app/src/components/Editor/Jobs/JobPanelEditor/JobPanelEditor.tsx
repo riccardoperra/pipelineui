@@ -6,7 +6,7 @@ import {PanelHeader} from '../../Layout/Panel/Form/PanelHeader';
 import {FullWidthPanelRow} from '../../Layout/Panel/Form/PanelRow';
 import {PanelDivider} from '../../Layout/Panel/Form/PanelDivider';
 import {JobStepsForm} from './JobStepsForm/JobStepsForm';
-import {createEffect, createSignal, Match, Switch} from 'solid-js';
+import {createEffect, createSignal, Match, Show, Switch} from 'solid-js';
 import {JobStepForm} from './JobStepsForm/JobStep/JobStepForm';
 import {useEditorContext} from '../../editor.context';
 import {createStore} from 'solid-js/store';
@@ -32,14 +32,7 @@ export function JobPanelEditor() {
   const editorStore = provideState(EditorStore);
   const {template, context} = useEditorContext();
 
-  const job = () => {
-    if (!editorStore.get.selectedJobId) {
-      return;
-    }
-    return template.jobs.find(
-      job => job.id.value === editorStore.get.selectedJobId,
-    );
-  };
+  const job = () => editorStore.selectedJob();
 
   const needs = () => {
     const templateJobs = template.jobs.filter(_job => _job.id !== job()?.id);

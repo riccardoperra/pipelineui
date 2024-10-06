@@ -104,7 +104,7 @@ export function Editor(props: EditorProps) {
                             <Match when={rightPanel() === 'properties'}>
                               <Show
                                 fallback={<PropertiesPanelEditor />}
-                                when={editor.get.selectedJobId}
+                                when={editor.selectedJob()}
                               >
                                 <JobPanelEditor />
                               </Show>

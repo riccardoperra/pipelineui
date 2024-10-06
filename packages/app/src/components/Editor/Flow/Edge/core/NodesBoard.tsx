@@ -21,6 +21,7 @@ interface Props {
   onNodePress: (x: number, y: number) => void;
   onNodeMove: (nodeIndex: number, x: number, y: number) => void;
   onNodeDelete: (nodeId: string) => void;
+  onSelectedChange: (node: NodeProps | null) => void;
 }
 
 const NodesBoard: Component<Props> = (props: Props) => {
@@ -29,8 +30,9 @@ const NodesBoard: Component<Props> = (props: Props) => {
 
   let scene: any;
 
-  function handleOnMouseDownNode(index: number) {
+  function handleOnMouseDownNode(index: number, node: NodeProps | null) {
     setSelected(index);
+    props.onSelectedChange?.(node);
   }
 
   return (
@@ -46,7 +48,7 @@ const NodesBoard: Component<Props> = (props: Props) => {
             content={node.data.content}
             inputs={node.inputs}
             outputs={node.outputs}
-            onMouseDown={event => handleOnMouseDownNode(index())}
+            onMouseDown={event => handleOnMouseDownNode(index(), node)}
             onNodeMount={(
               inputs: {offset: {x: number; y: number}}[],
               outputs: {offset: {x: number; y: number}}[],
@@ -92,7 +94,10 @@ const NodesBoard: Component<Props> = (props: Props) => {
               })
             }
             onClickOutside={() => {
-              if (index() === selected()) setSelected(null);
+              if (index() === selected()) {
+                setSelected(null);
+                props.onSelectedChange?.(null);
+              }
             }}
             onClickDelete={() => {
               setSelected(null);
