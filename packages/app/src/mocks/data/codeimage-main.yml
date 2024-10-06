@@ -1,0 +1,483 @@
+name: Main
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened, edited, assigned ]
+  pull_request_target:
+    types: [ opened, synchronize, reopened, edited, assigned ]
+    branches:
+      - changeset-release/main
+
+
+env:
+  IS_MAIN_BRANCH: ${{ github.head_ref == 'main' }}
+  IS_NEXT_BRANCH: ${{ github.head_ref == 'next' }}
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - uses: dorny/paths-filter@v2
+        if: (${{ env.IS_MAIN_BRANCH == 'false' }} || ${{ env.IS_NEXT_BRANCH == 'false' }})
+        id: diff-changes
+        with:
+          filters: |
+            app:
+              - apps/codeimage/**
+              - package.json
+              - pnpm-lock.json
+            libs:
+              - packages/**
+              - package.json
+              - pnpm-lock.json
+            backend:
+              - 'packages/prisma-models/**'
+              - 'apps/api/**'
+              - package.json
+              - pnpm-lock.json
+
+    outputs:
+      backend-change: 'true'
+      app-change: 'true'
+      libs-change: 'true'
+  #      backend-change: ${{ steps.filter.outputs.backend }}
+  #      app-change: ${{ steps.filter.outputs.app }}
+  #      libs-change: ${{ steps.filter.outputs.libs }}
+
+  lint:
+    name: Lint
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: Prisma migrate
+        run: |
+          cd apps/api
+          pnpm exec prisma generate
+          pnpm --filter=@codeimage/prisma-models build
+
+      - name: Lint
+        run: pnpm lint
+
+  build-packages:
+    name: Build packages
+    needs: [ install ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: Prisma migrate
+        run: |
+          cd apps/api
+          pnpm exec prisma generate
+          pnpm --filter=@codeimage/prisma-models build
+
+      - name: Build packages
+        run: |
+          pnpm libs:build
+
+      - name: Cache packages
+        uses: actions/cache@v4
+        with:
+          path: packages
+          key: packages-dist-${{ github.run_id }}-${{ github.run_number }}
+
+  typecheck-packages:
+    if: ${{ needs.install.outputs.libs-change == 'true' }}
+    name: Type-checking
+    needs: [ install, build-packages ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: Prisma migrate
+        run: |
+          cd apps/api
+          pnpm exec prisma generate
+          pnpm --filter=@codeimage/prisma-models build
+
+      - name: Restore dist
+        uses: actions/cache@v4
+        with:
+          path: packages
+          key: packages-dist-${{ github.run_id }}-${{ github.run_number }}
+
+      - name: Typecheck packages
+        run: |
+          pnpm --filter='./packages/**' --recursive typecheck:ci
+
+      - name: Typecheck app
+        run: |
+          pnpm --filter='@codeimage/api' typecheck:ci
+          pnpm --filter='@codeimage/app' typecheck
+
+  build-app-dev:
+    name: Build App and Preview (Dev)
+    environment: Preview
+    needs: [ build-packages ]
+    if: ${{ github.head_ref  != 'next' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: Restore dist
+        uses: actions/cache@v4
+        with:
+          path: packages
+          key: packages-dist-${{ github.run_id }}-${{ github.run_number }}
+
+      - name: Build app
+        env:
+          VITE_PUBLIC_AUTH0_DOMAIN: ${{ secrets.VITE_PUBLIC_AUTH0_DOMAIN }}
+          VITE_PUBLIC_AUTH0_CLIENT_ID: ${{ secrets.VITE_PUBLIC_AUTH0_CLIENT_ID }}
+          VITE_PUBLIC_AUTH0_AUDIENCE: ${{ secrets.VITE_PUBLIC_AUTH0_AUDIENCE }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_ENABLE_MSW: ${{ env.IS_NEXT_BRANCH == 'false' }}
+          VITE_PRESET_LIMIT: 10
+          VITE_PRESET_LIMIT_GUEST: 5
+          UMAMI_SCRIPT_SRC: ${{ secrets.UMAMI_SCRIPT_SRC }}
+          UMAMI_WEBSITE_ID: ${{ secrets.UMAMI_WEBSITE_ID }}
+          ENABLE_VERCEL_BUILD: true
+        run: |
+          pnpm --filter=@codeimage/app build
+
+      - uses: amondnet/vercel-action@v25.2.0
+        with:
+          vercel-token: ${{secrets.VERCEL_TOKEN}} # Required
+          github-token: ${{secrets.GITHUB_TOKEN}} #Optional
+          vercel-args: '--prebuilt' #Optional
+          working-directory: apps/codeimage
+          vercel-org-id: ${{secrets.VERCEL_ORG_ID}} #Required
+          vercel-project-id: ${{secrets.VERCEL_PROJECT_ID}} #Required
+          alias-domains: | #Optional
+            codeimage-app-pr-{{PR_NUMBER}}.vercel.app
+
+
+  build-app-next:
+    name: Build App and Preview (Next)
+    environment: Next
+    needs: [ build-packages ]
+    if: ${{ github.head_ref  == 'next' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: Restore dist
+        uses: actions/cache@v4
+        with:
+          path: packages
+          key: packages-dist-${{ github.run_id }}-${{ github.run_number }}
+
+      - name: Build app
+        env:
+          VITE_PUBLIC_AUTH0_DOMAIN: ${{ secrets.VITE_PUBLIC_AUTH0_DOMAIN }}
+          VITE_PUBLIC_AUTH0_CLIENT_ID: ${{ secrets.VITE_PUBLIC_AUTH0_CLIENT_ID }}
+          VITE_PUBLIC_AUTH0_AUDIENCE: ${{ secrets.VITE_PUBLIC_AUTH0_AUDIENCE }}
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_ENABLE_MSW: ${{ env.IS_NEXT_BRANCH == 'false' }}
+          VITE_PRESET_LIMIT: 10
+          VITE_PRESET_LIMIT_GUEST: 5
+          UMAMI_SCRIPT_SRC: ${{ secrets.UMAMI_SCRIPT_SRC }}
+          UMAMI_WEBSITE_ID: ${{ secrets.UMAMI_WEBSITE_ID }}
+          ENABLE_VERCEL_BUILD: true
+        run: |
+          pnpm --filter=@codeimage/app build
+
+      - uses: amondnet/vercel-action@v25.2.0
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+          vercel-args: '--prebuilt' #Optional
+          working-directory: apps/codeimage
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}} #Required
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID}} #Required
+          alias-domains: | #Optional
+            codeimage-app-pr-{{PR_NUMBER}}.vercel.app
+            next.codeimage.dev
+
+  build-highlight-dev:
+    name: '@codeimage/highlight dev and Preview'
+    environment: Preview
+    needs: [ build-packages ]
+    if: (${{ needs.install.outputs.app-change == 'true' }} || ${{ needs.install.outputs.libs-change == 'true' }})
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: Restore dist
+        uses: actions/cache@v4
+        with:
+          path: packages
+          key: packages-dist-${{ github.run_id }}-${{ github.run_number }}
+
+      - name: Build highlight demo
+        env:
+          ENABLE_VERCEL_BUILD: true
+        run: |
+          pnpm --filter=@codeimage/highlight build:dev
+
+      - uses: amondnet/vercel-action@v25.2.0
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+          vercel-args: '--prebuilt' #Optional
+          working-directory: packages/highlight/dev
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }} #Required
+          vercel-project-id: ${{ secrets.VERCEL_HIGHLIGHT_DEV_PROJECT_ID}} #Required
+          alias-domains: | #Optional
+            codeimage-highlight-pr-{{PR_NUMBER}}.vercel.app
+
+  build-website-dev:
+    name: '@codeimage/website dev and Preview'
+    environment: Preview
+    needs: [ build-packages ]
+    if: (${{ needs.install.outputs.app-change == 'true' }} || ${{ needs.install.outputs.libs-change == 'true' }})
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: Restore dist
+        uses: actions/cache@v4
+        with:
+          path: packages
+          key: packages-dist-${{ github.run_id }}-${{ github.run_number }}
+
+      - name: Build website preview
+        env:
+          VITE_UMAMI_SCRIPT_SRC: ${{ secrets.UMAMI_LANDING_SCRIPT_SRC }}
+          VITE_UMAMI_WEBSITE_ID: ${{ secrets.UMAMI_LANDING_WEBSITE_ID }}
+          VITE_PUBLIC_AUTH0_DOMAIN: ${{ secrets.VITE_PUBLIC_AUTH0_DOMAIN }}
+          VITE_PUBLIC_AUTH0_CLIENT_ID: ${{ secrets.VITE_PUBLIC_AUTH0_CLIENT_ID }}
+          VITE_PUBLIC_AUTH0_AUDIENCE: ${{ secrets.VITE_PUBLIC_AUTH0_AUDIENCE }}
+        run: |
+          pnpm --filter=@codeimage/website build
+
+      - uses: amondnet/vercel-action@v25.2.0
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+          github-token: ${{ secrets.GITHUB_TOKEN }} #Optional
+          vercel-args: '--prebuilt' #Optional
+          working-directory: apps/website
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }} #Required
+          vercel-project-id: ${{ secrets.VERCEL_WEBSITE_DEV_PROJECT_ID}} #Required
+          alias-domains: | #Optional
+            codeimage-website-pr-{{PR_NUMBER}}.vercel.app
+
+      - name: Cache website
+        uses: actions/cache@v4
+        with:
+          path: apps/website
+          key: apps-website-${{ github.run_id }}-${{ github.run_number }}
+
+  website-lhci:
+    name: Lighthouse
+    needs: [ build-website-dev ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: Restore website
+        uses: actions/cache@v4
+        with:
+          path: apps/website
+          key: apps-website-${{ github.run_id }}-${{ github.run_number }}
+
+      - name: run Lighthouse CI
+        run: |
+          cd apps/website
+          pnpm lighthouse
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+
+  build-api:
+    name: Build Api
+    needs: [ install, build-packages ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: "[API] Generate Prisma Migration"
+        run: |
+          pnpm --filter=@codeimage/api exec prisma generate
+          pnpm --filter=@codeimage/prisma-models build
+
+      - name: Build
+        run: |
+          pnpm --filter=@codeimage/api build:ts
+          pnpm prepare:api:deploy
+
+      - name: Cache build
+        uses: actions/cache@v4
+        with:
+          path: |
+            dist/api-bundle/**
+          key: rest-api-bundle-${{ github.run_id }}-${{ github.run_number }}
+          restore-keys: rest-api-bundle-${{ github.run_id }}-${{ github.run_number }}
+
+  be-test:
+    if: ${{ needs.install.outputs.backend-change == 'true' }}
+    name: Api test
+    needs: [ install ]
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_codeimage
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_codeimage
+      DOMAIN_AUTH0: https://example.it
+      CLIENT_ID_AUTH0: <client-id-auth>
+      CLIENT_SECRET_AUTH0: <client-secret-auth>
+      AUTH0_CLIENT_CLAIMS: https://example.com
+      AUDIENCE_AUTH0: https://example.com
+      GRANT_TYPE_AUTH0: client_credentials
+      MOCK_AUTH: false
+      MOCK_AUTH_EMAIL: dev@example.it
+      ALLOWED_ORIGINS: '*'
+
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: Restore dist
+        uses: actions/cache@v4
+        with:
+          path: |
+            packages
+          key: packages-${{ github.run_id }}-${{ github.run_number }}
+
+      - name: Prisma migrate
+        run: |
+          cd apps/api
+          pnpm exec prisma migrate deploy
+          pnpm exec prisma generate
+          pnpm --filter=@codeimage/prisma-models build
+
+      - name: Test (unit)
+        run: pnpm --filter=@codeimage/api test:unit
+
+      - name: Test (integration)
+        run: pnpm --filter=@codeimage/api test:integration
+
+  deploy-api-next:
+    if: ${{ github.head_ref  == 'next' }}
+    environment: Next
+    name: Deploy next
+    needs: [
+      lint,
+      build-packages,
+      build-api,
+      be-test,
+      build-app-next
+    ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: Restore packages
+        uses: actions/cache@v4
+        with:
+          path: packages
+          key: packages-dist-${{ github.run_id }}-${{ github.run_number }}
+
+      - name: Restore api build
+        uses: actions/cache@v4
+        with:
+          path: |
+            dist/api-bundle/**
+          key: rest-api-bundle-${{ github.run_id }}-${{ github.run_number }}
+
+      - name: Run migrations
+        run: |
+          pnpm --filter=@codeimage/api exec prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.NEXT_DATABASE_URL }}
+
+      - name: Deploy
+        run: |
+          find -type f -name '.gitignore' -delete
+          pnpm railway link --environment next $RAILWAY_API_PROJECT_ID
+          cd dist/api-bundle
+          pnpm railway up --detach
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_API_PROJECT_ID: ${{ secrets.RAILWAY_API_PROJECT_ID }}
+
+concurrency:
+  group: main-${{ github.head_ref }}
+  cancel-in-progress: true
