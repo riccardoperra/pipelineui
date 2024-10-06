@@ -1,16 +1,16 @@
 import type {
-  WorkflowDispatchInput,
-  EditorWorkflowStructure,
-} from '../editor.store';
-import type {
   ParseWorkflowResult,
   WorkflowTemplate,
 } from '@pipelineui/workflow-parser';
+import type {
+  EditorWorkflowStructure,
+  WorkflowDispatchInput,
+} from '../editor.types';
 
 export function getStructureFromWorkflow(
   result: ParseWorkflowResult,
   template: WorkflowTemplate,
-): WorkflowStructure {
+): EditorWorkflowStructure {
   console.debug(result, template);
   return {
     name: 'fileName',

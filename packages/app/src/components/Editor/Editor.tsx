@@ -10,7 +10,7 @@ import {Match, onMount, Show, Switch} from 'solid-js';
 import {YamlEditor} from './YamlEditor/YamlEditor';
 import {EditorStatusBar} from './StatusBar/StatusBar';
 import Resizable from '@corvu/resizable';
-import {EditorResizableHandler} from './Layout/Resizable';
+import {EditorResizableHandler} from './Layout/Resizable/Resizable';
 import {EditorStore} from './store/editor.store';
 import {useEditorContext} from './editor.context';
 import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';

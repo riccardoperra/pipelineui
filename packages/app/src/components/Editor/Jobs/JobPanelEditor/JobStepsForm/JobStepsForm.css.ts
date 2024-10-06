@@ -1,6 +1,6 @@
 import {style} from '@vanilla-extract/css';
 import {themeVars} from '@codeui/kit';
-import {appTheme} from '../../../../../ui/theme.css';
+import {appTheme} from '#ui/theme.css';
 
 export const container = style({
   display: 'flex',

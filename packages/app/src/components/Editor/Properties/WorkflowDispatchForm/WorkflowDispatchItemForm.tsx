@@ -6,7 +6,7 @@ import {
   workflowDispatchItemForm,
   workflowDispatchTrigger,
 } from './WorkflowDispatchForm.css';
-import {FullWidthPanelRow} from '../../Jobs/JobPanelEditor/Form/PanelRow';
+import {FullWidthPanelRow} from '#editor-layout/Panel/Form/PanelRow';
 import {
   Checkbox,
   IconButton,
@@ -15,11 +15,10 @@ import {
   TextArea,
   TextField,
 } from '@codeui/kit';
-
-import * as styles from '../../Jobs/JobPanelEditor/JobPanelEditor.css';
+import * as styles from '#editor-layout/Panel/Form/Form.css';
 import {Match, Switch} from 'solid-js';
 import {createControllableSignal} from '@kobalte/core';
-import type {WorkflowDispatchInput} from '../../store/editor.types';
+import type {WorkflowDispatchInput} from '#editor-store/editor.types';
 
 export interface WorkflowDispatchItemFormProps {
   value: WorkflowDispatchInput;

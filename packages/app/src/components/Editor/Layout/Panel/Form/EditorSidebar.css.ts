@@ -1,6 +1,6 @@
 import {createTheme, style} from '@vanilla-extract/css';
 import {recipe} from '@vanilla-extract/recipes';
-import {appTheme} from '../../../../../ui/theme.css';
+import {appTheme} from '#ui/theme.css';
 import {themeVars} from '@codeui/kit';
 
 export const [sidebarTheme, sidebarVars] = createTheme({

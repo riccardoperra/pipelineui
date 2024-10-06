@@ -1,10 +1,10 @@
 import {Select, TextField} from '@codeui/kit';
-import * as styles from './JobPanelEditor.css';
+import * as formStyles from '#editor-layout//Panel/Form/Form.css';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '../../store/editor.store';
-import {PanelHeader} from './Form/PanelHeader';
-import {FullWidthPanelRow} from './Form/PanelRow';
-import {PanelDivider} from './Form/PanelDivider';
+import {PanelHeader} from '../../Layout/Panel/Form/PanelHeader';
+import {FullWidthPanelRow} from '../../Layout/Panel/Form/PanelRow';
+import {PanelDivider} from '../../Layout/Panel/Form/PanelDivider';
 import {JobStepsForm} from './JobStepsForm/JobStepsForm';
 import {createEffect, createSignal, Match, Switch} from 'solid-js';
 import {JobStepForm} from './JobStepsForm/JobStep/JobStepForm';
@@ -19,6 +19,7 @@ import {
   EnvironmentControl,
   type JobEnvironment,
 } from './Environment/EnvironmentControl';
+import {PanelGroup} from '#editor-layout/Panel/Form/PanelGroup';
 
 interface Form {
   name: string;
@@ -98,7 +99,7 @@ export function JobPanelEditor() {
   });
 
   return (
-    <div class={styles.jobPanelEditor}>
+    <PanelGroup>
       <Switch>
         <Match when={!!activeStep()}>
           <JobStepForm />
@@ -109,8 +110,8 @@ export function JobPanelEditor() {
           <FullWidthPanelRow>
             <TextField
               slotClasses={{
-                root: styles.inlineInputRoot,
-                label: styles.inlineInputLabel,
+                root: formStyles.inlineInputRoot,
+                label: formStyles.inlineInputLabel,
               }}
               size={'sm'}
               theme={'filled'}
@@ -126,8 +127,8 @@ export function JobPanelEditor() {
           <FullWidthPanelRow>
             <TextField
               slotClasses={{
-                root: styles.inlineInputRoot,
-                label: styles.inlineInputLabel,
+                root: formStyles.inlineInputRoot,
+                label: formStyles.inlineInputLabel,
               }}
               size={'sm'}
               theme={'filled'}
@@ -150,8 +151,8 @@ export function JobPanelEditor() {
               theme={'filled'}
               label={'Needs'}
               slotClasses={{
-                root: styles.inlineInputRoot,
-                label: styles.inlineInputLabel,
+                root: formStyles.inlineInputRoot,
+                label: formStyles.inlineInputLabel,
               }}
             />
           </FullWidthPanelRow>
@@ -172,8 +173,8 @@ export function JobPanelEditor() {
           <FullWidthPanelRow>
             <TextField
               slotClasses={{
-                root: styles.inlineInputRoot,
-                label: styles.inlineInputLabel,
+                root: formStyles.inlineInputRoot,
+                label: formStyles.inlineInputLabel,
               }}
               size={'sm'}
               theme={'filled'}
@@ -190,6 +191,6 @@ export function JobPanelEditor() {
           <PanelDivider />
         </Match>
       </Switch>
-    </div>
+    </PanelGroup>
   );
 }

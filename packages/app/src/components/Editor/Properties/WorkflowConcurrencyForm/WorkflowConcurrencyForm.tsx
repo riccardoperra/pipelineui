@@ -1,11 +1,11 @@
-import {PanelHeader} from '../../Jobs/JobPanelEditor/Form/PanelHeader';
+import {PanelHeader} from '../../Layout/Panel/Form/PanelHeader';
 import {IconButton, TextField} from '@codeui/kit';
 import {createStore} from 'solid-js/store';
 import {createEffect} from 'solid-js';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '../../store/editor.store';
 import {useEditorContext} from '../../editor.context';
-import {FullWidthPanelRow} from '../../Jobs/JobPanelEditor/Form/PanelRow';
+import {FullWidthPanelRow} from '../../Layout/Panel/Form/PanelRow';
 import * as styles from '../../Jobs/JobPanelEditor/JobPanelEditor.css';
 
 export interface WorkflowConcurrency {

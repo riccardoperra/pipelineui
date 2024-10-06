@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "baseUrl": "./",
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
@@ -13,7 +14,10 @@
     "types": ["vinxi/types/client"],
     "isolatedModules": true,
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "#editor-layout/*": ["src/components/Editor/Layout/*"],
+      "#ui/*": ["src/ui/*"],
+      "#editor-store/*": ["src/components/Editor/store/*"]
     }
   }
 }

@@ -1,18 +1,19 @@
-import {FullWidthPanelRow} from '../../Form/PanelRow';
+import {FullWidthPanelRow} from '#editor-layout/Panel/Form/PanelRow';
 import {TextField} from '@codeui/kit';
-import * as styles from '../../JobPanelEditor.css';
-import {PanelHeader} from '../../Form/PanelHeader';
+import * as formStyles from '#editor-layout/Panel/Form/Form.css';
+import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
+import {PanelGroup} from '#editor-layout/Panel/Form/PanelGroup';
 
 export function JobStepForm() {
   return (
-    <div class={styles.jobPanelEditor}>
+    <PanelGroup>
       <PanelHeader label={'Job information'} />
 
       <FullWidthPanelRow>
         <TextField
           slotClasses={{
-            root: styles.inlineInputRoot,
-            label: styles.inlineInputLabel,
+            root: formStyles.inlineInputRoot,
+            label: formStyles.inlineInputLabel,
           }}
           size={'sm'}
           theme={'filled'}
@@ -35,8 +36,8 @@ export function JobStepForm() {
       <FullWidthPanelRow>
         <TextField
           slotClasses={{
-            root: styles.inlineInputRoot,
-            label: styles.inlineInputLabel,
+            root: formStyles.inlineInputRoot,
+            label: formStyles.inlineInputLabel,
           }}
           size={'sm'}
           theme={'filled'}
@@ -47,14 +48,14 @@ export function JobStepForm() {
       <FullWidthPanelRow>
         <TextField
           slotClasses={{
-            root: styles.inlineInputRoot,
-            label: styles.inlineInputLabel,
+            root: formStyles.inlineInputRoot,
+            label: formStyles.inlineInputLabel,
           }}
           size={'sm'}
           theme={'filled'}
           label={'Uses'}
         />
       </FullWidthPanelRow>
-    </div>
+    </PanelGroup>
   );
 }

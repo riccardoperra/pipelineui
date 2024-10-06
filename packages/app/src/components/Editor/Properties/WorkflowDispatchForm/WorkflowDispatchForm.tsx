@@ -1,4 +1,4 @@
-import {PanelHeader} from '../../Jobs/JobPanelEditor/Form/PanelHeader';
+import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
 import {IconButton} from '@codeui/kit';
 import {For} from 'solid-js';
 import {Accordion} from '@kobalte/core/accordion';
