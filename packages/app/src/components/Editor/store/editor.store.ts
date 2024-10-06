@@ -13,6 +13,7 @@ import {getStructureFromWorkflow} from './utils/getStructureFromWorkflow';
 import type {
   EditorWorkflowStructure,
   WorkflowDispatchInput,
+  WorkflowStructureEnvItem,
 } from './editor.types';
 
 export interface EditorState {
@@ -28,6 +29,12 @@ export function getInitialWorkflowStructureState(): EditorWorkflowStructure {
       workflowDispatch: [],
     },
     jobs: [],
+    env: {
+      map: {},
+      get array() {
+        return Object.values(this.map);
+      },
+    },
   };
 }
 
@@ -65,6 +72,30 @@ export const EditorStore = defineStore<EditorState>(() => ({
       session,
 
       actions: {
+        environmentVariables: {
+          addNew: (value: WorkflowStructureEnvItem) => {
+            _.set('structure', 'env', 'map', prevValue => {
+              return {
+                ...prevValue,
+                [value.name]: value,
+              };
+            });
+            _.yamlSession.setEnvironmentVariable(value.name, value);
+          },
+          updateByIndex: (index: number, value: WorkflowStructureEnvItem) => {
+            // TODO: convert to array
+            _.set('structure', 'env', 'map', prevValue => {
+              const keys = Object.keys(prevValue);
+              const key = keys[index];
+              return {
+                ...prevValue,
+                [key]: value,
+              };
+            });
+            _.yamlSession.setEnvironmentVariable(value.name, value);
+          },
+        },
+
         workflowDispatch: {
           addNew: (value: WorkflowDispatchInput) => {
             const length = untrack(

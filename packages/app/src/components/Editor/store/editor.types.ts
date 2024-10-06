@@ -1,3 +1,5 @@
+import {Tokens} from '@pipelineui/workflow-parser';
+
 export interface WorkflowDispatchInput {
   name?: string;
   type?: 'string' | 'choice' | 'boolean' | 'number' | 'environment';
@@ -26,8 +28,26 @@ export interface WorkflowStructureJob {
   environment: JobEnvironment | null | undefined;
 }
 
+export type StringExpression = {
+  type: 'expression';
+  token: Tokens.ExpressionToken;
+  value: string;
+};
+
+export interface WorkflowStructureEnvItem {
+  name: string;
+  type: 'string' | 'number' | 'boolean' | 'expression';
+  value: StringExpression | number | boolean | string | null;
+}
+
+export interface WorkflowStructureEnv {
+  map: Record<string, WorkflowStructureEnvItem>;
+  array: readonly WorkflowStructureEnvItem[];
+}
+
 export interface EditorWorkflowStructure {
   name: string;
+  env: WorkflowStructureEnv;
   events: WorkflowStructureEvents;
   jobs: WorkflowStructureJob[];
 }

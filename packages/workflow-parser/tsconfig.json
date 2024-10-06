@@ -13,6 +13,8 @@
     "sourceMap": true,
     "strict": true,
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "preserveSymlinks": true
   }
 }
