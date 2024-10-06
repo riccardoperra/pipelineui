@@ -76,7 +76,6 @@ export const EditorStore = defineStore<EditorState>(() => ({
             _.yamlSession.setEnvironmentVariable(length, value);
           },
           updateByIndex: (index: number, value: WorkflowStructureEnvItem) => {
-            // TODO: convert to array
             _.set('structure', 'env', 'array', index, value);
             _.yamlSession.setEnvironmentVariable(index, value);
           },
