@@ -6,7 +6,7 @@ import {Canvas} from './Canvas/Canvas';
 import {EditorHeader} from './Header/Header';
 import {provideState} from 'statebuilder';
 import {EditorUiStore} from './store/ui.store';
-import {ErrorBoundary, Match, onMount, Show, Switch} from 'solid-js';
+import {Match, onMount, Show, Switch} from 'solid-js';
 import {YamlEditor} from './YamlEditor/YamlEditor';
 import {EditorStatusBar} from './StatusBar/StatusBar';
 import Resizable from '@corvu/resizable';
@@ -120,7 +120,7 @@ export function Editor(props: EditorProps) {
           }}
         </Resizable>
       </div>
-      {/*<EditorStatusBar />*/}
+      <EditorStatusBar />
     </div>
   );
 }
