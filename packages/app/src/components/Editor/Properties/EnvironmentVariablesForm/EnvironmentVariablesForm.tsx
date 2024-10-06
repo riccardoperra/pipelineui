@@ -1,11 +1,12 @@
 import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
-import {For} from 'solid-js';
+import {For, Show} from 'solid-js';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '../../store/editor.store';
 import type {WorkflowStructureEnvItem} from '../../store/editor.types';
 import {PanelPlusButton} from '#editor-layout/Panel/Form/PanelPlusButton';
 import {EnvironmentVariablesItemForm} from './EnvironmentVariablesItemForm';
 import {PanelAccordion} from '#editor-layout/Panel/Form/PanelAccordion/PanelAccordion';
+import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
 
 export function EnvironmentVariablesForm() {
   const editor = provideState(EditorStore);
@@ -32,25 +33,29 @@ export function EnvironmentVariablesForm() {
         }
       />
 
-      <PanelAccordion>
-        <For each={envItems()}>
-          {(input, index) => {
-            return (
-              <EnvironmentVariablesItemForm
-                value={input}
-                index={index()}
-                onChange={value =>
-                  editor.actions.environmentVariables.updateByIndex(
-                    index(),
-                    value,
-                  )
-                }
-                onDelete={() => {}}
-              />
-            );
-          }}
-        </For>
-      </PanelAccordion>
+      <Show when={envItems().length}>
+        <PanelContent>
+          <PanelAccordion>
+            <For each={envItems()}>
+              {(input, index) => {
+                return (
+                  <EnvironmentVariablesItemForm
+                    value={input}
+                    index={index()}
+                    onChange={value =>
+                      editor.actions.environmentVariables.updateByIndex(
+                        index(),
+                        value,
+                      )
+                    }
+                    onDelete={() => {}}
+                  />
+                );
+              }}
+            </For>
+          </PanelAccordion>
+        </PanelContent>
+      </Show>
     </>
   );
 }

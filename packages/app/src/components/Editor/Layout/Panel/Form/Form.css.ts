@@ -1,5 +1,6 @@
 import {style} from '@vanilla-extract/css';
 import {appTheme} from '#ui/theme.css';
+import {recipe} from '@vanilla-extract/recipes';
 
 export const inlineInputRoot = style({
   display: 'flex',
@@ -13,12 +14,21 @@ export const inlineInputLabel = style({
   flex: '1 0 85px',
 });
 
-export const panelForm = style({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: appTheme.spacing['2'],
-  paddingLeft: appTheme.spacing['2'],
-  paddingRight: appTheme.spacing['2'],
+export const panelForm = recipe({
+  base: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: appTheme.spacing['2'],
+    paddingLeft: appTheme.spacing['2'],
+    paddingRight: appTheme.spacing['2'],
+  },
+  variants: {
+    noGap: {
+      true: {
+        gap: 0,
+      },
+    },
+  },
 });
 
 export const formStyles = {

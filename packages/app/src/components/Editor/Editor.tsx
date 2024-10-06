@@ -120,7 +120,7 @@ export function Editor(props: EditorProps) {
           }}
         </Resizable>
       </div>
-      {/*<EditorStatusBar />*/}
+      <EditorStatusBar />
     </div>
   );
 }

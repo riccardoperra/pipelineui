@@ -5,16 +5,9 @@ import {themeVars} from '@codeui/kit';
 
 export const [sidebarTheme, sidebarVars] = createTheme({
   gap: appTheme.spacing['4'],
-  panelTitleTextColor: themeVars.accent10,
+  panelTitleTextColor: '#fafafa',
   panelRowsTextColor: themeVars.accent9,
 });
-
-export const sidebar = style([
-  sidebarTheme,
-  {
-    paddingLeft: sidebarVars.gap,
-  },
-]);
 
 export const panelHeader = style([
   {
@@ -28,7 +21,13 @@ export const panelHeader = style([
     width: '100%',
     fontWeight: 500,
     fontSize: '14px',
-    color: sidebarVars.panelTitleTextColor,
+    color: '#fafafa',
+  },
+]);
+
+export const panelContent = style([
+  {
+    paddingBottom: appTheme.spacing['4'],
   },
 ]);
 
@@ -75,25 +74,6 @@ export const panelRowContent = recipe({
   },
 });
 
-export const titleWrapper = style([
-  {
-    selectors: {
-      [`${panelRow} &`]: {
-        color: sidebarVars.panelRowsTextColor,
-        height: '30px',
-        display: 'inline-flex',
-        position: 'relative',
-        paddingLeft: '15px',
-        alignItems: 'center',
-        userSelect: 'none',
-        hyphens: 'auto', // ???
-        wordBreak: 'break-word',
-      },
-    },
-  },
-]);
-
 export const panelDivider = style({
   borderBottom: `1px solid ${themeVars.separator}`,
-  paddingTop: appTheme.spacing['4'],
 });
