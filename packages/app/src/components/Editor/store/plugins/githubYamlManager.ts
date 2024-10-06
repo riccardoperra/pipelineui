@@ -2,11 +2,29 @@ import {type GenericStoreApi, makePlugin, type Store} from 'statebuilder';
 import type {YAMLDocument, YamlDocumentSessionPlugin} from './yamlSession';
 import type {JobEnvironment, WorkflowDispatchInput} from '../editor.store';
 import YAML, {Scalar, YAMLMap, YAMLSeq} from 'yaml';
+import type {StringExpression, WorkflowStructureEnvItem} from '../editor.types';
 
 export const withGithubYamlManager = () => {
   return makePlugin.typed<GenericStoreApi & YamlDocumentSessionPlugin>()(
     _ => {
       const {yamlSession} = _;
+
+      const modifyEnvField = (
+        yaml: YAMLDocument,
+        createIfNotExists: boolean = true,
+        updater: (on: YAMLMap<Scalar<string>>) => void,
+      ) => {
+        let envField = yaml.get('env') as YAMLMap<Scalar<string>>;
+        if (!envField) {
+          if (!createIfNotExists) {
+            console.warn('`env` field missing. Skipping update.');
+            return;
+          }
+          envField = new YAMLMap();
+          yaml.set(new Scalar('env'), envField);
+        }
+        updater(envField);
+      };
 
       const modifyOnField = (
         yaml: YAMLDocument,
@@ -104,6 +122,28 @@ export const withGithubYamlManager = () => {
         });
       };
 
+      const setEnvironmentVariable = (
+        name: string,
+        envItem: WorkflowStructureEnvItem,
+      ) => {
+        yamlSession.updater(yaml => {
+          modifyEnvField(yaml, true, env => {
+            let value;
+            if (
+              envItem.type === 'string' ||
+              envItem.type === 'number' ||
+              envItem.type === 'boolean'
+            ) {
+              value = new YAML.Scalar(envItem.value);
+            } else if (envItem.type === 'expression') {
+              // TODO parse value?
+              value = (envItem.value as StringExpression).value;
+            }
+            env.set(new Scalar(name), value);
+          });
+        });
+      };
+
       const findJob = (yaml: YAMLDocument, jobId: string) => {
         const jobs = yaml.get('jobs') as YAMLMap<String, YAMLMap>;
         return jobs.get(jobId);
@@ -156,6 +196,7 @@ export const withGithubYamlManager = () => {
       return {
         yamlSession: Object.assign(_.yamlSession, {
           deleteWorkflowDispatchItem,
+          setEnvironmentVariable,
           setWorkflowDispatch,
           setJobName,
           setJobNeeds,

@@ -20,6 +20,7 @@ import * as environmentConverters from '../snapshot/dist/model/converter/job/env
 import * as inputConverters from '../snapshot/dist/model/converter/job/inputs';
 import * as secretConverters from '../snapshot/dist/model/converter/job/secrets';
 import * as runsOnConverters from '../snapshot/dist/model/converter/job/runs-on';
+import {handleTemplateTokenErrors} from '../snapshot/dist/model/converter/handle-errors';
 
 export {
   isString,
@@ -33,6 +34,8 @@ export {
 };
 
 export * as Tokens from '@actions/workflow-parser/templates/tokens/index';
+
+export {handleTemplateTokenErrors};
 
 export type {WorkflowTemplateTypes};
 export {
