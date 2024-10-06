@@ -32,8 +32,8 @@ export function Canvas() {
         ({
           id: `job-${job.id!.toString()}`,
           position: {
-            x: 50,
-            y: 100 + 50 * index,
+            x: 0,
+            y: 0,
           },
           data: {
             get label() {
@@ -46,16 +46,16 @@ export function Canvas() {
               return (
                 <Show when={data()}>
                   {data => (
-                    <div
-                      style={{
-                        width: `${data().width! - 44}px`,
-                        height: `60px`,
-                      }}
-                    >
-                      Name: {job.name?.toString()}
-                      <Show when={job.type === 'job' && job}>
-                        {job => <>{job().steps.length} Steps</>}
-                      </Show>
+                    <div>
+                      <span
+                        style={{
+                          padding: '2px 6px',
+                          'background-color': '#2d2d2d',
+                          'border-radius': '8px',
+                        }}
+                      >
+                        {job.steps?.length} steps
+                      </span>
                     </div>
                   )}
                 </Show>
