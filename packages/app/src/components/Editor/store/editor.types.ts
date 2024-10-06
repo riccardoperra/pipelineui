@@ -41,8 +41,7 @@ export interface WorkflowStructureEnvItem {
 }
 
 export interface WorkflowStructureEnv {
-  map: Record<string, WorkflowStructureEnvItem>;
-  array: readonly WorkflowStructureEnvItem[];
+  array: WorkflowStructureEnvItem[];
 }
 
 export interface EditorWorkflowStructure {

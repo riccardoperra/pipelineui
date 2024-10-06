@@ -123,23 +123,37 @@ export const withGithubYamlManager = () => {
       };
 
       const setEnvironmentVariable = (
-        name: string,
+        index: number,
         envItem: WorkflowStructureEnvItem,
       ) => {
         yamlSession.updater(yaml => {
           modifyEnvField(yaml, true, env => {
+            const envAtIndex = env.items.at(index);
+            if (!envItem.name) {
+              console.warn('Missing `name` for env variable. Skipping update', {
+                index,
+                data: envItem,
+              });
+              return;
+            }
+
             let value;
             if (
               envItem.type === 'string' ||
               envItem.type === 'number' ||
               envItem.type === 'boolean'
             ) {
-              value = new YAML.Scalar(envItem.value);
+              value = new YAML.Scalar(String(envItem.value));
             } else if (envItem.type === 'expression') {
               // TODO parse value?
-              value = (envItem.value as StringExpression).value;
+              value = new YAML.Scalar(envItem.value as StringExpression).value;
             }
-            env.set(new Scalar(name), value);
+            if (!envAtIndex) {
+              env.add(new YAML.Pair(new YAML.Scalar(envItem.name), value));
+            } else {
+              envAtIndex.key = new YAML.Scalar<string>(envItem.name);
+              envAtIndex.value = value;
+            }
           });
         });
       };
