@@ -31,6 +31,14 @@ export const flowItem = style({
     border: '1px solid #30363d',
     transition: 'background-color 0.2s ease-in-out, border ease 0.2s',
   },
+  selectors: {
+    '&[data-selected]': {
+      zIndex: 50,
+    },
+    '&[data-selected]:before': {
+      border: `1px solid ${themeVars.brand}`,
+    },
+  },
 });
 
 export const flowItemHeader = style({

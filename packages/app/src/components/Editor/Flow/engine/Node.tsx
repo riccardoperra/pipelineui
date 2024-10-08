@@ -1,11 +1,8 @@
-import * as styles2 from '../Edge/core/NodeComponent.css';
-import {mergeClasses} from '@codeui/kit';
 import {mergeRefs} from '@kobalte/utils';
 import {createMemo, onCleanup, onMount, type Ref} from 'solid-js';
 import {getNodeContext} from './store';
 import type {FlowNode} from './types';
 import {baseNode, nodeVars} from './Node/Node.css';
-import {assignVars} from '@vanilla-extract/css';
 import {assignInlineVars} from '@vanilla-extract/dynamic';
 
 export interface NodeProps {

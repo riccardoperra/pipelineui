@@ -13,7 +13,13 @@ export function FlowItem(props: FlowItemProps) {
   const onClick = () => editor.set('selectedJobId', props.job.id.value);
 
   return (
-    <div class={styles.flowItem} onClick={onClick}>
+    <div
+      class={styles.flowItem}
+      data-selected={
+        editor.get.selectedJobId === props.job.id.value ? '' : null
+      }
+      onClick={onClick}
+    >
       <div class={styles.flowItemHeader}>{props.job.name?.toString()}</div>
     </div>
   );
