@@ -10,7 +10,12 @@ import {EditorUiStore} from '#editor-store/ui.store';
 import {EditorStore} from '#editor-store/editor.store';
 import type {NodeProps} from '../Flow/Edge/core';
 import {FlowRenderer} from '../Flow/engine/FlowRenderer';
-import type {FlowNode, FlowNodeMap} from '../Flow/engine/types';
+import type {
+  FlowConnection,
+  FlowDataConnector,
+  FlowNode,
+  FlowNodeMap,
+} from '../Flow/engine/types';
 import {FlowItem} from '../Flow/FlowItem';
 
 const FlowChart = clientOnly(() => import('../Flow/Edge/core'));
@@ -21,6 +26,7 @@ export function Canvas() {
 
   const [nodes, setNodes] = createSignal<Node[]>([]);
   const [mappedNodes, setMappedNodes] = createSignal<FlowNodeMap>({});
+  const [connections, setConnections] = createSignal<FlowConnection[]>([]);
   const [edges, setEdges] = createSignal<Edge[]>([]);
   const [elkNode, setElkNode] = createSignal<ElkNode | null>(null);
 
@@ -161,8 +167,43 @@ export function Canvas() {
             node.position.y = child.y ?? 0;
           }
         });
-        console.log('mapped nodes', mappedNodes);
-        setMappedNodes(mappedNodes);
+
+        const edges = template.jobs.reduce((acc, job) => {
+          const jobEdge: FlowConnection[] = (job.needs ?? []).reduce(
+            (acc, need) => {
+              const cJob = template.jobs.find(
+                n => n.id.toString() === need.toString(),
+              );
+              if (!cJob) {
+                return acc;
+              }
+              return [
+                ...acc,
+                {
+                  target: {
+                    nodeId: job.id.value,
+                    connectorId: `${job.id.value}-output`,
+                    connectorType: 'output',
+                  },
+                  source: {
+                    nodeId: need.value,
+                    connectorId: `${need.value}-input`,
+                    connectorType: 'input',
+                  },
+                } satisfies FlowConnection,
+              ];
+            },
+            [] as FlowConnection[],
+          );
+
+          return [...acc, ...jobEdge];
+        }, [] as FlowConnection[]);
+
+        batch(() => {
+          setMappedNodes(mappedNodes);
+          setConnections(edges);
+        });
+        console.warn(edges);
       });
     });
 
@@ -275,6 +316,7 @@ export function Canvas() {
       <FlowContainer>
         <FlowRenderer
           renderNode={node => <FlowItem job={node.data.job} />}
+          connections={connections()}
           nodes={mappedNodes()}
         />
 

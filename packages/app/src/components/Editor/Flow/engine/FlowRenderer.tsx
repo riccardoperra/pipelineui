@@ -30,6 +30,7 @@ export function FlowRenderer(props: FlowRendererProps) {
 
   createEffect(() => {
     setNodes(props.nodes);
+    setConnections(props.connections);
   });
 
   const registerNode = (data: RegisterNodeOptions) => {
