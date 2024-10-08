@@ -188,7 +188,6 @@ const FlowChart: Component<Props> = (props: Props) => {
       {inputs: {offset: Position}[]; outputs: {offset: Position}[]}[]
     >(initNodesOffsets);
 
-  const [clickedDelta, setClickedDelta] = createSignal<Position>({x: 0, y: 0});
   const [newEdge, setNewEdge] = createSignal<{
     position: Vector;
     sourceNode: number;
@@ -220,17 +219,10 @@ const FlowChart: Component<Props> = (props: Props) => {
     outputs: {offset: {x: number; y: number}}[];
   }) {
     setNodesOffsets(
-      produce(
-        (
-          nodesOffsets: {
-            inputs: {offset: {x: number; y: number}}[];
-            outputs: {offset: {x: number; y: number}}[];
-          }[],
-        ) => {
-          nodesOffsets[values.nodeIndex].inputs = values.inputs;
-          nodesOffsets[values.nodeIndex].outputs = values.outputs;
-        },
-      ),
+      produce(nodesOffsets => {
+        nodesOffsets[values.nodeIndex].inputs = values.inputs;
+        nodesOffsets[values.nodeIndex].outputs = values.outputs;
+      }),
     );
 
     setEdgesActives((prev: EdgesActive) => {
@@ -272,10 +264,6 @@ const FlowChart: Component<Props> = (props: Props) => {
       });
       return next;
     });
-  }
-
-  function handleOnNodePress(deltaX: number, deltaY: number) {
-    setClickedDelta({x: deltaX, y: deltaY});
   }
 
   function handleOnNodeDelete(nodeId: string) {
@@ -346,7 +334,6 @@ const FlowChart: Component<Props> = (props: Props) => {
             nodesPositions={nodesPositions()}
             nodes={nodesData}
             onNodeMount={handleOnNodeMount}
-            onNodePress={handleOnNodePress}
             onNodeDelete={handleOnNodeDelete}
             onSelectedChange={props.onSelectedChange}
           />

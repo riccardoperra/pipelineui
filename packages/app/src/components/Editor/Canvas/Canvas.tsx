@@ -9,6 +9,9 @@ import {provideState} from 'statebuilder';
 import {EditorUiStore} from '#editor-store/ui.store';
 import {EditorStore} from '#editor-store/editor.store';
 import type {NodeProps} from '../Flow/Edge/core';
+import {FlowRenderer} from '../Flow/engine/FlowRenderer';
+import type {FlowNode, FlowNodeMap} from '../Flow/engine/types';
+import {FlowItem} from '../Flow/FlowItem';
 
 const FlowChart = clientOnly(() => import('../Flow/Edge/core'));
 
@@ -17,6 +20,7 @@ export function Canvas() {
   const editor = provideState(EditorStore);
 
   const [nodes, setNodes] = createSignal<Node[]>([]);
+  const [mappedNodes, setMappedNodes] = createSignal<FlowNodeMap>({});
   const [edges, setEdges] = createSignal<Edge[]>([]);
   const [elkNode, setElkNode] = createSignal<ElkNode | null>(null);
 
@@ -77,6 +81,90 @@ export function Canvas() {
           outputs: 1,
         }) satisfies Node,
     );
+
+    const mappedNodes: FlowNodeMap = template.jobs.reduce((acc, job) => {
+      acc[job.id.value] = {
+        id: job.id.value,
+        position: {
+          x: 0,
+          y: 0,
+        },
+        data: {
+          job,
+        },
+      };
+      return acc;
+    }, {} as FlowNodeMap);
+
+    import('elkjs').then(({default: ELK}) => {
+      const graph: ElkNode = {
+        id: 'root',
+        layoutOptions: {
+          // "elk.algorithm": "mrtree",
+          'elk.algorithm': 'layered',
+          'elk.direction': 'RIGHT',
+          'elk.alignment': 'TOP',
+          'elk.layered.spacing.edgeNodeBetweenLayers': '40',
+          // "elk.layered.nodePlacement.bk.fixedAlignment": "LEFTUP",
+          // "elk.layered.nodePlacement.favorStraightEdges": 'false',
+          'elk.spacing.nodeNode': '40',
+          'elk.layered.nodePlacement.strategy': 'INTERACTIVE',
+          'elk.layered.crossingMinimization.positionChoiceConstraint': '0',
+          'elk.layered.crossingMinimization.strategy': 'NONE',
+          // 'elk.layered.crossingMinimization.semiInteractive': 'true',
+          'elk.layered.crossingMinimization.forceNodeModelOrder': 'true',
+        },
+        children: [
+          ...Object.values(mappedNodes).map(node => {
+            return {
+              id: `${node.id}`,
+              width: 250,
+              height: 68,
+              properties: {
+                'org.eclipse.elk.portConstraints': 'FIXED_ORDER',
+              },
+            };
+          }),
+        ],
+        edges: Object.values(mappedNodes).reduce((acc, node, index, array) => {
+          const nodeJob = template.jobs.find(
+            job => node.id === `${job.id!.toString()}`,
+          );
+          if (nodeJob && nodeJob.needs?.length) {
+            const targets = nodeJob.needs.reduce((acc, need) => {
+              const job = template.jobs.find(
+                n => n.id.toString() === need.toString(),
+              );
+              if (!job) {
+                return acc;
+              }
+              return [...acc, `${job.id!.toString()}`];
+            }, [] as string[]);
+
+            targets.forEach(target => {
+              acc.push({
+                id: `edge-${Math.random()}`,
+                sources: [target],
+                targets: [node.id],
+              });
+            });
+          }
+
+          return acc;
+        }, [] as ElkExtendedEdge[]),
+      };
+      new ELK().layout(graph).then(layout => {
+        layout.children?.forEach(child => {
+          const node = mappedNodes[child.id];
+          if (node) {
+            node.position.x = child.x ?? 0;
+            node.position.y = child.y ?? 0;
+          }
+        });
+        console.log('mapped nodes', mappedNodes);
+        setMappedNodes(mappedNodes);
+      });
+    });
 
     const edges = template.jobs.reduce((acc, job) => {
       const jobEdge: Edge[] = (job.needs ?? []).reduce((acc, need) => {
@@ -185,13 +273,18 @@ export function Canvas() {
   return (
     <div class={styles.canvasContainer}>
       <FlowContainer>
-        <FlowChart
-          edges={edges()}
-          nodes={nodes()}
-          onEdgesChange={setEdges}
-          onNodesChange={setNodes}
-          onSelectedChange={onSelectedChange}
+        <FlowRenderer
+          renderNode={node => <FlowItem job={node.data.job} />}
+          nodes={mappedNodes()}
         />
+
+        {/*<FlowChart*/}
+        {/*  edges={edges()}*/}
+        {/*  nodes={nodes()}*/}
+        {/*  onEdgesChange={setEdges}*/}
+        {/*  onNodesChange={setNodes}*/}
+        {/*  onSelectedChange={onSelectedChange}*/}
+        {/*/>*/}
 
         {/*<For each={props.template.jobs}>{job => <FlowItem job={job} />}</For>*/}
 

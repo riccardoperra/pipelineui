@@ -8,8 +8,7 @@ export const flowItem = style({
   vars: {
     [flowItemPadding]: appTheme.spacing['4'],
   },
-  backgroundColor: '#0a0a0a',
-  // backgroundColor: themeVars.accent2,
+  backgroundColor: themeVars.accent2,
   borderRadius: '6px',
   fontSize: '13px',
   paddingBottom: '12px',
@@ -30,6 +29,7 @@ export const flowItem = style({
     left: 0,
     top: 0,
     border: '1px solid #30363d',
+    transition: 'background-color 0.2s ease-in-out, border ease 0.2s',
   },
 });
 
