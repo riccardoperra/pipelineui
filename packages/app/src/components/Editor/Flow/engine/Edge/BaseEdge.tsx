@@ -1,5 +1,15 @@
 import {mergeClasses} from '@codeui/kit';
 import * as styles from './BaseEdge.css';
+import {JSX} from 'solid-js';
+
+export interface BaseEdgeProps {
+  path: string;
+  markerEnd: string;
+  markerStart: string;
+  interactionWidth: number;
+  id: string;
+  style: JSX.CSSProperties;
+}
 
 export function BaseEdge(props: BaseEdgeProps) {
   return (

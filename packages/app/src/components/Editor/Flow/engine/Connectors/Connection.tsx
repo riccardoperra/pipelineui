@@ -1,46 +1,14 @@
-import type {FlowConnection, FlowNodePoint} from '../types';
+import type {FlowConnection} from '../types';
 import {createMemo} from 'solid-js';
 import {getSmoothStepPath, Position} from '@xyflow/system';
 import {getNodeContext} from '../store';
-import {BaseEdge} from '../../Edge/BaseEdge';
-import {connection} from '../Connection.css';
+import {BaseEdge} from '../Edge/BaseEdge';
+import {connection} from './Connection.css';
 
 export interface ConnectionProps {
   connection: FlowConnection;
 }
 
-export function calculateDistance(
-  sourcePoint: FlowNodePoint,
-  targetPoint: FlowNodePoint,
-): number {
-  return Math.sqrt(
-    (targetPoint.x - sourcePoint.x) ** 2 + (targetPoint.y - sourcePoint.y) ** 2,
-  );
-}
-
-export function createCurvature(
-  startX: number,
-  startY: number,
-  endX: number,
-  endY: number,
-  curvature: number,
-): string {
-  return `M ${startX} ${startY} C ${startX + curvature} ${startY}, ${
-    endX - curvature
-  } ${endY}, ${endX} ${endY}`;
-}
-
-export function calculateCurvature(
-  distance: number,
-  maxCurvature: number,
-): number {
-  const maxDistanceForCurvature = 150;
-
-  return (
-    (Math.min(distance, maxDistanceForCurvature) / maxDistanceForCurvature) *
-    maxCurvature
-  );
-}
 export function Connection(props: ConnectionProps) {
   const {nodes, sceneRef} = getNodeContext();
 
@@ -49,7 +17,6 @@ export function Connection(props: ConnectionProps) {
   const targetNode = () => nodes[props.connection.target.nodeId];
 
   const path = createMemo(() => {
-    const scene = sceneRef();
     const startX = sourceNode().position.x + 250;
     const startY = sourceNode().position.y + 25;
     const endX = targetNode().position.x;
