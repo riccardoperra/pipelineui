@@ -17,6 +17,7 @@ export const flowItem = style({
   transition: 'background-color 0.2s ease-in-out',
   position: 'relative',
   display: 'inline-flex',
+  gap: appTheme.spacing['2'],
   flexDirection: 'column',
   overflow: 'hidden',
   content: '',
@@ -28,7 +29,7 @@ export const flowItem = style({
     borderRadius: '6px',
     left: 0,
     top: 0,
-    border: '1px solid #30363d',
+    border: `1px solid ${themeVars.accent5}`,
     transition: 'background-color 0.2s ease-in-out, border ease 0.2s',
   },
   selectors: {
@@ -45,8 +46,16 @@ export const flowItemHeader = style({
   height: '36px',
   display: 'flex',
   alignItems: 'center',
-  color: 'rgb(161,161,161)',
+  color: '#fafafa',
   paddingLeft: appTheme.spacing['4'],
   paddingRight: appTheme.spacing['4'],
+  background: themeVars.accent4,
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
   // borderBottom: `1px solid hsla(0,0%,100%,.14)`,
+});
+
+export const flowItemContent = style({
+  paddingLeft: appTheme.spacing['4'],
+  paddingRight: appTheme.spacing['4'],
 });

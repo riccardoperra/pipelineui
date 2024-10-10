@@ -27,6 +27,7 @@ export function Canvas() {
   const [nodes, setNodes] = createSignal<Node[]>([]);
   const [mappedNodes, setMappedNodes] = createSignal<FlowNodeMap>({});
   const [connections, setConnections] = createSignal<FlowConnection[]>([]);
+  const [edges, setEdges] = createSignal<FlowConnection[]>([]);
   const [size, setSize] = createSignal({width: 0, height: 0});
   const [elkNode, setElkNode] = createSignal<ElkNode | null>(null);
 
@@ -125,7 +126,7 @@ export function Canvas() {
             return {
               id: `${node.id}`,
               width: 250,
-              height: 68,
+              height: 150,
               properties: {
                 'org.eclipse.elk.portConstraints': 'FIXED_ORDER',
               },
