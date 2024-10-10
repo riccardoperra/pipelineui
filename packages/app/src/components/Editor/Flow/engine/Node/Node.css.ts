@@ -11,5 +11,6 @@ export const baseNode = style([
     display: 'inline-block',
     position: 'absolute',
     transform: `translate3d(${nodeVars.transformX}, ${nodeVars.transformY}, 0)`,
+    zIndex: 5,
   },
 ]);

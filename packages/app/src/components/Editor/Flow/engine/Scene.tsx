@@ -5,10 +5,10 @@ import {For} from 'solid-js';
 import {Connection} from './Connectors/Connection';
 
 export function FlowScene() {
-  const {nodes, connections} = getNodeContext();
+  const {nodes, connections, setSceneRef} = getNodeContext();
 
   return (
-    <div style={{width: '100%', height: '100%'}}>
+    <div style={{width: '100%', height: '100%'}} ref={setSceneRef}>
       <Entries of={nodes}>
         {(key, value) => <Node nodeId={key} value={value()} />}
       </Entries>

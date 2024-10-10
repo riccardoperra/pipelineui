@@ -7,4 +7,7 @@ export const baseEdge = style({
   fill: 'none',
   stroke: '#b1b1b7',
   strokeWidth: 1,
+  transform: 'translateZ(0)',
+  pointerEvents: 'all',
+  zIndex: 0,
 });

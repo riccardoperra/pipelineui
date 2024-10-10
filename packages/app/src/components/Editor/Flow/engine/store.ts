@@ -1,4 +1,10 @@
-import {type Accessor, createContext, JSX, useContext} from 'solid-js';
+import {
+  type Accessor,
+  createContext,
+  JSX,
+  type Setter,
+  useContext,
+} from 'solid-js';
 import type {FlowConnection, FlowNode, FlowNodeMap} from './types';
 
 export interface RegisterNodeOptions {
@@ -11,7 +17,11 @@ export interface NodeStoreContextValue {
   registerNode: (data: RegisterNodeOptions) => () => void;
   nodes: FlowNodeMap;
   renderNode: (node: FlowNode) => JSX.Element;
+  sceneRef: Accessor<HTMLDivElement>;
+  setSceneRef: Setter<HTMLDivElement>;
   connections: FlowConnection[];
+  width: number;
+  height: number;
 }
 
 export const NodeStoreContext = createContext<NodeStoreContextValue>();

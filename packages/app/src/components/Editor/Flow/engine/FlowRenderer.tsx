@@ -8,6 +8,8 @@ export interface FlowRendererProps {
   nodes: FlowNodeMap;
   connections: FlowConnection[];
   renderNode: (node: FlowNode) => JSX.Element;
+  width: number;
+  height: number;
 }
 
 export function FlowRenderer(props: FlowRendererProps) {
@@ -27,6 +29,8 @@ export function FlowRenderer(props: FlowRendererProps) {
   >();
 
   const [selectedNodeId, setSelectedNodeId] = createSignal<string | null>(null);
+
+  const [scene, setScene] = createSignal();
 
   createEffect(() => {
     setNodes(props.nodes);
@@ -51,6 +55,8 @@ export function FlowRenderer(props: FlowRendererProps) {
         connections,
         renderNode: props.renderNode,
         registerNode,
+        sceneRef: scene,
+        setSceneRef: setScene,
       }}
     >
       <FlowScene />

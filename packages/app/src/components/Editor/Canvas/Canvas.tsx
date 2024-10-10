@@ -27,7 +27,7 @@ export function Canvas() {
   const [nodes, setNodes] = createSignal<Node[]>([]);
   const [mappedNodes, setMappedNodes] = createSignal<FlowNodeMap>({});
   const [connections, setConnections] = createSignal<FlowConnection[]>([]);
-  const [edges, setEdges] = createSignal<Edge[]>([]);
+  const [size, setSize] = createSignal({width: 0, height: 0});
   const [elkNode, setElkNode] = createSignal<ElkNode | null>(null);
 
   const onSelectedChange = (node: NodeProps | null) => {
@@ -200,6 +200,7 @@ export function Canvas() {
         }, [] as FlowConnection[]);
 
         batch(() => {
+          setSize(() => ({width: layout.width, height: layout.height}));
           setMappedNodes(mappedNodes);
           setConnections(edges);
         });
@@ -313,11 +314,13 @@ export function Canvas() {
 
   return (
     <div class={styles.canvasContainer}>
-      <FlowContainer>
+      <FlowContainer size={size()}>
         <FlowRenderer
           renderNode={node => <FlowItem job={node.data.job} />}
           connections={connections()}
           nodes={mappedNodes()}
+          width={size().width}
+          height={size().height}
         />
 
         {/*<FlowChart*/}
