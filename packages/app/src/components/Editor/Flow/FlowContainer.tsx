@@ -2,9 +2,15 @@ import * as styles from './FlowContainer.css';
 import {onMount, type ParentProps} from 'solid-js';
 import {provideState} from 'statebuilder';
 import {CanvasStore} from '../store/canvas.store';
-import {flowCanvas} from './FlowContainer.css';
 
-export function FlowContainer(props: ParentProps) {
+export function FlowContainer(
+  props: ParentProps<{
+    size: {
+      width: number;
+      height: number;
+    };
+  }>,
+) {
   const canvasStore = provideState(CanvasStore);
   let ref!: HTMLDivElement;
 
@@ -13,7 +19,13 @@ export function FlowContainer(props: ParentProps) {
   });
 
   return (
-    <div class={styles.flowContainer}>
+    <div
+      class={styles.flowContainer}
+      style={{
+        width: `${props.size.width}px`,
+        height: `${props.size.height}px`,
+      }}
+    >
       <div class={styles.flowCanvas} ref={ref}>
         {props.children}
       </div>

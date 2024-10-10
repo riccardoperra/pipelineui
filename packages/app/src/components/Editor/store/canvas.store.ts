@@ -26,6 +26,14 @@ export const CanvasStore = defineStore<CanvasState>(() => ({
         setInstance(
           panzoom(el, {
             autocenter: true,
+            // beforeMouseDown: function (e) {
+            //   // allow mouse-down panning only if altKey is down. Otherwise - ignore
+            //   console.log(e.composedPath());
+            //   const find = e.composedPath().find(el => {
+            //     return el.getAttribute && el.getAttribute('data-node');
+            //   });
+            //   return !!find;
+            // },
           }),
         );
         setRef(el);

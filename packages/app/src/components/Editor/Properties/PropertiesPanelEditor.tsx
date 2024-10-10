@@ -6,7 +6,7 @@ import {PanelDivider} from '#editor-layout/Panel/Form/PanelDivider';
 
 export function PropertiesPanelEditor() {
   return (
-    <PanelGroup>
+    <PanelGroup noGap>
       <WorkflowDispatchForm />
 
       <PanelDivider />

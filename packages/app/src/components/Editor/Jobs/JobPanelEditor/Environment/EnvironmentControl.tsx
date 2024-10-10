@@ -143,7 +143,7 @@ export function EnvironmentControl(props: EnvironmentControlProps) {
               </label>
               <div class={inputClasses()}>
                 <span class={environmentControlInputValue}>
-                  {props.value.name}
+                  {props.value?.name ?? 'No value'}
                 </span>
               </div>
             </div>

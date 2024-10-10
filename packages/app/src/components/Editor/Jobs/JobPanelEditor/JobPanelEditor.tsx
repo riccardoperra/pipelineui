@@ -6,7 +6,7 @@ import {PanelHeader} from '../../Layout/Panel/Form/PanelHeader';
 import {FullWidthPanelRow} from '../../Layout/Panel/Form/PanelRow';
 import {PanelDivider} from '../../Layout/Panel/Form/PanelDivider';
 import {JobStepsForm} from './JobStepsForm/JobStepsForm';
-import {createEffect, createSignal, Match, Switch} from 'solid-js';
+import {createEffect, createSignal, Match, Show, Switch} from 'solid-js';
 import {JobStepForm} from './JobStepsForm/JobStep/JobStepForm';
 import {useEditorContext} from '../../editor.context';
 import {createStore} from 'solid-js/store';
@@ -20,6 +20,7 @@ import {
   type JobEnvironment,
 } from './Environment/EnvironmentControl';
 import {PanelGroup} from '#editor-layout/Panel/Form/PanelGroup';
+import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
 
 interface Form {
   name: string;
@@ -32,14 +33,7 @@ export function JobPanelEditor() {
   const editorStore = provideState(EditorStore);
   const {template, context} = useEditorContext();
 
-  const job = () => {
-    if (!editorStore.get.selectedJobId) {
-      return;
-    }
-    return template.jobs.find(
-      job => job.id.value === editorStore.get.selectedJobId,
-    );
-  };
+  const job = () => editorStore.selectedJob();
 
   const needs = () => {
     const templateJobs = template.jobs.filter(_job => _job.id !== job()?.id);
@@ -107,80 +101,82 @@ export function JobPanelEditor() {
         <Match when={!activeStep()}>
           <PanelHeader label={'General'} />
 
-          <FullWidthPanelRow>
-            <TextField
-              slotClasses={{
-                root: formStyles.inlineInputRoot,
-                label: formStyles.inlineInputLabel,
-              }}
-              size={'sm'}
-              theme={'filled'}
-              label={'Name'}
-              value={form.name}
-              onChange={value => {
-                setForm('name', value);
-                editorStore.yamlSession.setJobName(job()!.id.value!, value);
-              }}
-            />
-          </FullWidthPanelRow>
+          <PanelContent withGap>
+            <FullWidthPanelRow>
+              <TextField
+                slotClasses={{
+                  root: formStyles.inlineInputRoot,
+                  label: formStyles.inlineInputLabel,
+                }}
+                size={'sm'}
+                theme={'filled'}
+                label={'Name'}
+                value={form.name}
+                onChange={value => {
+                  setForm('name', value);
+                  editorStore.yamlSession.setJobName(job()!.id.value!, value);
+                }}
+              />
+            </FullWidthPanelRow>
 
-          <FullWidthPanelRow>
-            <TextField
-              slotClasses={{
-                root: formStyles.inlineInputRoot,
-                label: formStyles.inlineInputLabel,
-              }}
-              size={'sm'}
-              theme={'filled'}
-              label={'Runs on'}
-              value={form.runsOn}
-            />
-          </FullWidthPanelRow>
+            <FullWidthPanelRow>
+              <TextField
+                slotClasses={{
+                  root: formStyles.inlineInputRoot,
+                  label: formStyles.inlineInputLabel,
+                }}
+                size={'sm'}
+                theme={'filled'}
+                label={'Runs on'}
+                value={form.runsOn}
+              />
+            </FullWidthPanelRow>
 
-          <FullWidthPanelRow>
-            <Select
-              aria-label={'Needs input'}
-              multiple={true}
-              options={needsOptions()}
-              value={form.needs}
-              onChange={options => {
-                setForm('needs', options);
-                editorStore.yamlSession.setJobNeeds(job()!.id.value, options);
-              }}
-              size={'sm'}
-              theme={'filled'}
-              label={'Needs'}
-              slotClasses={{
-                root: formStyles.inlineInputRoot,
-                label: formStyles.inlineInputLabel,
-              }}
-            />
-          </FullWidthPanelRow>
+            <FullWidthPanelRow>
+              <Select
+                aria-label={'Needs input'}
+                multiple={true}
+                options={needsOptions()}
+                value={form.needs}
+                onChange={options => {
+                  setForm('needs', options);
+                  editorStore.yamlSession.setJobNeeds(job()!.id.value, options);
+                }}
+                size={'sm'}
+                theme={'filled'}
+                label={'Needs'}
+                slotClasses={{
+                  root: formStyles.inlineInputRoot,
+                  label: formStyles.inlineInputLabel,
+                }}
+              />
+            </FullWidthPanelRow>
 
-          <FullWidthPanelRow>
-            <EnvironmentControl
-              value={form.environment}
-              onValueChange={value => {
-                setForm('environment', value);
-                editorStore.yamlSession.setJobEnvironment(
-                  job()!.id.value,
-                  value,
-                );
-              }}
-            />
-          </FullWidthPanelRow>
+            <FullWidthPanelRow>
+              <EnvironmentControl
+                value={form.environment}
+                onValueChange={value => {
+                  setForm('environment', value);
+                  editorStore.yamlSession.setJobEnvironment(
+                    job()!.id.value,
+                    value,
+                  );
+                }}
+              />
+            </FullWidthPanelRow>
 
-          <FullWidthPanelRow>
-            <TextField
-              slotClasses={{
-                root: formStyles.inlineInputRoot,
-                label: formStyles.inlineInputLabel,
-              }}
-              size={'sm'}
-              theme={'filled'}
-              label={'Concurrency'}
-            />
-          </FullWidthPanelRow>
+            <FullWidthPanelRow>
+              <TextField
+                slotClasses={{
+                  root: formStyles.inlineInputRoot,
+                  label: formStyles.inlineInputLabel,
+                }}
+                size={'sm'}
+                theme={'filled'}
+                label={'Concurrency'}
+              />
+            </FullWidthPanelRow>
+          </PanelContent>
 
           <PanelDivider />
 
