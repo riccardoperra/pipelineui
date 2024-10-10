@@ -110,6 +110,14 @@ export function getStructureFromWorkflow(
         } satisfies WorkflowDispatchInput;
       }),
     },
-    jobs: [],
+    jobs: template.jobs.map(job => {
+      return {
+        name: job.name?.value,
+        runsOn: job['runs-on']?.value,
+        environment: null,
+        needs: job.needs?.values(),
+        id: job.id.value,
+      };
+    }),
   };
 }

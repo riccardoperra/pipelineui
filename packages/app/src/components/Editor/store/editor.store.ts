@@ -73,7 +73,6 @@ export const EditorStore = defineStore<EditorState>(() => ({
         if (!selectedJobId) {
           return;
         }
-        console.log(selectedJobId);
         return _.get.template?.jobs.find(job => {
           return job.id.value === selectedJobId;
         });

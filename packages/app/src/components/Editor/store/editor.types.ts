@@ -22,6 +22,7 @@ export type JobEnvironment = {
 };
 
 export interface WorkflowStructureJob {
+  id: string;
   name: string;
   runsOn: string;
   needs: string[];

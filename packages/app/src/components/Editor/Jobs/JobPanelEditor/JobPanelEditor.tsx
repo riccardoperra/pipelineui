@@ -35,6 +35,9 @@ export function JobPanelEditor() {
 
   const job = () => editorStore.selectedJob();
 
+  const jobValue = () =>
+    editorStore.get.structure.jobs.find(_ => _.id === job()?.id.value);
+
   const needs = () => {
     const templateJobs = template.jobs.filter(_job => _job.id !== job()?.id);
     return templateJobs ?? [];
@@ -111,9 +114,9 @@ export function JobPanelEditor() {
                 size={'sm'}
                 theme={'filled'}
                 label={'Name'}
-                value={form.name}
+                value={jobValue()?.name}
                 onChange={value => {
-                  setForm('name', value);
+                  editorStore.set('structure', 'jobs', 0, 'name', value);
                   editorStore.yamlSession.setJobName(job()!.id.value!, value);
                 }}
               />
@@ -128,7 +131,11 @@ export function JobPanelEditor() {
                 size={'sm'}
                 theme={'filled'}
                 label={'Runs on'}
-                value={form.runsOn}
+                value={jobValue()?.runsOn}
+                onChange={value => {
+                  editorStore.set('structure', 'jobs', 0, 'runsOn', value);
+                  editorStore.yamlSession.setJobRunsOn(job()!.id.value!, value);
+                }}
               />
             </FullWidthPanelRow>
 

@@ -1,7 +1,7 @@
 import {type GenericStoreApi, makePlugin, type Store} from 'statebuilder';
 import type {YAMLDocument, YamlDocumentSessionPlugin} from './yamlSession';
 import type {JobEnvironment, WorkflowDispatchInput} from '../editor.store';
-import YAML, {Scalar, YAMLMap, YAMLSeq} from 'yaml';
+import YAML, {Pair, Scalar, YAMLMap, YAMLSeq} from 'yaml';
 import type {StringExpression, WorkflowStructureEnvItem} from '../editor.types';
 
 export const withGithubYamlManager = () => {
@@ -166,7 +166,16 @@ export const withGithubYamlManager = () => {
       const setJobName = (jobId: string, name: string) => {
         yamlSession.updater(yaml => {
           const job = findJob(yaml, jobId)!;
-          job.set('name', name);
+          const hasJob = job.has('name');
+          if (!hasJob) {
+            // TODO: support ordering0
+            job.items = [
+              new Pair<unknown, unknown>(new Scalar('name'), name),
+              ...job.items,
+            ];
+          } else {
+            job.set('name', name);
+          }
         });
       };
 
@@ -182,6 +191,22 @@ export const withGithubYamlManager = () => {
               needsSeq.delete(0);
             }
             needs.forEach(need => needsSeq.add(need));
+          }
+        });
+      };
+
+      const setJobRunsOn = (jobId: string, runsOn: string) => {
+        yamlSession.updater(yaml => {
+          const job = findJob(yaml, jobId)!;
+          const hasJob = job.has('runs-on');
+          if (!hasJob) {
+            // TODO: support ordering0
+            job.items = [
+              new Pair<unknown, unknown>(new Scalar('runs-on'), runsOn),
+              ...job.items,
+            ];
+          } else {
+            job.set('runs-on', runsOn);
           }
         });
       };
@@ -214,6 +239,7 @@ export const withGithubYamlManager = () => {
           setWorkflowDispatch,
           setJobName,
           setJobNeeds,
+          setJobRunsOn,
           setJobEnvironment,
         }),
       };

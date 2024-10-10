@@ -11,6 +11,9 @@ interface FlowItemProps {
 export function FlowItem(props: FlowItemProps) {
   const editor = provideState(EditorStore);
 
+  const job = () =>
+    editor.get.structure.jobs.find(job => job.id === props.job.id.value);
+
   const onClick = () => editor.set('selectedJobId', props.job.id.value);
 
   return (
@@ -21,7 +24,7 @@ export function FlowItem(props: FlowItemProps) {
       }
       onClick={onClick}
     >
-      <div class={styles.flowItemHeader}>{props.job.name?.toString()}</div>
+      <div class={styles.flowItemHeader}>{job()?.name}</div>
       <div class={styles.flowItemContent}>
         <div>
           <span
@@ -41,7 +44,7 @@ export function FlowItem(props: FlowItemProps) {
               'border-radius': '8px',
             }}
           >
-            {props.job.type === 'job' && props.job['runs-on']?.['value']}
+            {job()?.runsOn}
           </span>
         </div>
       </div>
