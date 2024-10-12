@@ -6,7 +6,7 @@ import {PanelEditorStore} from '../panel-editor.store';
 export function JobStepsForm() {
   const panelStore = provideState(PanelEditorStore);
 
-  const steps = () => panelStore.selectedJob!.steps;
+  const steps = () => panelStore.selectedJob().steps;
 
   return (
     <div class={container}>
