@@ -1,6 +1,9 @@
 import {Tokens} from '@pipelineui/workflow-parser';
 
 export interface WorkflowDispatchInput {
+  readonly $index: number;
+  readonly $nodeId: string;
+
   name?: string;
   type?: 'string' | 'choice' | 'boolean' | 'number' | 'environment';
   deprecationMessage?: string;

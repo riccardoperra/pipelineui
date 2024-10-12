@@ -264,7 +264,11 @@ export const withGithubYamlManager = () => {
         });
       };
 
-      const setJobStepRun = (jobId: string, stepIndex: number, run: string) => {
+      const setJobStepRun = (
+        jobId: string,
+        stepIndex: number,
+        run: string | null,
+      ) => {
         yamlSession.updater(yaml => {
           const job = findJob(yaml, jobId)!;
           if (!job) {
@@ -286,7 +290,7 @@ export const withGithubYamlManager = () => {
       const setJobStepUses = (
         jobId: string,
         stepIndex: number,
-        uses: string,
+        uses: string | null,
       ) => {
         yamlSession.updater(yaml => {
           const job = findJob(yaml, jobId)!;

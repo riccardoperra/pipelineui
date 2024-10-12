@@ -98,8 +98,10 @@ export function getStructureFromWorkflow(
     events: {
       workflowDispatch: Object.entries(
         template.events.workflow_dispatch?.inputs ?? {},
-      ).map(([key, input]) => {
+      ).map(([key, input], $index) => {
         return {
+          $index,
+          $nodeId: crypto.randomUUID().toString(),
           name: key,
           default: input.default,
           type: input.type,
@@ -128,7 +130,7 @@ export function getStructureFromWorkflow(
                   $nodeId: crypto.randomUUID().toString(),
                   type: 'run',
                   id: step.id,
-                  name: step.name,
+                  name: step.name?.toString(),
                   env: step.env,
                   // @ts-expect-error TODO: fix type
                   run: step.run['value'],
@@ -139,7 +141,7 @@ export function getStructureFromWorkflow(
                   $nodeId: crypto.randomUUID().toString(),
                   type: 'action',
                   id: step.id,
-                  name: step.name,
+                  name: step.name?.toString(),
                   env: step.env,
                   uses: step.uses.value,
                 };

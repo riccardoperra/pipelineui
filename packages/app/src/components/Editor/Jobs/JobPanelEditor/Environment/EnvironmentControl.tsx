@@ -26,7 +26,7 @@ export type JobEnvironment = {
 };
 
 interface EnvironmentControlProps {
-  value: JobEnvironment;
+  value: JobEnvironment | null;
   onValueChange: (value: JobEnvironment) => void;
 }
 
@@ -151,9 +151,9 @@ export function EnvironmentControl(props: EnvironmentControlProps) {
         />
         <PopoverContent>
           <EnvironmentControlForm
-            initialModality={props.value.type ?? 'value'}
-            initialName={props.value.name ?? ''}
-            initialUrl={props.value.url ?? ''}
+            initialModality={props.value?.type ?? 'value'}
+            initialName={props.value?.name ?? ''}
+            initialUrl={props.value?.url ?? ''}
             onSubmit={props.onValueChange}
           />
         </PopoverContent>

@@ -1,18 +1,21 @@
 import {container, listItem} from './JobStepsForm.css';
-import type {WorkflowStructureJobStep} from '#editor-store/editor.types';
 import {createEffect, For} from 'solid-js';
+import {provideState} from 'statebuilder';
+import {PanelEditorStore} from '../panel-editor.store';
 
-export interface JobStepsFormProps {
-  steps: WorkflowStructureJobStep[];
-  onClickStep: (stepId: string) => void;
-}
+export function JobStepsForm() {
+  const panelStore = provideState(PanelEditorStore);
 
-export function JobStepsForm(props: JobStepsFormProps) {
+  const steps = () => panelStore.selectedJob!.steps;
+
   return (
     <div class={container}>
-      <For each={props.steps}>
+      <For each={steps()}>
         {step => (
-          <button class={listItem} onClick={() => props.onClickStep(step.id)}>
+          <button
+            class={listItem}
+            onClick={() => panelStore.actions.setActiveStepId(step.$nodeId)}
+          >
             {step.name || step.id}
           </button>
         )}

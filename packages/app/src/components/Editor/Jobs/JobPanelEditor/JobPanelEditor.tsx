@@ -6,7 +6,7 @@ import {PanelHeader} from '../../Layout/Panel/Form/PanelHeader';
 import {FullWidthPanelRow} from '../../Layout/Panel/Form/PanelRow';
 import {PanelDivider} from '../../Layout/Panel/Form/PanelDivider';
 import {JobStepsForm} from './JobStepsForm/JobStepsForm';
-import {createEffect, createSignal, Match, Show, Switch} from 'solid-js';
+import {createEffect, Match, Switch} from 'solid-js';
 import {JobStepForm} from './JobStepsForm/JobStep/JobStepForm';
 import {useEditorContext} from '../../editor.context';
 import {createStore} from 'solid-js/store';
@@ -21,6 +21,7 @@ import {
 } from './Environment/EnvironmentControl';
 import {PanelGroup} from '#editor-layout/Panel/Form/PanelGroup';
 import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
+import {PanelEditorStore} from './panel-editor.store';
 
 interface Form {
   name: string;
@@ -32,18 +33,19 @@ interface Form {
 export function JobPanelEditor() {
   const editorStore = provideState(EditorStore);
   const {template, context} = useEditorContext();
+  const panelStore = provideState(PanelEditorStore);
 
-  const job = () => editorStore.selectedJob();
+  const job = () => panelStore.selectedJob!;
 
   const needs = () => {
-    const templateJobs = template.jobs.filter(_job => _job.id !== job()?.id);
+    const templateJobs = template.jobs.filter(
+      _job => _job.id.value !== job().id,
+    );
     return templateJobs ?? [];
   };
   const needsOptions = () => {
     return needs().map(need => need.id?.toString());
   };
-
-  const [activeStep, setActiveStep] = createSignal<string | null>();
 
   const [form, setForm] = createStore<Form>({
     name: '',
@@ -95,10 +97,10 @@ export function JobPanelEditor() {
   return (
     <PanelGroup>
       <Switch>
-        <Match when={!!activeStep()}>
-          <JobStepForm stepId={activeStep()!} />
+        <Match when={!!panelStore.get.activeStep}>
+          <JobStepForm />
         </Match>
-        <Match when={!activeStep()}>
+        <Match when={!panelStore.get.activeStep}>
           <PanelHeader label={'General'} />
 
           <PanelContent withGap>
@@ -128,7 +130,7 @@ export function JobPanelEditor() {
                 size={'sm'}
                 theme={'filled'}
                 label={'Runs on'}
-                value={job()?.runsOn}
+                value={job().runsOn}
                 onChange={value => {
                   editorStore.set('structure', 'jobs', 0, 'runsOn', value);
                   editorStore.yamlSession.setJobRunsOn(job()!.id, value);
@@ -141,11 +143,9 @@ export function JobPanelEditor() {
                 aria-label={'Needs input'}
                 multiple={true}
                 options={needsOptions()}
-                value={form.needs}
+                value={job().needs}
                 onChange={options => {
-                  setForm('needs', options);
-                  console.log('change needs');
-                  // editorStore.yamlSession.setJobNeeds(job()!.id.value, options);
+                  console.log('change needs', options);
                 }}
                 size={'sm'}
                 theme={'filled'}
@@ -159,7 +159,7 @@ export function JobPanelEditor() {
 
             <FullWidthPanelRow>
               <EnvironmentControl
-                value={form.environment}
+                value={job().environment ?? null}
                 onValueChange={value => {
                   setForm('environment', value);
                   editorStore.yamlSession.setJobEnvironment(job()!.id, value);
@@ -184,10 +184,7 @@ export function JobPanelEditor() {
 
           <PanelHeader label={'Steps'} />
 
-          <JobStepsForm
-            steps={job()?.steps ?? []}
-            onClickStep={setActiveStep}
-          />
+          <JobStepsForm />
 
           <PanelDivider />
         </Match>

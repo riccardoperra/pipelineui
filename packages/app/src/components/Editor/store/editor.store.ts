@@ -1,7 +1,7 @@
 import {defineStore} from 'statebuilder';
-import {Document, type ParsedNode, parseDocument, YAMLMap} from 'yaml';
-import {createMemo, createSignal, untrack} from 'solid-js';
-import {reconcile} from 'solid-js/store';
+import {Document, type ParsedNode, parseDocument} from 'yaml';
+import {batch, createSignal, untrack} from 'solid-js';
+import {reconcile, type SetStoreFunction} from 'solid-js/store';
 import {
   getWorkflowJson,
   type WorkflowTemplate,
@@ -14,6 +14,9 @@ import type {
   EditorWorkflowStructure,
   WorkflowDispatchInput,
   WorkflowStructureEnvItem,
+  WorkflowStructureJobActionStep,
+  WorkflowStructureJobRunStep,
+  WorkflowStructureJobStep,
 } from './editor.types';
 
 export interface EditorState {
@@ -46,23 +49,35 @@ export const EditorStore = defineStore<EditorState>(() => ({
     const [session, setSession] =
       createSignal<Document.Parsed<ParsedNode, true>>();
 
-    const [notifier, setNotifier] = createSignal([], {equals: false});
+    const createStepJobUpdater = <
+      T extends WorkflowStructureJobRunStep | WorkflowStructureJobActionStep,
+    >(
+      jobId: string,
+      stepId: string,
+    ) => {
+      const jobIndex = untrack(() =>
+        _.get.structure.jobs.findIndex(job => job.id === jobId),
+      );
+      if (jobIndex === -1) {
+        return;
+      }
+      const stepIndex = _.get.structure.jobs[jobIndex].steps.findIndex(
+        step => step.$nodeId === stepId,
+      );
+      if (stepIndex === -1) {
+        return;
+      }
 
-    const yamlCode = createMemo(() => {
-      notifier();
-      return session()?.toString() ?? '';
-    });
+      const setter = (...args: any[]) => {
+        // @ts-expect-error
+        _.set('structure', 'jobs', jobIndex, 'steps', stepIndex, ...args);
+      };
 
-    const yamlUpdater = (cb: () => void) => {
-      cb();
-      setNotifier([]);
-      queueMicrotask(() => {
-        getWorkflowJson('./yaml.json', session()!.toString()!).template.then(
-          response => {
-            _.set('template', reconcile(response));
-          },
-        );
-      });
+      return {
+        update: setter as SetStoreFunction<T>,
+        jobIndex,
+        stepIndex,
+      } as const;
     };
 
     return {
@@ -81,104 +96,67 @@ export const EditorStore = defineStore<EditorState>(() => ({
       actions: {
         jobs: {
           stepUpdateName(jobId: string, stepId: string, name: string) {
-            const jobIndex = untrack(() =>
-              _.get.structure.jobs.findIndex(job => job.id === jobId),
-            );
-            if (jobIndex === -1) {
+            const updater = createStepJobUpdater(jobId, stepId);
+            if (!updater) {
               return;
             }
-            const stepIndex = _.get.structure.jobs[jobIndex].steps.findIndex(
-              step => step.id === stepId,
-            );
-            if (stepIndex === -1) {
-              return;
-            }
-            _.set(
-              'structure',
-              'jobs',
-              jobIndex,
-              'steps',
-              stepIndex,
-              'name',
-              name,
-            );
-            _.yamlSession.setJobStepName(jobId, stepIndex, name);
+            updater.update('name', name);
+            _.yamlSession.setJobStepName(jobId, updater.stepIndex, name);
           },
 
           stepUpdateType(jobId: string, stepId: string, type: string) {
-            const jobIndex = untrack(() =>
-              _.get.structure.jobs.findIndex(job => job.id === jobId),
-            );
-            if (jobIndex === -1) {
+            const updater = createStepJobUpdater(jobId, stepId);
+            if (!updater) {
               return;
             }
-            const stepIndex = _.get.structure.jobs[jobIndex].steps.findIndex(
-              step => step.id === stepId,
-            );
-            if (stepIndex === -1 || (type !== 'action' && type !== 'run')) {
-              return;
-            }
-            _.set(
-              'structure',
-              'jobs',
-              jobIndex,
-              'steps',
-              stepIndex,
-              'type',
-              type as 'action' | 'run',
-            );
+            updater.update('type', type as 'action' | 'run');
+            untrack(() => {
+              const job = _.get.structure.jobs[updater.jobIndex];
+              const step = job.steps[updater.stepIndex];
+
+              console.log('run', type);
+
+              if (type === 'action') {
+                _.yamlSession.setJobStepUses(
+                  jobId,
+                  updater.stepIndex,
+                  (step as WorkflowStructureJobActionStep)['uses'],
+                );
+                _.yamlSession.setJobStepRun(jobId, updater.stepIndex, null);
+              } else {
+                _.yamlSession.setJobStepUses(jobId, updater.stepIndex, null);
+                _.yamlSession.setJobStepRun(
+                  jobId,
+                  updater.stepIndex,
+                  (step as WorkflowStructureJobRunStep)['run'],
+                );
+              }
+            });
           },
 
           stepUpdateRun(jobId: string, stepId: string, run: string) {
-            const jobIndex = untrack(() =>
-              _.get.structure.jobs.findIndex(job => job.id === jobId),
+            const updater = createStepJobUpdater<WorkflowStructureJobRunStep>(
+              jobId,
+              stepId,
             );
-            if (jobIndex === -1) {
+            if (!updater) {
               return;
             }
-            const stepIndex = _.get.structure.jobs[jobIndex].steps.findIndex(
-              step => step.id === stepId,
-            );
-            if (stepIndex === -1) {
-              return;
-            }
-            _.set(
-              'structure',
-              'jobs',
-              jobIndex,
-              'steps',
-              stepIndex,
-              // @ts-expect-error TODO: fix type, union
-              'run',
-              run,
-            );
-            _.yamlSession.setJobStepRun(jobId, stepIndex, run);
+            updater.update('run', run);
+            _.yamlSession.setJobStepRun(jobId, updater.stepIndex, run);
           },
 
           stepUpdateUses(jobId: string, stepId: string, uses: string) {
-            const jobIndex = untrack(() =>
-              _.get.structure.jobs.findIndex(job => job.id === jobId),
-            );
-            if (jobIndex === -1) {
+            const updater =
+              createStepJobUpdater<WorkflowStructureJobActionStep>(
+                jobId,
+                stepId,
+              );
+            if (!updater) {
               return;
             }
-            const stepIndex = _.get.structure.jobs[jobIndex].steps.findIndex(
-              step => step.id === stepId,
-            );
-            if (stepIndex === -1) {
-              return;
-            }
-            _.set(
-              'structure',
-              'jobs',
-              jobIndex,
-              'steps',
-              stepIndex,
-              // @ts-expect-error TODO: fix type, union
-              'uses',
-              uses,
-            );
-            _.yamlSession.setJobStepUses(jobId, stepIndex, uses);
+            updater.update('uses', uses);
+            _.yamlSession.setJobStepUses(jobId, updater.stepIndex, uses);
           },
         },
 
@@ -224,20 +202,20 @@ export const EditorStore = defineStore<EditorState>(() => ({
       sessionUpdate: {
         setConcurrency: (data: WorkflowConcurrency | null) => {
           const workflow = session()!;
-          yamlUpdater(() => {
-            if (data === null) {
-              workflow.delete('concurrency');
-            } else {
-              const concurrency = new YAMLMap();
-              concurrency.set('group', data.group);
-              concurrency.set('cancel-in-progress', data.cancelInProgress);
-              workflow.set('concurrency', concurrency);
-            }
-          });
+          // TODO: add update
+          // yamlUpdater(() => {
+          //   if (data === null) {
+          //     workflow.delete('concurrency');
+          //   } else {
+          //     const concurrency = new YAMLMap();
+          //     concurrency.set('group', data.group);
+          //     concurrency.set('cancel-in-progress', data.cancelInProgress);
+          //     workflow.set('concurrency', concurrency);
+          //   }
+          // });
         },
       },
 
-      yamlCode,
       initEditSession(source: string): void {
         _.yamlSession.init(
           parseDocument(source, {

@@ -15,21 +15,13 @@ import type {
   WorkflowStructureJobActionStep,
   WorkflowStructureJobRunStep,
 } from '#editor-store/editor.types';
+import {PanelEditorStore} from '../../panel-editor.store';
 
-export interface JobStepFormProp {
-  stepId: string;
-}
-
-export function JobStepForm(props: JobStepFormProp) {
+export function JobStepForm() {
   const {selectedJob, actions} = provideState(EditorStore);
+  const panelStore = provideState(PanelEditorStore);
 
-  const jobStep = () => {
-    const job = selectedJob();
-    if (!job) {
-      return null;
-    }
-    return job.steps.find(step => step.id === props.stepId);
-  };
+  const jobStep = panelStore.selectedStep;
 
   return (
     <Show when={jobStep()}>
@@ -46,25 +38,12 @@ export function JobStepForm(props: JobStepFormProp) {
                 }}
                 size={'sm'}
                 theme={'filled'}
-                label={'Id'}
-                value={jobStep()?.id}
-              />
-            </FullWidthPanelRow>
-
-            <FullWidthPanelRow>
-              <TextField
-                slotClasses={{
-                  root: formStyles.inlineInputRoot,
-                  label: formStyles.inlineInputLabel,
-                }}
-                size={'sm'}
-                theme={'filled'}
                 label={'Name'}
                 value={jobStep()?.name}
                 onChange={name =>
                   actions.jobs.stepUpdateName(
                     selectedJob()?.id!,
-                    props.stepId,
+                    jobStep().$nodeId,
                     name,
                   )
                 }
@@ -95,7 +74,7 @@ export function JobStepForm(props: JobStepFormProp) {
                   onChange={value =>
                     actions.jobs.stepUpdateType(
                       selectedJob()?.id!,
-                      props.stepId,
+                      jobStep().$nodeId,
                       value as string,
                     )
                   }
@@ -128,7 +107,7 @@ export function JobStepForm(props: JobStepFormProp) {
                     onChange={uses =>
                       actions.jobs.stepUpdateUses(
                         selectedJob()?.id!,
-                        props.stepId,
+                        jobStep().$nodeId,
                         uses,
                       )
                     }
@@ -161,7 +140,7 @@ export function JobStepForm(props: JobStepFormProp) {
                     onChange={run =>
                       actions.jobs.stepUpdateRun(
                         selectedJob()?.id!,
-                        props.stepId,
+                        jobStep().$nodeId,
                         run,
                       )
                     }
