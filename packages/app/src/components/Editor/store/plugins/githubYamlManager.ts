@@ -314,6 +314,19 @@ export const withGithubYamlManager = () => {
         });
       };
 
+      const deleteJobStep = (
+        jobIdOrIndex: string | number,
+        stepIndex: number,
+      ) => {
+        yamlSession.updater(yaml => {
+          const job = findJob(yaml, jobIdOrIndex)!;
+          if (!job) {
+            return false;
+          }
+          job.items = job.items.toSpliced(stepIndex, 1);
+        });
+      };
+
       return {
         yamlSession: Object.assign(_.yamlSession, {
           deleteWorkflowDispatchItem,
@@ -326,6 +339,7 @@ export const withGithubYamlManager = () => {
           setJobStepName,
           setJobStepRun,
           setJobStepUses,
+          deleteJobStep,
         }),
       };
     },

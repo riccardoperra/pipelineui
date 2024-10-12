@@ -189,6 +189,7 @@ export const EditorStore = defineStore<EditorState>(() => ({
       updateJobStepType: {jobId: string; stepId: string; type: string};
       updateJobStepRun: {jobId: string; stepId: string; run: string | null};
       updateJobStepUses: {jobId: string; stepId: string; uses: string | null};
+      deleteJobStep: {jobId: string; stepId: string};
     }>({
       devtools: {storeName: 'editor'},
     }),
@@ -305,5 +306,32 @@ export const EditorStore = defineStore<EditorState>(() => ({
       }
       updater.update('uses', uses ?? '');
       _.yamlSession.setJobStepUses(updater.jobIndex, updater.stepIndex, uses);
+    });
+
+    _.hold(_.commands.deleteJobStep, ({jobId, stepId}) => {
+      const updater =
+        _.utils.createStepJobUpdater<WorkflowStructureJobActionStep>(
+          jobId,
+          stepId,
+        );
+      if (!updater) {
+        return;
+      }
+      const jobIndex = untrack(() =>
+        _.get.structure.jobs.findIndex(job => job.$nodeId === jobId),
+      );
+      if (jobIndex === -1) {
+        return;
+      }
+      const stepIndex = _.get.structure.jobs[jobIndex].steps.findIndex(
+        step => step.$nodeId === stepId,
+      );
+      if (stepIndex === -1) {
+        return;
+      }
+      _.set('structure', 'jobs', jobIndex, 'steps', steps => [
+        ...steps.toSpliced(stepIndex, 1),
+      ]);
+      _.yamlSession.deleteJobStep(jobIndex, stepIndex);
     });
   });
