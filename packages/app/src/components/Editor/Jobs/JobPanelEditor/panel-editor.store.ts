@@ -21,7 +21,13 @@ export const PanelEditorStore = defineStore<PanelEditorState>(() => ({
   .extend((_, context) => {
     const editorStore = context.inject(EditorStore);
 
-    context.hooks.onInit(() => {});
+    context.hooks.onInit(() => {
+      editorStore
+        .watchCommand([editorStore.commands.setSelectedJobId])
+        .subscribe(() => {
+          _.actions.setActiveStepId(null);
+        });
+    });
 
     const selectedStep = createMemo(() => {
       const activeStep = _.get.activeStep;
@@ -34,11 +40,9 @@ export const PanelEditorStore = defineStore<PanelEditorState>(() => ({
     });
 
     return {
-      get selectedJob() {
-        return editorStore.selectedJob();
-      },
+      selectedJob: editorStore.selectedJob,
       selectedStep,
-      get headerPanelLabel() {
+      headerPanelLabel: () => {
         const selectedJob = editorStore.selectedJob()!;
         const activeStep = selectedStep();
         const jobName = `${selectedJob.name || selectedJob.id}`;

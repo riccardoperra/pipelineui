@@ -1,6 +1,6 @@
 import {defineStore} from 'statebuilder';
 import {Document, type ParsedNode, parseDocument} from 'yaml';
-import {batch, createSignal, untrack} from 'solid-js';
+import {createSignal, untrack} from 'solid-js';
 import {reconcile, type SetStoreFunction} from 'solid-js/store';
 import {
   getWorkflowJson,
@@ -14,6 +14,7 @@ import type {
   EditorWorkflowStructure,
   WorkflowDispatchInput,
   WorkflowStructureEnvItem,
+  WorkflowStructureJob,
   WorkflowStructureJobActionStep,
   WorkflowStructureJobRunStep,
 } from './editor.types';
@@ -87,14 +88,16 @@ export const EditorStore = defineStore<EditorState>(() => ({
         createStepJobUpdater,
       },
 
-      selectedJob: () => {
+      selectedJob: (): WorkflowStructureJob => {
         const selectedJobId = _.get.selectedJobId;
         if (!selectedJobId) {
-          return;
+          // TODO: Fix type ! . here the job should always be valuated
+          return null as unknown as WorkflowStructureJob;
         }
+        // TODO: Fix type ! . here the job should always be valuated
         return _.get.structure?.jobs.find(job => {
           return job.id === selectedJobId;
-        });
+        })!;
       },
 
       // TODO @deprecated
@@ -170,6 +173,8 @@ export const EditorStore = defineStore<EditorState>(() => ({
   })
   .extend(
     withProxyCommands<{
+      setSelectedJobId: string | null;
+
       addNewEnvironmentVariable: {value: WorkflowStructureEnvItem};
       updateEnvironmentVariableByIndex: {
         index: number;
@@ -187,6 +192,10 @@ export const EditorStore = defineStore<EditorState>(() => ({
     }),
   )
   .extend(_ => {
+    _.hold(_.commands.setSelectedJobId, (value, {set}) =>
+      set('selectedJobId', value),
+    );
+
     _.hold(_.commands.addNewEnvironmentVariable, ({value}) => {
       const length = untrack(() => _().structure.env.array.length);
       _.set('structure', 'env', 'array', items => [...items, value]);

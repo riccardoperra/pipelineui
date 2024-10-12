@@ -14,11 +14,11 @@ export function JobForm() {
   const panelStore = provideState(PanelEditorStore);
   const editorStore = provideState(EditorStore);
 
-  const job = () => panelStore.selectedJob!;
+  const job = panelStore.selectedJob;
 
   const needs = () => {
     const templateJobs = editorStore.get.structure.jobs.filter(
-      _job => _job.id !== job().id,
+      _job => _job.id !== job()!.id,
     );
     return templateJobs ?? [];
   };

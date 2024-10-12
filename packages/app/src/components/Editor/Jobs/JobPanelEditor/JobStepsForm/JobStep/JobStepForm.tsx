@@ -27,7 +27,7 @@ export function JobStepForm() {
     <Show when={jobStep()}>
       {jobStep => (
         <>
-          <PanelHeader label={`Step > ${jobStep()?.id}`} />
+          <PanelHeader label={`Step properties`} />
 
           <PanelContent withGap>
             <FullWidthPanelRow>
