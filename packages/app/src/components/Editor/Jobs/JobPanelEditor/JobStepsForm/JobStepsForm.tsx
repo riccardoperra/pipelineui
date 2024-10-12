@@ -55,30 +55,39 @@ export function JobStepsForm() {
                     )}
                   />
                   <PopoverContent variant={'bordered'}>
-                    <strong>Do you want to delete the job?</strong>
-                    <span>This action is not reversible.</span>
+                    <strong>Confirm deletion</strong>
+                    <div>This action is not reversible.</div>
 
-                    <Button
-                      theme={'secondary'}
-                      size={'xs'}
-                      onClick={() => setDeleting(false)}
-                    >
-                      Close
-                    </Button>
-
-                    <Button
-                      theme={'negative'}
-                      size={'xs'}
-                      onClick={() => {
-                        setDeleting(false);
-                        editorStore.actions.deleteJobStep({
-                          jobId: editorStore.selectedJob().$nodeId,
-                          stepId: step.$nodeId,
-                        });
+                    {/*TODO add component*/}
+                    <div
+                      style={{
+                        'margin-top': '16px',
+                        display: 'flex',
+                        gap: '4px',
                       }}
                     >
-                      Confirm
-                    </Button>
+                      <Button
+                        theme={'secondary'}
+                        size={'xs'}
+                        onClick={() => setDeleting(false)}
+                      >
+                        Close
+                      </Button>
+
+                      <Button
+                        theme={'negative'}
+                        size={'xs'}
+                        onClick={() => {
+                          setDeleting(false);
+                          editorStore.actions.deleteJobStep({
+                            jobId: editorStore.selectedJob().$nodeId,
+                            stepId: step.$nodeId,
+                          });
+                        }}
+                      >
+                        Confirm
+                      </Button>
+                    </div>
                   </PopoverContent>
                 </Popover>
               </div>

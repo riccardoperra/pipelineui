@@ -16,7 +16,7 @@ export const listItem = style({
   height: '36px',
   width: '100%',
   border: `1px solid ${themeVars.accent3}`,
-  backgroundColor: themeVars.accent3,
   color: themeVars.accent10,
   justifyContent: 'space-between',
+  paddingLeft: appTheme.spacing['2'],
 });

@@ -22,11 +22,11 @@ export const PanelEditorStore = defineStore<PanelEditorState>(() => ({
     const editorStore = context.inject(EditorStore);
 
     context.hooks.onInit(() => {
-      editorStore
-        .watchCommand([editorStore.commands.setSelectedJobId])
-        .subscribe(() => {
-          _.actions.setActiveStepId(null);
-        });
+      const command = `@@BEFORE/${editorStore.commands.setSelectedJobId.identity}`;
+      editorStore.watchCommand(new RegExp(command)).subscribe(command => {
+        console.log(command);
+        _.actions.setActiveStepId(null);
+      });
     });
 
     const selectedStep = createMemo(() => {

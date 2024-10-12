@@ -104,8 +104,8 @@ importers:
         specifier: ^1.9.1
         version: 1.9.1
       statebuilder:
-        specifier: ^0.6.0
-        version: 0.6.0
+        specifier: file:/Users/riccardoperra/WebstormProjects/statebuilder/packages/state
+        version: file:../statebuilder/packages/state
       vinxi:
         specifier: ^0.4.3
         version: 0.4.3(@types/node@22.7.4)(ioredis@5.4.1)(terser@5.34.1)
@@ -4193,6 +4193,9 @@ packages:
 
   statebuilder@0.6.0:
     resolution: {integrity: sha512-PZ+Y/MNbTK1m7yoekMWJyKl90FC1lXdvxUJHgvXWlG/mHgmwpJe6qYpxAFJ8U4jpVyFNhxoh1Bs/sHOfeqKFOg==}
+
+  statebuilder@file:../statebuilder/packages/state:
+    resolution: {directory: ../statebuilder/packages/state, type: directory}
 
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
@@ -9446,6 +9449,12 @@ snapshots:
   standard-as-callback@2.1.0: {}
 
   statebuilder@0.6.0:
+    dependencies:
+      '@solid-primitives/event-bus': 1.0.11(solid-js@1.9.1)
+      rxjs: 7.8.1
+      solid-js: 1.9.1
+
+  statebuilder@file:../statebuilder/packages/state:
     dependencies:
       '@solid-primitives/event-bus': 1.0.11(solid-js@1.9.1)
       rxjs: 7.8.1
