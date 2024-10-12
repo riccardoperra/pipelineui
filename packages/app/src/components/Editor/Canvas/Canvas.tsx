@@ -144,7 +144,18 @@ function _Canvas() {
   });
 
   return (
-    <div class={styles.canvasContainer}>
+    <div
+      class={styles.canvasContainer}
+      onClick={e => {
+        const target = e.composedPath();
+        const containsNode = target.find(node =>
+          (node as Element).hasAttribute?.('data-flow-node'),
+        );
+        if (!containsNode) {
+          editor.actions.setSelectedJobId(null);
+        }
+      }}
+    >
       <FlowContainer size={size()}>
         <FlowRenderer
           renderNode={node => <FlowItem job={node.data.job} />}

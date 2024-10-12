@@ -28,7 +28,7 @@ export function Node(props: NodeProps) {
   return (
     <div
       ref={mergeRefs(internalRef, props.ref)}
-      data-node={true}
+      data-flow-node={true}
       class={baseNode}
       data-selected={props.selected ? '' : null}
       style={assignInlineVars({
