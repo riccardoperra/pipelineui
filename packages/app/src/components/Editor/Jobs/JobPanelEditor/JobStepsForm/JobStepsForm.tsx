@@ -13,7 +13,7 @@ export function JobStepsForm(props: JobStepsFormProps) {
       <For each={props.steps}>
         {step => (
           <button class={listItem} onClick={() => props.onClickStep(step.id)}>
-            {step.id}
+            {step.name || step.id}
           </button>
         )}
       </For>

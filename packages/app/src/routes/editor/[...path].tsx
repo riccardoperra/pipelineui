@@ -6,12 +6,14 @@ import {
   type RouteSectionProps,
 } from '@solidjs/router';
 import {createEffect, createSignal, Show} from 'solid-js';
+
 import {
   getWorkflowJson,
   type WorkflowTemplate,
 } from '@pipelineui/workflow-parser';
-import {EditorContext} from '../../components/Editor/editor.context';
-import {Editor} from '../../components/Editor/Editor';
+import {EditorContext} from '~/components/Editor/editor.context';
+import {Editor} from '~/components/Editor/Editor';
+import {getGithubRepoFileContent} from '~/lib/api';
 
 const getWorkflowFromUrl = cache(async (path: string) => {
   'use server';
@@ -27,21 +29,20 @@ const getWorkflowFromUrl = cache(async (path: string) => {
 
   const {owner, repoName, branchName, filePath} = resolvedPath();
 
-  return await fetch(
-    `https://ungh.cc/repos/${owner}/${repoName}/files/${branchName}/${filePath.join('/')}`,
-  ).then(response => {
-    if (!response.ok) {
+  return getGithubRepoFileContent(
+    `${owner}/${repoName}`,
+    branchName,
+    filePath.join('/'),
+  )
+    .then(response => {
+      if (response.failed) {
+        throw redirect('/not-found');
+      }
+      return response.data;
+    })
+    .catch(() => {
       throw redirect('/not-found');
-    }
-    return response.json() as Promise<{
-      meta: {
-        url: string;
-      };
-      file: {
-        contents: string;
-      };
-    }>;
-  });
+    });
 }, 'github-workflow');
 
 export const route = {
@@ -63,7 +64,6 @@ export default function EditorPage(props: RouteSectionProps) {
 
   createEffect(() => {
     const fetchedWorkflow = workflowContent();
-    console.log(fetchedWorkflow);
     if (!fetchedWorkflow) {
       return;
     }

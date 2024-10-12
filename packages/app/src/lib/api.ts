@@ -66,6 +66,38 @@ export function getGithubRepoFiles(
   );
 }
 
+export interface GithubRepositoryFileContent {
+  meta: {
+    url: string;
+  };
+  file: {
+    contents: string;
+  };
+}
+
+export async function getGithubRepoFileContent(
+  repo: string,
+  branch: string,
+  path: string,
+): Promise<FetchResponse<GithubRepositoryFileContent, Error>> {
+  const response = await fetch(
+    `https://ungh.cc/repos/${repo}/files/${branch}/${path}`,
+  );
+  if (!response.ok) {
+    if (response.status === 404) {
+      return {
+        error: new Error(`Workflow not found.`),
+        failed: true,
+      };
+    }
+    return {
+      error: new Error('An error occurred.'),
+      failed: true,
+    };
+  }
+  return {data: await response.json(), failed: false, error: null};
+}
+
 export function getGithubRepoWorkflowFiles(
   repo: string,
   branch: string,

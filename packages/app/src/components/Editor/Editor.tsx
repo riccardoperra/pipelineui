@@ -2,11 +2,10 @@ import {EditorSidebar} from './LeftSidebar/EditorSidebar';
 import * as styles from './Editor.css';
 import {JobPanelEditor} from './Jobs/JobPanelEditor/JobPanelEditor';
 import type {WorkflowTemplate} from '@pipelineui/workflow-parser';
-import {Canvas} from './Canvas/Canvas';
 import {EditorHeader} from './Header/Header';
 import {provideState} from 'statebuilder';
 import {EditorUiStore} from './store/ui.store';
-import {Match, onMount, Show, Switch} from 'solid-js';
+import {lazy, Match, onMount, Show, Suspense, Switch} from 'solid-js';
 import {YamlEditor} from './YamlEditor/YamlEditor';
 import {EditorStatusBar} from './StatusBar/StatusBar';
 import Resizable from '@corvu/resizable';
@@ -19,6 +18,12 @@ interface EditorProps {
   content: string;
   template: WorkflowTemplate;
 }
+
+const Canvas = lazy(() =>
+  import('./Canvas/Canvas').then(({Canvas}) => ({
+    default: Canvas,
+  })),
+);
 
 export function Editor(props: EditorProps) {
   const editorUi = provideState(EditorUiStore);
@@ -76,7 +81,9 @@ export function Editor(props: EditorProps) {
 
                 <Resizable.Panel initialSize={0.58}>
                   <Show when={editor.get.template}>
-                    <Canvas />
+                    <Suspense>
+                      <Canvas />
+                    </Suspense>
                   </Show>
                 </Resizable.Panel>
 

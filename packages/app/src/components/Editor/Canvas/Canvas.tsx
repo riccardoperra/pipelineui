@@ -1,6 +1,6 @@
 import * as styles from './Canvas.css';
 import {FlowContainer} from '../Flow/FlowContainer';
-import {batch, createEffect, createSignal} from 'solid-js';
+import {batch, createEffect, createSignal, lazy} from 'solid-js';
 import type {ElkExtendedEdge, ElkNode} from 'elkjs';
 import {useEditorContext} from '../editor.context';
 import {provideState} from 'statebuilder';
@@ -9,7 +9,11 @@ import {FlowRenderer} from '../Flow/engine/FlowRenderer';
 import type {FlowConnection, FlowNodeMap} from '../Flow/engine/types';
 import {FlowItem} from '../Flow/FlowItem';
 
-export function Canvas() {
+export const Canvas = lazy(() => {
+  return import('elkjs').then(() => ({default: _Canvas}));
+});
+
+function _Canvas() {
   const {template} = useEditorContext();
   const editor = provideState(EditorStore);
 
