@@ -1,16 +1,11 @@
 import * as styles from './EditorHeader.css';
+import {headerRepoNavLi, headerRepoNavOl} from './EditorHeader.css';
 import {Button, IconButton, Link} from '@codeui/kit';
 import {provideState} from 'statebuilder';
 import {EditorUiStore} from '../store/ui.store';
 import {Show} from 'solid-js';
 import {Icon} from '#ui/components/Icon';
 import {A, useParams} from '@solidjs/router';
-import type {GithubRepository} from '../../../lib/api';
-import {
-  headerRepoNavContent,
-  headerRepoNavLi,
-  headerRepoNavOl,
-} from './EditorHeader.css';
 
 export interface EditorHeaderProps {
   showBack: boolean;
