@@ -9,6 +9,7 @@ export const header = style({
   paddingLeft: appTheme.spacing['4'],
   paddingRight: appTheme.spacing['4'],
   alignItems: 'center',
+  gap: appTheme.spacing['2'],
   backgroundColor: themeVars.accent1,
 });
 
@@ -21,6 +22,27 @@ export const subHeader = style({
   alignItems: 'center',
   backgroundColor: themeVars.accent2,
   borderBottom: `1px solid ${themeVars.accent6}`,
+});
+
+export const headerRepoNavContent = style({
+  display: 'flex',
+  gap: appTheme.spacing['2'],
+});
+
+export const headerRepoNavOl = style({
+  listStyleType: 'none',
+  display: 'flex',
+  gap: appTheme.spacing['2'],
+  alignItems: 'center',
+  padding: 0,
+});
+
+export const headerRepoNavLi = style({
+  listStyleType: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  gap: appTheme.spacing['1'],
+  padding: 0,
 });
 
 export const subHeaderRightContent = style({

@@ -31,7 +31,7 @@ export function Editor(props: EditorProps) {
 
   return (
     <div class={styles.wrapper}>
-      <EditorHeader />
+      <EditorHeader showBack />
       <div class={styles.editor}>
         <Resizable orientation={'horizontal'} class={styles.editorResizable}>
           {() => {

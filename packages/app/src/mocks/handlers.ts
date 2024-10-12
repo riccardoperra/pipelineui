@@ -4,7 +4,6 @@ import codeImageMainYml from './data/codeimage-main.yml?raw';
 import invalidFile from './data/invalid?raw';
 import type {
   GithubGetRepositoryResponse,
-  GithubRepository,
   GithubRepositoryFileResponse,
 } from '../lib/api';
 
