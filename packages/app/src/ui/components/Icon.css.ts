@@ -13,6 +13,11 @@ export const icon = recipe({
 
   variants: {
     size: {
+      lg: {
+        vars: {
+          [iconFontSize]: '28px',
+        },
+      },
       md: {
         vars: {
           [iconFontSize]: '22px',

@@ -110,45 +110,48 @@ export function getStructureFromWorkflow(
         } satisfies WorkflowDispatchInput;
       }),
     },
-    jobs: template.jobs.map((job, $index) => {
-      if (job.type === 'job') {
-        return {
-          $index,
-          $nodeId: crypto.randomUUID().toString(),
-          id: job.id.value,
-          name: (job.name as Tokens.StringToken)?.value ?? job.id.value,
-          runsOn: job['runs-on']?.value,
-          environment: null,
-          needs: [...(job.needs?.values() ?? [])].map(value => value.value),
-          steps: job.steps.map((step, $index) => {
-            if ('run' in step) {
-              return {
-                $index,
-                $nodeId: crypto.randomUUID().toString(),
-                type: 'run',
-                id: step.id,
-                name: step.name,
-                env: step.env,
-                // @ts-expect-error TODO: fix type
-                run: step.run['value'],
-              };
-            } else {
-              return {
-                $index,
-                $nodeId: crypto.randomUUID().toString(),
-                type: 'action',
-                id: step.id,
-                name: step.name,
-                env: step.env,
-                uses: step.uses.value,
-              };
-            }
-          }),
-        };
-      } else {
-        // TODO: add support
-        throw new Error(`Job with type ${job.type} is not supported`);
-      }
-    }),
+    jobs: template.jobs
+      .map((job, $index) => {
+        if (job.type === 'job') {
+          return {
+            $index,
+            $nodeId: crypto.randomUUID().toString(),
+            id: job.id.value,
+            name: (job.name as Tokens.StringToken)?.value ?? job.id.value,
+            runsOn: job['runs-on']?.value,
+            environment: null,
+            needs: [...(job.needs?.values() ?? [])].map(value => value.value),
+            steps: job.steps.map((step, $index) => {
+              if ('run' in step) {
+                return {
+                  $index,
+                  $nodeId: crypto.randomUUID().toString(),
+                  type: 'run',
+                  id: step.id,
+                  name: step.name,
+                  env: step.env,
+                  // @ts-expect-error TODO: fix type
+                  run: step.run['value'],
+                };
+              } else {
+                return {
+                  $index,
+                  $nodeId: crypto.randomUUID().toString(),
+                  type: 'action',
+                  id: step.id,
+                  name: step.name,
+                  env: step.env,
+                  uses: step.uses.value,
+                };
+              }
+            }),
+          };
+        } else {
+          // TODO: add support
+          return null;
+          // throw new Error(`Job with type ${job.type} is not supported`);
+        }
+      })
+      .filter(_ => !!_),
   };
 }

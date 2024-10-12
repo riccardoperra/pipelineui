@@ -3,6 +3,7 @@ import type {WorkflowTemplate} from '@pipelineui/workflow-parser';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '../store/editor.store';
 import {flowItemContent} from './FlowItem.css';
+import {Show} from 'solid-js';
 
 interface FlowItemProps {
   job: WorkflowTemplate['jobs'][number];
@@ -37,15 +38,19 @@ export function FlowItem(props: FlowItemProps) {
             {props.job?.steps?.length} steps
           </span>
 
-          <span
-            style={{
-              padding: '2px 6px',
-              'background-color': '#2d2d2d',
-              'border-radius': '8px',
-            }}
-          >
-            {job()?.runsOn}
-          </span>
+          <Show when={job()?.runsOn}>
+            {runsOn => (
+              <span
+                style={{
+                  padding: '2px 6px',
+                  'background-color': '#2d2d2d',
+                  'border-radius': '8px',
+                }}
+              >
+                {job()?.runsOn}
+              </span>
+            )}
+          </Show>
         </div>
       </div>
     </div>
