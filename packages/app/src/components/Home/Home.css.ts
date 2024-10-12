@@ -1,6 +1,6 @@
 import {createVar, style} from '@vanilla-extract/css';
 import {appTheme} from '#ui/theme.css';
-import {themeVars, buttonStyles} from '@codeui/kit';
+import {themeVars} from '@codeui/kit';
 
 const canvasPatternColor = createVar();
 
@@ -22,33 +22,6 @@ export const homeContainer = style({
   gap: appTheme.spacing['16'],
   width: '100%',
   height: '100%',
-});
-
-export const mainTitleContainer = style({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginTop: appTheme.spacing['16'],
-  marginBottom: appTheme.spacing['1'],
-  padding: `${appTheme.spacing['4']} ${appTheme.spacing['8']}`,
-});
-
-export const mainTitle = style({
-  fontSize: '34px',
-  display: 'flex',
-  alignItems: 'center',
-  gap: appTheme.spacing['4'],
-});
-
-export const mainDescription = style({
-  color: '#fafafa',
-  textAlign: 'center',
-});
-
-export const mainDescriptionHighlight = style({
-  color: themeVars.brand,
-  textDecorationColor: themeVars.brand,
 });
 
 export const choiceSeparator = style({
@@ -84,38 +57,8 @@ export const content = style({
   width: '600px',
 });
 
-export const contentTitle = style({
-  textAlign: 'center',
-  color: themeVars.accent10,
-});
-
-export const submitRepoInputContainer = style({
-  display: 'flex',
-  height: '46px',
-  position: 'relative',
-});
-
-export const submitRepoInputRoot = style({
-  flex: 1,
-});
-
-export const submitRepoInput = style({
-  borderTopRightRadius: 0,
-  borderBottomRightRadius: 0,
-});
-
-export const submitRepoSubmitButton = style({
-  borderTopLeftRadius: 0,
-  borderBottomLeftRadius: 0,
-  width: '46px',
-  vars: {
-    [buttonStyles.buttonVars.buttonHeight]: '46px',
-  },
-});
-
-export const resetRepoSubmitButton = style({
-  position: 'absolute',
-  right: '50px',
-  top: '50%',
-  transform: 'translateY(-50%)',
+export const errorBanner = style({
+  padding: appTheme.spacing['4'],
+  background: themeVars.critical,
+  borderRadius: '12px',
 });

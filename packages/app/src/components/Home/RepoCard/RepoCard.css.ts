@@ -3,7 +3,7 @@ import {themeVars} from '@codeui/kit';
 import {appTheme} from '#ui/theme.css';
 
 export const repoCard = style({
-  background: themeVars.accent2,
+  background: '#1d1d1d90',
   boxShadow: themeVars.dialogBoxShadow,
   borderRadius: '8px',
 
@@ -12,7 +12,7 @@ export const repoCard = style({
   display: 'flex',
   flexDirection: 'column',
   gap: appTheme.spacing['4'],
-  filter: 'drop-shadow(0 0 15px rgba(49,49,49,.35))',
+  filter: 'drop-shadow(0 0 15px rgba(80,80,80,0.35))',
 });
 
 export const repoCardInfoWrapper = style({
@@ -48,6 +48,9 @@ export const repoCardWorkflows = style({
   display: 'flex',
   flexDirection: 'column',
   gap: appTheme.spacing['2'],
+  maxHeight: '275px',
+  position: 'relative',
+  overflow: 'auto',
 });
 
 export const repoCardWorkflowItem = style({

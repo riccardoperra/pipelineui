@@ -12,7 +12,7 @@ export default function App() {
       <Router
         root={props => (
           <MetaProvider>
-            <Title>SolidStart - Basic</Title>
+            <Title>PipelineUI</Title>
             <Suspense>{props.children}</Suspense>
           </MetaProvider>
         )}

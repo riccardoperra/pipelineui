@@ -1,6 +1,7 @@
 import {
   cache,
   createAsync,
+  redirect,
   type RouteDefinition,
   type RouteSectionProps,
 } from '@solidjs/router';
@@ -29,6 +30,9 @@ const getWorkflowFromUrl = cache(async (path: string) => {
   return await fetch(
     `https://ungh.cc/repos/${owner}/${repoName}/files/${branchName}/${filePath.join('/')}`,
   ).then(response => {
+    if (!response.ok) {
+      throw redirect('/not-found');
+    }
     return response.json() as Promise<{
       meta: {
         url: string;

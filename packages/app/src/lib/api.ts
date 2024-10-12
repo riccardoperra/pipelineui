@@ -16,12 +16,31 @@ export interface GithubGetRepositoryResponse {
   repo: GithubRepository;
 }
 
-export function getGithubRepo(
+export type FetchResponse<T, E = unknown> =
+  | {data: T; error: null; failed: false}
+  | {data?: undefined; error: E; failed: true};
+
+export async function getGithubRepo(
   name: string,
-): Promise<GithubGetRepositoryResponse> {
-  return fetch(`https://ungh.cc/repos/${name}`).then(response =>
-    response.json(),
-  );
+): Promise<FetchResponse<GithubGetRepositoryResponse, Error>> {
+  const response = await fetch(`https://ungh.cc/repos/${name}`);
+  if (!response.ok) {
+    if (response.status === 404) {
+      return {
+        error: new Error(`Repo ${name} not found.`),
+        failed: true,
+      };
+    }
+    return {
+      error: new Error('An error occurred.'),
+      failed: true,
+    };
+  }
+  return {
+    data: await response.json(),
+    error: null,
+    failed: false,
+  };
 }
 
 export interface GithubRepositoryFile {

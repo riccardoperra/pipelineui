@@ -1,39 +1,25 @@
 import {
   choiceSeparator,
   content,
-  contentTitle,
   homeContainer,
+  errorBanner,
   homeLayoutWrapper,
-  mainDescription,
-  mainDescriptionHighlight,
-  mainTitle,
-  mainTitleContainer,
-  resetRepoSubmitButton,
-  submitRepoInput,
-  submitRepoInputContainer,
-  submitRepoInputRoot,
-  submitRepoSubmitButton,
 } from './Home.css';
-import {Button, IconButton, TextField} from '@codeui/kit';
-import {
-  cache,
-  createAsync,
-  createAsyncStore,
-  useSearchParams,
-} from '@solidjs/router';
-import {createSignal, Show, Suspense, useTransition} from 'solid-js';
-import {Icon} from '#ui/components/Icon';
+import {Button} from '@codeui/kit';
+import {cache, createAsync, useSearchParams} from '@solidjs/router';
+import {Show, Suspense} from 'solid-js';
 import {getGithubRepo} from '../../lib/api';
 import {RepoCard} from './RepoCard/RepoCard';
 import {RepoCardFallback} from './RepoCard/RepoCardFallback';
+import {RepoSearch} from './RepoSearch/RepoSearch';
+import {HomeTitle} from './HomeTitle/HomeTitle';
 
 export const searchRepo = cache((path: string) => {
   return getGithubRepo(path);
-}, 'search');
+}, 'search-repo');
 
 export function Home() {
-  const [repoSearchValue, setRepoSearchValue] = createSignal<string>('');
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
   const repo = createAsync(() => {
     return !params.repo ? Promise.resolve(null) : searchRepo(params.repo);
   });
@@ -41,78 +27,22 @@ export function Home() {
   return (
     <div class={homeLayoutWrapper}>
       <div class={homeContainer}>
-        <div class={mainTitleContainer}>
-          <h1 class={mainTitle}>
-            <Icon name={'account_tree'} size={'lg'} />
-            PipelineUI
-          </h1>
-          <span class={mainDescription}>
-            <span class={mainDescriptionHighlight}>Visual workflow</span> for
-            GitHub
-          </span>
-        </div>
-
+        <HomeTitle />
         <div class={content}>
-          <h2 class={contentTitle}>
-            Search for existing github repositories...
-          </h2>
-          <form
-            role={'search'}
-            onSubmit={e => {
-              e.preventDefault();
-              const data = new FormData(e.target as HTMLFormElement);
-              setParams({
-                repo: (data.get('repository-path') as string) ?? '',
-              });
-            }}
-          >
-            <div class={submitRepoInputContainer}>
-              <TextField
-                name={'repository-path'}
-                slotClasses={{
-                  root: submitRepoInputRoot,
-                  input: submitRepoInput,
-                }}
-                size={'lg'}
-                placeholder={'e.g. riccardoperra/codeimage'}
-                theme={'filled'}
-                value={repoSearchValue()}
-                onChange={e => {
-                  setRepoSearchValue(e);
-                }}
-              />
-              <Show when={repoSearchValue()}>
-                <IconButton
-                  class={resetRepoSubmitButton}
-                  size={'sm'}
-                  aria-label={'Cancel'}
-                  type={'button'}
-                  variant={'ghost'}
-                  theme={'secondary'}
-                  onClick={() => {
-                    setRepoSearchValue('');
-                    setParams({repo: ''}, {replace: true});
-                  }}
-                >
-                  <Icon name={'close'} />
-                </IconButton>
-              </Show>
-
-              <IconButton
-                class={submitRepoSubmitButton}
-                size={'lg'}
-                aria-label={'Enter'}
-                type={'submit'}
-                theme={'secondary'}
-              >
-                <Icon name={'keyboard_return'} />
-              </IconButton>
-            </div>
-          </form>
+          <RepoSearch />
 
           <Suspense fallback={<RepoCardFallback />}>
-            <Show when={repo()?.repo}>
-              {response => <RepoCard repo={response()} />}
+            <Show when={repo()} keyed>
+              {response => (
+                <Show
+                  fallback={
+                    <div class={errorBanner}>{response.error?.message}</div>
+                  }
+                  when={!response.failed && response}
+                >
+                  {response => <RepoCard repo={response().data.repo} />}
+                </Show>
+              )}
             </Show>
           </Suspense>
 
