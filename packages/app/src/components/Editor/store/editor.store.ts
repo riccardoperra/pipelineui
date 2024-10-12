@@ -16,8 +16,8 @@ import type {
   WorkflowStructureEnvItem,
   WorkflowStructureJobActionStep,
   WorkflowStructureJobRunStep,
-  WorkflowStructureJobStep,
 } from './editor.types';
+import {withProxyCommands} from 'statebuilder/commands';
 
 export interface EditorState {
   selectedJobId: string | null;
@@ -56,7 +56,7 @@ export const EditorStore = defineStore<EditorState>(() => ({
       stepId: string,
     ) => {
       const jobIndex = untrack(() =>
-        _.get.structure.jobs.findIndex(job => job.id === jobId),
+        _.get.structure.jobs.findIndex(job => job.$nodeId === jobId),
       );
       if (jobIndex === -1) {
         return;
@@ -83,6 +83,10 @@ export const EditorStore = defineStore<EditorState>(() => ({
     return {
       session,
 
+      utils: {
+        createStepJobUpdater,
+      },
+
       selectedJob: () => {
         const selectedJobId = _.get.selectedJobId;
         if (!selectedJobId) {
@@ -93,85 +97,8 @@ export const EditorStore = defineStore<EditorState>(() => ({
         });
       },
 
-      actions: {
-        jobs: {
-          stepUpdateName(jobId: string, stepId: string, name: string) {
-            const updater = createStepJobUpdater(jobId, stepId);
-            if (!updater) {
-              return;
-            }
-            updater.update('name', name);
-            _.yamlSession.setJobStepName(jobId, updater.stepIndex, name);
-          },
-
-          stepUpdateType(jobId: string, stepId: string, type: string) {
-            const updater = createStepJobUpdater(jobId, stepId);
-            if (!updater) {
-              return;
-            }
-            updater.update('type', type as 'action' | 'run');
-            untrack(() => {
-              const job = _.get.structure.jobs[updater.jobIndex];
-              const step = job.steps[updater.stepIndex];
-
-              console.log('run', type);
-
-              if (type === 'action') {
-                _.yamlSession.setJobStepUses(
-                  jobId,
-                  updater.stepIndex,
-                  (step as WorkflowStructureJobActionStep)['uses'],
-                );
-                _.yamlSession.setJobStepRun(jobId, updater.stepIndex, null);
-              } else {
-                _.yamlSession.setJobStepUses(jobId, updater.stepIndex, null);
-                _.yamlSession.setJobStepRun(
-                  jobId,
-                  updater.stepIndex,
-                  (step as WorkflowStructureJobRunStep)['run'],
-                );
-              }
-            });
-          },
-
-          stepUpdateRun(jobId: string, stepId: string, run: string) {
-            const updater = createStepJobUpdater<WorkflowStructureJobRunStep>(
-              jobId,
-              stepId,
-            );
-            if (!updater) {
-              return;
-            }
-            updater.update('run', run);
-            _.yamlSession.setJobStepRun(jobId, updater.stepIndex, run);
-          },
-
-          stepUpdateUses(jobId: string, stepId: string, uses: string) {
-            const updater =
-              createStepJobUpdater<WorkflowStructureJobActionStep>(
-                jobId,
-                stepId,
-              );
-            if (!updater) {
-              return;
-            }
-            updater.update('uses', uses);
-            _.yamlSession.setJobStepUses(jobId, updater.stepIndex, uses);
-          },
-        },
-
-        environmentVariables: {
-          addNew: (value: WorkflowStructureEnvItem) => {
-            const length = untrack(() => _().structure.env.array.length);
-            _.set('structure', 'env', 'array', items => [...items, value]);
-            _.yamlSession.setEnvironmentVariable(length, value);
-          },
-          updateByIndex: (index: number, value: WorkflowStructureEnvItem) => {
-            _.set('structure', 'env', 'array', index, value);
-            _.yamlSession.setEnvironmentVariable(index, value);
-          },
-        },
-
+      // TODO @deprecated
+      actionsDeprecated: {
         workflowDispatch: {
           addNew: (value: WorkflowDispatchInput) => {
             const length = untrack(
@@ -240,4 +167,124 @@ export const EditorStore = defineStore<EditorState>(() => ({
         });
       },
     };
+  })
+  .extend(
+    withProxyCommands<{
+      addNewEnvironmentVariable: {value: WorkflowStructureEnvItem};
+      updateEnvironmentVariableByIndex: {
+        index: number;
+        value: WorkflowStructureEnvItem;
+      };
+
+      updateJobName: {jobId: string; name: string | null};
+      updateJobRunsOn: {jobId: string; runsOn: string | null};
+      updateJobStepName: {jobId: string; stepId: string; name: string | null};
+      updateJobStepType: {jobId: string; stepId: string; type: string};
+      updateJobStepRun: {jobId: string; stepId: string; run: string | null};
+      updateJobStepUses: {jobId: string; stepId: string; uses: string | null};
+    }>({
+      devtools: {storeName: 'editor'},
+    }),
+  )
+  .extend(_ => {
+    _.hold(_.commands.addNewEnvironmentVariable, ({value}) => {
+      const length = untrack(() => _().structure.env.array.length);
+      _.set('structure', 'env', 'array', items => [...items, value]);
+      _.yamlSession.setEnvironmentVariable(length, value);
+    });
+
+    _.hold(_.commands.updateEnvironmentVariableByIndex, ({index, value}) => {
+      _.set('structure', 'env', 'array', index, value);
+      _.yamlSession.setEnvironmentVariable(index, value);
+    });
+
+    _.hold(_.commands.updateJobName, ({jobId, name}) => {
+      const index = _.get.structure.jobs.findIndex(
+        job => job.$nodeId === jobId,
+      );
+      _.set('structure', 'jobs', index, 'name', name ?? '');
+      _.yamlSession.setJobName(index, name ?? '');
+    });
+
+    _.hold(_.commands.updateJobRunsOn, ({jobId, runsOn}) => {
+      const index = _.get.structure.jobs.findIndex(
+        job => job.$nodeId === jobId,
+      );
+      _.set('structure', 'jobs', index, 'runsOn', runsOn ?? '');
+      _.yamlSession.setJobRunsOn(index, runsOn ?? '');
+    });
+
+    _.hold(_.commands.updateJobStepName, ({jobId, stepId, name}) => {
+      const updater = _.utils.createStepJobUpdater(jobId, stepId);
+      if (!updater) {
+        return;
+      }
+      updater.update('name', name ?? '');
+      _.yamlSession.setJobStepName(
+        updater.jobIndex,
+        updater.stepIndex,
+        name ?? '',
+      );
+    });
+
+    _.hold(_.commands.updateJobStepType, ({jobId, stepId, type}) => {
+      const updater = _.utils.createStepJobUpdater(jobId, stepId);
+      if (!updater) {
+        return;
+      }
+      updater.update('type', type as 'action' | 'run');
+      untrack(() => {
+        const job = _.get.structure.jobs[updater.jobIndex];
+        const step = job.steps[updater.stepIndex];
+
+        if (type === 'action') {
+          _.yamlSession.setJobStepUses(
+            updater.jobIndex,
+            updater.stepIndex,
+            (step as WorkflowStructureJobActionStep)['uses'],
+          );
+          _.yamlSession.setJobStepRun(
+            updater.jobIndex,
+            updater.stepIndex,
+            null,
+          );
+        } else {
+          _.yamlSession.setJobStepUses(
+            updater.jobIndex,
+            updater.stepIndex,
+            null,
+          );
+          _.yamlSession.setJobStepRun(
+            updater.jobIndex,
+            updater.stepIndex,
+            (step as WorkflowStructureJobRunStep)['run'],
+          );
+        }
+      });
+    });
+
+    _.hold(_.commands.updateJobStepRun, ({jobId, stepId, run}) => {
+      const updater = _.utils.createStepJobUpdater<WorkflowStructureJobRunStep>(
+        jobId,
+        stepId,
+      );
+      if (!updater) {
+        return;
+      }
+      updater.update('run', run ?? '');
+      _.yamlSession.setJobStepRun(updater.jobIndex, updater.stepIndex, run);
+    });
+
+    _.hold(_.commands.updateJobStepUses, ({jobId, stepId, uses}) => {
+      const updater =
+        _.utils.createStepJobUpdater<WorkflowStructureJobActionStep>(
+          jobId,
+          stepId,
+        );
+      if (!updater) {
+        return;
+      }
+      updater.update('uses', uses ?? '');
+      _.yamlSession.setJobStepUses(updater.jobIndex, updater.stepIndex, uses);
+    });
   });

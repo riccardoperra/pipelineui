@@ -18,7 +18,7 @@ export function EnvironmentVariablesForm() {
       value: '',
       type: 'string',
     };
-    editor.actions.environmentVariables.addNew(draftInput);
+    editor.actions.addNewEnvironmentVariable({value: draftInput});
   };
 
   return (
@@ -43,10 +43,10 @@ export function EnvironmentVariablesForm() {
                     value={input}
                     index={index()}
                     onChange={value =>
-                      editor.actions.environmentVariables.updateByIndex(
-                        index(),
+                      editor.actions.updateEnvironmentVariableByIndex({
+                        index: index(),
                         value,
-                      )
+                      })
                     }
                     onDelete={() => {}}
                   />

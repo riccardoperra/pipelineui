@@ -15,7 +15,9 @@ export function FlowItem(props: FlowItemProps) {
   const job = () =>
     editor.get.structure.jobs.find(job => job.id === props.job.id.value);
 
-  const onClick = () => editor.set('selectedJobId', props.job.id.value);
+  const onClick = () => {
+    editor.set('selectedJobId', props.job.id.value);
+  };
 
   return (
     <div

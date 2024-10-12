@@ -10,7 +10,7 @@ import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '#editor-store/editor.store';
 import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
-import {Show} from 'solid-js';
+import {createEffect, createMemo, on, Show} from 'solid-js';
 import type {
   WorkflowStructureJobActionStep,
   WorkflowStructureJobRunStep,
@@ -18,7 +18,7 @@ import type {
 import {PanelEditorStore} from '../../panel-editor.store';
 
 export function JobStepForm() {
-  const {selectedJob, actions} = provideState(EditorStore);
+  const {selectedJob, actions, get} = provideState(EditorStore);
   const panelStore = provideState(PanelEditorStore);
 
   const jobStep = panelStore.selectedStep;
@@ -41,11 +41,11 @@ export function JobStepForm() {
                 label={'Name'}
                 value={jobStep()?.name}
                 onChange={name =>
-                  actions.jobs.stepUpdateName(
-                    selectedJob()?.id!,
-                    jobStep().$nodeId,
+                  actions.updateJobStepName({
+                    jobId: selectedJob()!.$nodeId,
+                    stepId: jobStep().$nodeId,
                     name,
-                  )
+                  })
                 }
               />
             </FullWidthPanelRow>
@@ -71,12 +71,12 @@ export function JobStepForm() {
                   autoWidth
                   fluid
                   value={jobStep()?.type}
-                  onChange={value =>
-                    actions.jobs.stepUpdateType(
-                      selectedJob()?.id!,
-                      jobStep().$nodeId,
-                      value as string,
-                    )
+                  onChange={type =>
+                    actions.updateJobStepType({
+                      jobId: selectedJob()!.$nodeId,
+                      stepId: jobStep().$nodeId,
+                      type,
+                    })
                   }
                 >
                   <SegmentedControlItem value={'run'}>Run</SegmentedControlItem>
@@ -105,11 +105,11 @@ export function JobStepForm() {
                     label={'Uses'}
                     value={jobStep().uses}
                     onChange={uses =>
-                      actions.jobs.stepUpdateUses(
-                        selectedJob()?.id!,
-                        jobStep().$nodeId,
+                      actions.updateJobStepUses({
+                        jobId: selectedJob()!.$nodeId,
+                        stepId: jobStep().$nodeId,
                         uses,
-                      )
+                      })
                     }
                   />
                 </FullWidthPanelRow>
@@ -138,11 +138,11 @@ export function JobStepForm() {
                     label={'Run'}
                     value={jobStep()?.run}
                     onChange={run =>
-                      actions.jobs.stepUpdateRun(
-                        selectedJob()?.id!,
-                        jobStep().$nodeId,
+                      actions.updateJobStepRun({
+                        jobId: selectedJob()!.$nodeId,
+                        stepId: jobStep().$nodeId,
                         run,
-                      )
+                      })
                     }
                   />
                 </FullWidthPanelRow>

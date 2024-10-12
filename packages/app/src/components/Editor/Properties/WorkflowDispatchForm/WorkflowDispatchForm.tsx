@@ -23,7 +23,7 @@ export function WorkflowDispatchForm() {
       description: undefined,
       options: undefined,
     };
-    editor.actions.workflowDispatch.addNew(draftInput);
+    editor.actionsDeprecated.workflowDispatch.addNew(draftInput);
   };
 
   return (
@@ -48,10 +48,12 @@ export function WorkflowDispatchForm() {
                     value={input}
                     index={index()}
                     onDelete={() =>
-                      editor.actions.workflowDispatch.deleteByIndex(index())
+                      editor.actionsDeprecated.workflowDispatch.deleteByIndex(
+                        index(),
+                      )
                     }
                     onChange={value => {
-                      editor.actions.workflowDispatch.updateByIndex(
+                      editor.actionsDeprecated.workflowDispatch.updateByIndex(
                         index(),
                         value,
                       );

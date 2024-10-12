@@ -12,7 +12,7 @@ export const PanelEditorStore = defineStore<PanelEditorState>(() => ({
 }))
   .extend(
     withProxyCommands<{
-      setActiveStepId: string;
+      setActiveStepId: string | null;
     }>(),
   )
   .extend(_ => {
@@ -20,6 +20,8 @@ export const PanelEditorStore = defineStore<PanelEditorState>(() => ({
   })
   .extend((_, context) => {
     const editorStore = context.inject(EditorStore);
+
+    context.hooks.onInit(() => {});
 
     const selectedStep = createMemo(() => {
       const activeStep = _.get.activeStep;

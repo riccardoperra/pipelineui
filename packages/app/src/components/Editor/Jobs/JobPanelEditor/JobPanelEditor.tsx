@@ -1,27 +1,12 @@
-import {Select, TextField} from '@codeui/kit';
-import * as formStyles from '#editor-layout/Panel/Form/Form.css';
 import {provideState} from 'statebuilder';
-import {EditorStore} from '../../store/editor.store';
-import {PanelHeader} from '../../Layout/Panel/Form/PanelHeader';
-import {FullWidthPanelRow} from '../../Layout/Panel/Form/PanelRow';
-import {PanelDivider} from '../../Layout/Panel/Form/PanelDivider';
-import {JobStepsForm} from './JobStepsForm/JobStepsForm';
-import {createEffect, Match, Switch} from 'solid-js';
+import {Match, Show, Switch} from 'solid-js';
 import {JobStepForm} from './JobStepsForm/JobStep/JobStepForm';
-import {useEditorContext} from '../../editor.context';
-import {createStore} from 'solid-js/store';
-import {
-  environmentConverters,
-  isString,
-  WorkflowTemplateTypes,
-} from '@pipelineui/workflow-parser';
-import {
-  EnvironmentControl,
-  type JobEnvironment,
-} from './Environment/EnvironmentControl';
+import {type JobEnvironment} from './Environment/EnvironmentControl';
 import {PanelGroup} from '#editor-layout/Panel/Form/PanelGroup';
-import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
 import {PanelEditorStore} from './panel-editor.store';
+import {JobForm} from './JobForm/JobForm';
+import {IconButton} from '@codeui/kit';
+import {Icon} from '#ui/components/Icon';
 
 interface Form {
   name: string;
@@ -31,162 +16,30 @@ interface Form {
 }
 
 export function JobPanelEditor() {
-  const editorStore = provideState(EditorStore);
-  const {template, context} = useEditorContext();
   const panelStore = provideState(PanelEditorStore);
-
-  const job = () => panelStore.selectedJob!;
-
-  const needs = () => {
-    const templateJobs = template.jobs.filter(
-      _job => _job.id.value !== job().id,
-    );
-    return templateJobs ?? [];
-  };
-  const needsOptions = () => {
-    return needs().map(need => need.id?.toString());
-  };
-
-  const [form, setForm] = createStore<Form>({
-    name: '',
-    runsOn: '',
-    needs: [],
-    environment: {
-      type: 'value',
-      url: undefined,
-      name: undefined,
-    },
-  });
-
-  createEffect(() => {
-    const workflowJob = job() as WorkflowTemplateTypes.Job | null;
-    if (!workflowJob) {
-      return;
-    }
-
-    function parseEnvironment(token: any) {
-      if (isString(token)) {
-        return {
-          type: 'value',
-          name: token.value,
-        } as const;
-      }
-      const ref = environmentConverters.convertToActionsEnvironmentRef(
-        context,
-        token,
-      );
-      return {
-        type: 'reference',
-        name: ref.name?.assertString('Name should be string')?.value,
-        url: ref.url?.assertString('Url should be string')?.value,
-      } as const;
-    }
-
-    const environment = workflowJob.environment
-      ? parseEnvironment(workflowJob.environment)
-      : null;
-
-    setForm(form => ({
-      ...form,
-      name: workflowJob.name?.toString(),
-      needs: workflowJob.needs?.map(need => need.value) ?? [],
-      environment: environment,
-    }));
-  });
 
   return (
     <PanelGroup>
+      <Show when={panelStore.get.activeStep}>
+        <IconButton
+          aria-label={'Back'}
+          size={'sm'}
+          theme={'secondary'}
+          variant={'ghost'}
+          onClick={() => panelStore.actions.setActiveStepId(null)}
+        >
+          <Icon name={'arrow_left_alt'} />
+        </IconButton>
+
+        {panelStore.headerPanelLabel}
+      </Show>
+
       <Switch>
         <Match when={!!panelStore.get.activeStep}>
           <JobStepForm />
         </Match>
         <Match when={!panelStore.get.activeStep}>
-          <PanelHeader label={'General'} />
-
-          <PanelContent withGap>
-            <FullWidthPanelRow>
-              <TextField
-                slotClasses={{
-                  root: formStyles.inlineInputRoot,
-                  label: formStyles.inlineInputLabel,
-                }}
-                size={'sm'}
-                theme={'filled'}
-                label={'Name'}
-                value={job()?.name}
-                onChange={value => {
-                  editorStore.set('structure', 'jobs', 0, 'name', value);
-                  editorStore.yamlSession.setJobName(job()!.id, value);
-                }}
-              />
-            </FullWidthPanelRow>
-
-            <FullWidthPanelRow>
-              <TextField
-                slotClasses={{
-                  root: formStyles.inlineInputRoot,
-                  label: formStyles.inlineInputLabel,
-                }}
-                size={'sm'}
-                theme={'filled'}
-                label={'Runs on'}
-                value={job().runsOn}
-                onChange={value => {
-                  editorStore.set('structure', 'jobs', 0, 'runsOn', value);
-                  editorStore.yamlSession.setJobRunsOn(job()!.id, value);
-                }}
-              />
-            </FullWidthPanelRow>
-
-            <FullWidthPanelRow>
-              <Select
-                aria-label={'Needs input'}
-                multiple={true}
-                options={needsOptions()}
-                value={job().needs}
-                onChange={options => {
-                  console.log('change needs', options);
-                }}
-                size={'sm'}
-                theme={'filled'}
-                label={'Needs'}
-                slotClasses={{
-                  root: formStyles.inlineInputRoot,
-                  label: formStyles.inlineInputLabel,
-                }}
-              />
-            </FullWidthPanelRow>
-
-            <FullWidthPanelRow>
-              <EnvironmentControl
-                value={job().environment ?? null}
-                onValueChange={value => {
-                  setForm('environment', value);
-                  editorStore.yamlSession.setJobEnvironment(job()!.id, value);
-                }}
-              />
-            </FullWidthPanelRow>
-
-            <FullWidthPanelRow>
-              <TextField
-                slotClasses={{
-                  root: formStyles.inlineInputRoot,
-                  label: formStyles.inlineInputLabel,
-                }}
-                size={'sm'}
-                theme={'filled'}
-                label={'Concurrency'}
-              />
-            </FullWidthPanelRow>
-          </PanelContent>
-
-          <PanelDivider />
-
-          <PanelHeader label={'Steps'} />
-
-          <JobStepsForm />
-
-          <PanelDivider />
+          <JobForm />
         </Match>
       </Switch>
     </PanelGroup>

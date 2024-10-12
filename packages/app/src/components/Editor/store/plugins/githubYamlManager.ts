@@ -162,9 +162,13 @@ export const withGithubYamlManager = () => {
         });
       };
 
-      const findJob = (yaml: YAMLDocument, jobId: string) => {
+      const findJob = (yaml: YAMLDocument, jobId: number | string) => {
         const jobs = yaml.get('jobs') as YAMLMap<string, YAMLMap>;
-        return jobs.get(jobId);
+        if (typeof jobId === 'number') {
+          return jobs.items[jobId]?.value;
+        } else {
+          return jobs.get(jobId);
+        }
       };
 
       const findJobStep = (jobYaml: YAML.YAMLMap, stepIndex: number) => {
@@ -177,9 +181,9 @@ export const withGithubYamlManager = () => {
         return steps.get(stepIndex);
       };
 
-      const setJobName = (jobId: string, name: string) => {
+      const setJobName = (jobIdOrIndex: string | number, name: string) => {
         yamlSession.updater(yaml => {
-          const job = findJob(yaml, jobId)!;
+          const job = findJob(yaml, jobIdOrIndex)!;
           const hasJob = job.has('name');
           if (!hasJob) {
             // TODO: support ordering0
@@ -193,9 +197,9 @@ export const withGithubYamlManager = () => {
         });
       };
 
-      const setJobNeeds = (jobId: string, needs: string[]) => {
+      const setJobNeeds = (jobIdOrIndex: string | number, needs: string[]) => {
         yamlSession.updater(yaml => {
-          const job = findJob(yaml, jobId)!;
+          const job = findJob(yaml, jobIdOrIndex)!;
           if (!job.has('needs')) {
             job.set('needs', needs);
           } else {
@@ -209,9 +213,9 @@ export const withGithubYamlManager = () => {
         });
       };
 
-      const setJobRunsOn = (jobId: string, runsOn: string) => {
+      const setJobRunsOn = (jobIdOrIndex: string | number, runsOn: string) => {
         yamlSession.updater(yaml => {
-          const job = findJob(yaml, jobId)!;
+          const job = findJob(yaml, jobIdOrIndex)!;
           const hasJob = job.has('runs-on');
           if (!hasJob) {
             // TODO: support ordering0
@@ -226,11 +230,11 @@ export const withGithubYamlManager = () => {
       };
 
       const setJobEnvironment = (
-        jobId: string,
+        jobIdOrIndex: string | number,
         environment: JobEnvironment,
       ) => {
         yamlSession.updater(yaml => {
-          const job = findJob(yaml, jobId)!;
+          const job = findJob(yaml, jobIdOrIndex)!;
           if (environment.type === 'value') {
             if (!environment.name) {
               job.delete('environment');
@@ -247,12 +251,12 @@ export const withGithubYamlManager = () => {
       };
 
       const setJobStepName = (
-        jobId: string,
+        jobIdOrIndex: string | number,
         stepIndex: number,
         name: string,
       ) => {
         yamlSession.updater(yaml => {
-          const job = findJob(yaml, jobId)!;
+          const job = findJob(yaml, jobIdOrIndex)!;
           if (!job) {
             return false;
           }
@@ -265,12 +269,12 @@ export const withGithubYamlManager = () => {
       };
 
       const setJobStepRun = (
-        jobId: string,
+        jobIdOrIndex: string | number,
         stepIndex: number,
         run: string | null,
       ) => {
         yamlSession.updater(yaml => {
-          const job = findJob(yaml, jobId)!;
+          const job = findJob(yaml, jobIdOrIndex)!;
           if (!job) {
             return false;
           }
@@ -288,12 +292,12 @@ export const withGithubYamlManager = () => {
       };
 
       const setJobStepUses = (
-        jobId: string,
+        jobIdOrIndex: string | number,
         stepIndex: number,
         uses: string | null,
       ) => {
         yamlSession.updater(yaml => {
-          const job = findJob(yaml, jobId)!;
+          const job = findJob(yaml, jobIdOrIndex)!;
           if (!job) {
             return false;
           }
