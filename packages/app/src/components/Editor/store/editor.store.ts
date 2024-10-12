@@ -12,6 +12,7 @@ import {withYamlDocumentSession} from './plugins/yamlSession';
 import {getStructureFromWorkflow} from './utils/getStructureFromWorkflow';
 import type {
   EditorWorkflowStructure,
+  JobEnvironment,
   WorkflowDispatchInput,
   WorkflowStructureEnvItem,
   WorkflowStructureJob,
@@ -183,6 +184,7 @@ export const EditorStore = defineStore<EditorState>(() => ({
 
       updateJobName: {jobId: string; name: string | null};
       updateJobRunsOn: {jobId: string; runsOn: string | null};
+      updateJobEnvironment: {jobId: string; value: JobEnvironment};
       updateJobStepName: {jobId: string; stepId: string; name: string | null};
       updateJobStepType: {jobId: string; stepId: string; type: string};
       updateJobStepRun: {jobId: string; stepId: string; run: string | null};
@@ -213,6 +215,14 @@ export const EditorStore = defineStore<EditorState>(() => ({
       );
       _.set('structure', 'jobs', index, 'name', name ?? '');
       _.yamlSession.setJobName(index, name ?? '');
+    });
+
+    _.hold(_.commands.updateJobEnvironment, ({jobId, value}) => {
+      const index = _.get.structure.jobs.findIndex(
+        job => job.$nodeId === jobId,
+      );
+      _.set('structure', 'jobs', index, 'environment', value);
+      _.yamlSession.setJobEnvironment(index, value);
     });
 
     _.hold(_.commands.updateJobRunsOn, ({jobId, runsOn}) => {

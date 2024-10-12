@@ -92,8 +92,10 @@ export function JobForm() {
           <EnvironmentControl
             value={job().environment ?? null}
             onValueChange={value => {
-              setForm('environment', value);
-              editorStore.yamlSession.setJobEnvironment(job()!.id, value);
+              editorStore.actions.updateJobEnvironment({
+                jobId: job().$nodeId,
+                value,
+              });
             }}
           />
         </FullWidthPanelRow>

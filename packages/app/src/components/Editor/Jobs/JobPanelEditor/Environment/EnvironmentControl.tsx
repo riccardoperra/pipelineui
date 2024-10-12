@@ -113,6 +113,8 @@ export function EnvironmentControl(props: EnvironmentControlProps) {
     theme: 'filled',
   });
 
+  const [openPopover, setOpenPopover] = createSignal(false);
+
   const inputClasses = () =>
     mergeClasses(
       fieldProps.baseStyle(),
@@ -122,7 +124,7 @@ export function EnvironmentControl(props: EnvironmentControlProps) {
 
   return (
     <>
-      <Popover>
+      <Popover open={openPopover()} onOpenChange={setOpenPopover}>
         <PopoverTrigger
           as={triggerProps => (
             <div
@@ -154,7 +156,10 @@ export function EnvironmentControl(props: EnvironmentControlProps) {
             initialModality={props.value?.type ?? 'value'}
             initialName={props.value?.name ?? ''}
             initialUrl={props.value?.url ?? ''}
-            onSubmit={props.onValueChange}
+            onSubmit={value => {
+              props.onValueChange(value);
+              setOpenPopover(false);
+            }}
           />
         </PopoverContent>
       </Popover>
