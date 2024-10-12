@@ -35,9 +35,6 @@ export function JobPanelEditor() {
 
   const job = () => editorStore.selectedJob();
 
-  const jobValue = () =>
-    editorStore.get.structure.jobs.find(_ => _.id === job()?.id.value);
-
   const needs = () => {
     const templateJobs = template.jobs.filter(_job => _job.id !== job()?.id);
     return templateJobs ?? [];
@@ -99,7 +96,7 @@ export function JobPanelEditor() {
     <PanelGroup>
       <Switch>
         <Match when={!!activeStep()}>
-          <JobStepForm />
+          <JobStepForm stepId={activeStep()!} />
         </Match>
         <Match when={!activeStep()}>
           <PanelHeader label={'General'} />
@@ -114,10 +111,10 @@ export function JobPanelEditor() {
                 size={'sm'}
                 theme={'filled'}
                 label={'Name'}
-                value={jobValue()?.name}
+                value={job()?.name}
                 onChange={value => {
                   editorStore.set('structure', 'jobs', 0, 'name', value);
-                  editorStore.yamlSession.setJobName(job()!.id.value!, value);
+                  editorStore.yamlSession.setJobName(job()!.id, value);
                 }}
               />
             </FullWidthPanelRow>
@@ -131,10 +128,10 @@ export function JobPanelEditor() {
                 size={'sm'}
                 theme={'filled'}
                 label={'Runs on'}
-                value={jobValue()?.runsOn}
+                value={job()?.runsOn}
                 onChange={value => {
                   editorStore.set('structure', 'jobs', 0, 'runsOn', value);
-                  editorStore.yamlSession.setJobRunsOn(job()!.id.value!, value);
+                  editorStore.yamlSession.setJobRunsOn(job()!.id, value);
                 }}
               />
             </FullWidthPanelRow>
@@ -147,7 +144,8 @@ export function JobPanelEditor() {
                 value={form.needs}
                 onChange={options => {
                   setForm('needs', options);
-                  editorStore.yamlSession.setJobNeeds(job()!.id.value, options);
+                  console.log('change needs');
+                  // editorStore.yamlSession.setJobNeeds(job()!.id.value, options);
                 }}
                 size={'sm'}
                 theme={'filled'}
@@ -164,10 +162,7 @@ export function JobPanelEditor() {
                 value={form.environment}
                 onValueChange={value => {
                   setForm('environment', value);
-                  editorStore.yamlSession.setJobEnvironment(
-                    job()!.id.value,
-                    value,
-                  );
+                  editorStore.yamlSession.setJobEnvironment(job()!.id, value);
                 }}
               />
             </FullWidthPanelRow>
@@ -189,7 +184,10 @@ export function JobPanelEditor() {
 
           <PanelHeader label={'Steps'} />
 
-          <JobStepsForm />
+          <JobStepsForm
+            steps={job()?.steps ?? []}
+            onClickStep={setActiveStep}
+          />
 
           <PanelDivider />
         </Match>

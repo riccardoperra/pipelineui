@@ -21,12 +21,43 @@ export type JobEnvironment = {
   url?: string;
 };
 
+export type WorkflowStructureJobBaseStep = {
+  readonly $index: number;
+  readonly $nodeId: string;
+
+  id: string;
+  name?: string;
+  if: string;
+  // "continue-on-error"?: boolean | ScalarToken;
+  // env?: MappingToken;
+};
+
+export interface WorkflowStructureJobActionStep
+  extends WorkflowStructureJobBaseStep {
+  type: 'action';
+  uses: string;
+}
+
+export interface WorkflowStructureJobRunStep
+  extends WorkflowStructureJobBaseStep {
+  type: 'run';
+  run: string;
+}
+
+export type WorkflowStructureJobStep =
+  | WorkflowStructureJobActionStep
+  | WorkflowStructureJobRunStep;
+
 export interface WorkflowStructureJob {
+  readonly $index: number;
+  readonly $nodeId: string;
+
   id: string;
   name: string;
   runsOn: string;
   needs: string[];
   environment: JobEnvironment | null | undefined;
+  steps: WorkflowStructureJobStep[];
 }
 
 export type StringExpression = {

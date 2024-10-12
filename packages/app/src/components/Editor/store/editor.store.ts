@@ -73,12 +73,115 @@ export const EditorStore = defineStore<EditorState>(() => ({
         if (!selectedJobId) {
           return;
         }
-        return _.get.template?.jobs.find(job => {
-          return job.id.value === selectedJobId;
+        return _.get.structure?.jobs.find(job => {
+          return job.id === selectedJobId;
         });
       },
 
       actions: {
+        jobs: {
+          stepUpdateName(jobId: string, stepId: string, name: string) {
+            const jobIndex = untrack(() =>
+              _.get.structure.jobs.findIndex(job => job.id === jobId),
+            );
+            if (jobIndex === -1) {
+              return;
+            }
+            const stepIndex = _.get.structure.jobs[jobIndex].steps.findIndex(
+              step => step.id === stepId,
+            );
+            if (stepIndex === -1) {
+              return;
+            }
+            _.set(
+              'structure',
+              'jobs',
+              jobIndex,
+              'steps',
+              stepIndex,
+              'name',
+              name,
+            );
+            _.yamlSession.setJobStepName(jobId, stepIndex, name);
+          },
+
+          stepUpdateType(jobId: string, stepId: string, type: string) {
+            const jobIndex = untrack(() =>
+              _.get.structure.jobs.findIndex(job => job.id === jobId),
+            );
+            if (jobIndex === -1) {
+              return;
+            }
+            const stepIndex = _.get.structure.jobs[jobIndex].steps.findIndex(
+              step => step.id === stepId,
+            );
+            if (stepIndex === -1 || (type !== 'action' && type !== 'run')) {
+              return;
+            }
+            _.set(
+              'structure',
+              'jobs',
+              jobIndex,
+              'steps',
+              stepIndex,
+              'type',
+              type as 'action' | 'run',
+            );
+          },
+
+          stepUpdateRun(jobId: string, stepId: string, run: string) {
+            const jobIndex = untrack(() =>
+              _.get.structure.jobs.findIndex(job => job.id === jobId),
+            );
+            if (jobIndex === -1) {
+              return;
+            }
+            const stepIndex = _.get.structure.jobs[jobIndex].steps.findIndex(
+              step => step.id === stepId,
+            );
+            if (stepIndex === -1) {
+              return;
+            }
+            _.set(
+              'structure',
+              'jobs',
+              jobIndex,
+              'steps',
+              stepIndex,
+              // @ts-expect-error TODO: fix type, union
+              'run',
+              run,
+            );
+            _.yamlSession.setJobStepRun(jobId, stepIndex, run);
+          },
+
+          stepUpdateUses(jobId: string, stepId: string, uses: string) {
+            const jobIndex = untrack(() =>
+              _.get.structure.jobs.findIndex(job => job.id === jobId),
+            );
+            if (jobIndex === -1) {
+              return;
+            }
+            const stepIndex = _.get.structure.jobs[jobIndex].steps.findIndex(
+              step => step.id === stepId,
+            );
+            if (stepIndex === -1) {
+              return;
+            }
+            _.set(
+              'structure',
+              'jobs',
+              jobIndex,
+              'steps',
+              stepIndex,
+              // @ts-expect-error TODO: fix type, union
+              'uses',
+              uses,
+            );
+            _.yamlSession.setJobStepUses(jobId, stepIndex, uses);
+          },
+        },
+
         environmentVariables: {
           addNew: (value: WorkflowStructureEnvItem) => {
             const length = untrack(() => _().structure.env.array.length);

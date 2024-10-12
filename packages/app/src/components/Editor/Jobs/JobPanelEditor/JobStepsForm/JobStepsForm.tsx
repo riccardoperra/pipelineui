@@ -1,11 +1,22 @@
 import {container, listItem} from './JobStepsForm.css';
+import type {WorkflowStructureJobStep} from '#editor-store/editor.types';
+import {createEffect, For} from 'solid-js';
 
-export function JobStepsForm() {
+export interface JobStepsFormProps {
+  steps: WorkflowStructureJobStep[];
+  onClickStep: (stepId: string) => void;
+}
+
+export function JobStepsForm(props: JobStepsFormProps) {
   return (
     <div class={container}>
-      <button class={listItem}>Step 1</button>
-      <button class={listItem}>Step 2</button>
-      <button class={listItem}>Step 3</button>
+      <For each={props.steps}>
+        {step => (
+          <button class={listItem} onClick={() => props.onClickStep(step.id)}>
+            {step.id}
+          </button>
+        )}
+      </For>
     </div>
   );
 }

@@ -1,8 +1,12 @@
-import {type GenericStoreApi, makePlugin, type Store} from 'statebuilder';
+import {type GenericStoreApi, makePlugin} from 'statebuilder';
 import type {YAMLDocument, YamlDocumentSessionPlugin} from './yamlSession';
-import type {JobEnvironment, WorkflowDispatchInput} from '../editor.store';
 import YAML, {Pair, Scalar, YAMLMap, YAMLSeq} from 'yaml';
-import type {StringExpression, WorkflowStructureEnvItem} from '../editor.types';
+import type {
+  JobEnvironment,
+  StringExpression,
+  WorkflowDispatchInput,
+  WorkflowStructureEnvItem,
+} from '../editor.types';
 
 export const withGithubYamlManager = () => {
   return makePlugin.typed<GenericStoreApi & YamlDocumentSessionPlugin>()(
@@ -159,8 +163,18 @@ export const withGithubYamlManager = () => {
       };
 
       const findJob = (yaml: YAMLDocument, jobId: string) => {
-        const jobs = yaml.get('jobs') as YAMLMap<String, YAMLMap>;
+        const jobs = yaml.get('jobs') as YAMLMap<string, YAMLMap>;
         return jobs.get(jobId);
+      };
+
+      const findJobStep = (jobYaml: YAML.YAMLMap, stepIndex: number) => {
+        const steps = jobYaml.get('steps') as
+          | YAML.YAMLSeq<YAML.YAMLMap>
+          | undefined;
+        if (!steps) {
+          return null;
+        }
+        return steps.get(stepIndex);
       };
 
       const setJobName = (jobId: string, name: string) => {
@@ -232,6 +246,66 @@ export const withGithubYamlManager = () => {
         });
       };
 
+      const setJobStepName = (
+        jobId: string,
+        stepIndex: number,
+        name: string,
+      ) => {
+        yamlSession.updater(yaml => {
+          const job = findJob(yaml, jobId)!;
+          if (!job) {
+            return false;
+          }
+          const step = findJobStep(job, stepIndex);
+          if (!step) {
+            return false;
+          }
+          step.set(new Scalar('name'), name);
+        });
+      };
+
+      const setJobStepRun = (jobId: string, stepIndex: number, run: string) => {
+        yamlSession.updater(yaml => {
+          const job = findJob(yaml, jobId)!;
+          if (!job) {
+            return false;
+          }
+          const step = findJobStep(job, stepIndex);
+          if (!step) {
+            return false;
+          }
+
+          if (!run) {
+            step.delete('run');
+          } else {
+            step.set(new Scalar('run'), run);
+          }
+        });
+      };
+
+      const setJobStepUses = (
+        jobId: string,
+        stepIndex: number,
+        uses: string,
+      ) => {
+        yamlSession.updater(yaml => {
+          const job = findJob(yaml, jobId)!;
+          if (!job) {
+            return false;
+          }
+          const step = findJobStep(job, stepIndex);
+          if (!step) {
+            return false;
+          }
+
+          if (!uses) {
+            step.delete('uses');
+          } else {
+            step.set(new Scalar('uses'), uses);
+          }
+        });
+      };
+
       return {
         yamlSession: Object.assign(_.yamlSession, {
           deleteWorkflowDispatchItem,
@@ -241,6 +315,9 @@ export const withGithubYamlManager = () => {
           setJobNeeds,
           setJobRunsOn,
           setJobEnvironment,
+          setJobStepName,
+          setJobStepRun,
+          setJobStepUses,
         }),
       };
     },
