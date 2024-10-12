@@ -186,6 +186,7 @@ export const EditorStore = defineStore<EditorState>(() => ({
       updateJobRunsOn: {jobId: string; runsOn: string | null};
       updateJobEnvironment: {jobId: string; value: JobEnvironment};
       updateJobStepName: {jobId: string; stepId: string; name: string | null};
+      updateJobStepIf: {jobId: string; stepId: string; value: string | null};
       updateJobStepType: {jobId: string; stepId: string; type: string};
       updateJobStepRun: {jobId: string; stepId: string; run: string | null};
       updateJobStepUses: {jobId: string; stepId: string; uses: string | null};
@@ -245,6 +246,15 @@ export const EditorStore = defineStore<EditorState>(() => ({
         updater.stepIndex,
         name ?? '',
       );
+    });
+
+    _.hold(_.commands.updateJobStepIf, ({jobId, stepId, value}) => {
+      const updater = _.utils.createStepJobUpdater(jobId, stepId);
+      if (!updater) {
+        return;
+      }
+      updater.update('if', value ?? '');
+      _.yamlSession.setJobStepIf(updater.jobIndex, updater.stepIndex, value);
     });
 
     _.hold(_.commands.updateJobStepType, ({jobId, stepId, type}) => {

@@ -59,6 +59,14 @@ export function JobStepForm() {
                 size={'sm'}
                 theme={'filled'}
                 label={'If'}
+                value={jobStep()?.if}
+                onChange={value =>
+                  actions.updateJobStepIf({
+                    jobId: selectedJob()!.$nodeId,
+                    stepId: jobStep().$nodeId,
+                    value,
+                  })
+                }
               />
             </FullWidthPanelRow>
 

@@ -1,7 +1,8 @@
 import {createCodeMirror, createEditorControlledValue} from 'solid-codemirror';
 import {fleetDark} from './fleetTheme';
 import {yaml} from '@codemirror/lang-yaml';
-import {EditorView} from '@codemirror/view';
+import {EditorView, keymap} from '@codemirror/view';
+import {search, searchKeymap} from '@codemirror/search';
 
 interface YamlEditorProps {
   code: string;
@@ -25,6 +26,7 @@ export function YamlEditor(props: YamlEditorProps) {
       },
     }),
   );
+  createExtension(() => [keymap.of(searchKeymap), search({})]);
   createEditorControlledValue(editorView, () => props.code ?? '');
 
   return <div ref={setRef} style={{height: '100%', width: '100%'}}></div>;

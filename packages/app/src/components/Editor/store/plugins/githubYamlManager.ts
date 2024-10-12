@@ -264,7 +264,34 @@ export const withGithubYamlManager = () => {
           if (!step) {
             return false;
           }
-          step.set(new Scalar('name'), name);
+          if (!name) {
+            step.delete('name');
+          } else {
+            step.set('name', name);
+          }
+        });
+      };
+
+      const setJobStepIf = (
+        jobIdOrIndex: string | number,
+        stepIndex: number,
+        value: string | null,
+      ) => {
+        yamlSession.updater(yaml => {
+          const job = findJob(yaml, jobIdOrIndex)!;
+          if (!job) {
+            return false;
+          }
+          const step = findJobStep(job, stepIndex);
+          if (!step) {
+            return false;
+          }
+
+          if (!value) {
+            step.delete('if');
+          } else {
+            step.set('if', value);
+          }
         });
       };
 
@@ -337,6 +364,7 @@ export const withGithubYamlManager = () => {
           setJobRunsOn,
           setJobEnvironment,
           setJobStepName,
+          setJobStepIf,
           setJobStepRun,
           setJobStepUses,
           deleteJobStep,
