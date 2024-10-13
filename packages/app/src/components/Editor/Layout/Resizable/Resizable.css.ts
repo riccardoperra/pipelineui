@@ -32,6 +32,10 @@ export const resizableHandlerContainer = recipe({
       right: {
         // marginRight: '-4px',
       },
+      bottom: {
+        height: '4px',
+        width: '100%',
+      },
     },
   },
 });

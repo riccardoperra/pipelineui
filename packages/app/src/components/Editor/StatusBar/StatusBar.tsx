@@ -1,16 +1,67 @@
-import {rightSide, statusBar} from './EditorStatusBar.css';
+import {
+  diagnosticCounter,
+  diagnosticCounterBar,
+  leftSide,
+  rightSide,
+  statusBar,
+  statusBarAction,
+} from './EditorStatusBar.css';
 import {provideState} from 'statebuilder';
 import {CanvasStore} from '../store/canvas.store';
-import {IconButton, Tooltip} from '@codeui/kit';
+import {Button, IconButton, Tooltip} from '@codeui/kit';
 import {Icon} from '#ui/components/Icon';
+import {EditorStore} from '#editor-store/editor.store';
+import {EditorUiStore} from '#editor-store/ui.store';
 
 export function EditorStatusBar() {
   const canvasState = provideState(CanvasStore);
+  const editorUiStore = provideState(EditorUiStore);
+  const editorStore = provideState(EditorStore);
 
   const size = () => Math.floor(canvasState.get.scale * 100);
 
+  const errors = () =>
+    editorStore.get.diagnostics.filter(diagnostic => diagnostic.severity === 1)
+      .length;
+
+  const warnings = () =>
+    editorStore.get.diagnostics.filter(diagnostic => diagnostic.severity === 2)
+      .length;
+
   return (
     <div class={statusBar}>
+      <div class={leftSide}>
+        <div class={diagnosticCounterBar}>
+          <Tooltip
+            theme={'secondary'}
+            content={`Errors: ${errors()}, Warnings: ${warnings()}`}
+          >
+            <Button
+              class={statusBarAction()}
+              size={'xs'}
+              theme={'secondary'}
+              variant={
+                editorUiStore.get.bottomPanel === 'diagnostic'
+                  ? undefined
+                  : 'ghost'
+              }
+              onClick={() =>
+                editorUiStore.actions.toggleBottomPanel('diagnostic')
+              }
+            >
+              <span class={diagnosticCounter}>
+                <Icon name={'error'} />
+                {errors()}
+              </span>
+              <span class={diagnosticCounter}>
+                <Icon name={'warning'} />
+                {warnings()}
+              </span>
+            </Button>
+          </Tooltip>
+        </div>
+      </div>
+
       <div class={rightSide}>
         <Tooltip theme={'secondary'} content={'Fit to screen'}>
           <IconButton

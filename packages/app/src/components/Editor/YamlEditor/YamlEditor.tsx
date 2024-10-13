@@ -5,17 +5,22 @@ import {
 } from 'solid-codemirror';
 import {fleetDark} from './fleetTheme';
 import {yaml} from '@codemirror/lang-yaml';
-import {EditorView, keymap} from '@codemirror/view';
+import {EditorView, keymap, lineNumbers} from '@codemirror/view';
 import {search, searchKeymap} from '@codemirror/search';
-import PostMessageWorkerTransport from './lsp/protocol';
 import {lintGutter, lintKeymap} from '@codemirror/lint';
 import {defaultKeymap} from '@codemirror/commands';
 import {languageServerPlugin} from './lsp/plugin';
 import {githubLanguageServerTransport} from './lsp/plugins/githubLanguageServerTransport';
+import {diagnosticState} from './lsp/plugins/diagnostics';
+import type {Diagnostic} from 'vscode-languageserver-protocol';
+import {createEffect, onMount} from 'solid-js';
 
 interface YamlEditorProps {
   code: string;
   setCode: (code: string) => void;
+
+  onMount: (editorView: EditorView) => void;
+  onDiagnosticsChange?: (diagnostic: Diagnostic[]) => void;
 }
 
 export function YamlEditor(props: YamlEditorProps) {
@@ -26,30 +31,43 @@ export function YamlEditor(props: YamlEditorProps) {
   } = createCodeMirror({
     onValueChange: props.setCode,
   });
+
+  createEffect(() => {
+    props.onMount(editorView());
+  });
+
   createExtension(() => fleetDark);
   createExtension(() => yaml());
   createExtension(() =>
     EditorView.theme({
       '&': {
         fontSize: '13px',
+        height: '100%',
       },
     }),
   );
-  createExtension(() => [keymap.of(searchKeymap), search({})]);
   createEditorControlledValue(editorView, () => props.code ?? '');
   createExtension(() => lintGutter());
 
   createExtension(() => [
     keymap.of([...defaultKeymap, ...searchKeymap, ...lintKeymap]),
+    search(),
+    lineNumbers(),
   ]);
 
   createLazyCompartmentExtension(async () => {
-    return languageServerPlugin({
-      transport: await githubLanguageServerTransport(),
-      workspaceFolders: ['file:///'],
-      documentUri: `file:///action.yaml`,
-      languageId: 'yaml',
-    });
+    return [
+      languageServerPlugin({
+        transport: await githubLanguageServerTransport(),
+        workspaceFolders: ['file:///'],
+        documentUri: `file:///action.yaml`,
+        languageId: 'yaml',
+      }),
+      EditorView.updateListener.from(diagnosticState, value => {
+        props.onDiagnosticsChange?.(value);
+        return () => {};
+      }),
+    ];
   }, editorView);
 
   return <div ref={setRef} style={{height: '100%', width: '100%'}}></div>;

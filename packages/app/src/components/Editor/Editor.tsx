@@ -12,7 +12,7 @@ import {EditorStore} from './store/editor.store';
 import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';
 import {JobPanelEditor} from './Jobs/JobPanelEditor/JobPanelEditor';
 import {YamlMergeView} from './YamlEditor/MergeView';
-import {Dialog} from '@codeui/kit';
+import {DiagnosticPanel} from './DiagnosticPanel/DiagnosticPanel';
 
 const Canvas = lazy(() =>
   Promise.all([import('elkjs'), import('./Canvas/Canvas')]).then(([, m]) => ({
@@ -28,93 +28,127 @@ export function Editor() {
     <div class={styles.wrapper}>
       <EditorHeader showBack />
       <div class={styles.editor}>
-        <Resizable orientation={'horizontal'} class={styles.editorResizable}>
+        <Resizable
+          initialSizes={[1, 0]}
+          orientation={'vertical'}
+          class={styles.editorResizable}
+        >
           {() => {
             const context = Resizable.useContext();
-            editorUi.setResizableContext(context);
+            editorUi.setVerticalResizableContext(context);
 
             return (
               <>
-                <Resizable.Panel
-                  initialSize={0.25}
-                  minSize={0.1}
-                  collapsible
-                  class={styles.resizablePanel}
-                >
-                  <Show
-                    when={
-                      editorUi.get.leftPanel !== 'none' &&
-                      editorUi.get.leftPanel
-                    }
+                <Resizable.Panel class={styles.resizablePanel}>
+                  <Resizable
+                    orientation={'horizontal'}
+                    class={styles.editorResizable}
                   >
-                    {leftPanel => (
-                      <>
-                        <EditorSidebar position={'left'}>
-                          <Switch>
-                            <Match when={leftPanel() === 'code'}>
-                              <YamlEditor
-                                code={editor.yamlSession.source()}
-                                setCode={() => {}}
-                              />
-                            </Match>
-                            <Match when={leftPanel() === 'merge'}>
-                              <YamlMergeView
-                                leftSource={editor.yamlSession.initialSource()}
-                                rightSource={editor.yamlSession.source()}
-                              />
-                            </Match>
-                          </Switch>
-                        </EditorSidebar>
-                      </>
-                    )}
-                  </Show>
+                    {() => {
+                      const context = Resizable.useContext();
+                      editorUi.setHorizontalResizableContext(context);
+                      return (
+                        <>
+                          <Resizable.Panel
+                            initialSize={0.25}
+                            minSize={0.1}
+                            collapsible
+                            class={styles.resizablePanel}
+                          >
+                            <Show
+                              when={
+                                editorUi.get.leftPanel !== 'none' &&
+                                editorUi.get.leftPanel
+                              }
+                            >
+                              {leftPanel => (
+                                <>
+                                  <EditorSidebar position={'left'}>
+                                    <Switch>
+                                      <Match when={leftPanel() === 'code'}>
+                                        <YamlEditor
+                                          code={editor.yamlSession.source()}
+                                          setCode={() => {}}
+                                          onMount={editor.setEditorView}
+                                          onDiagnosticsChange={
+                                            editor.actions.setDiagnostics
+                                          }
+                                        />
+                                      </Match>
+                                      <Match when={leftPanel() === 'merge'}>
+                                        <YamlMergeView
+                                          leftSource={editor.yamlSession.initialSource()}
+                                          rightSource={editor.yamlSession.source()}
+                                        />
+                                      </Match>
+                                    </Switch>
+                                  </EditorSidebar>
+                                </>
+                              )}
+                            </Show>
+                          </Resizable.Panel>
+
+                          <EditorResizableHandler
+                            hidden={editorUi.get.leftPanel === 'none'}
+                            position={'left'}
+                          />
+
+                          <Resizable.Panel initialSize={0.58}>
+                            <Suspense>
+                              <Canvas />
+                            </Suspense>
+                          </Resizable.Panel>
+
+                          <EditorResizableHandler
+                            hidden={editorUi.get.rightPanel === 'none'}
+                            position={'right'}
+                          />
+
+                          <Resizable.Panel
+                            initialSize={0.17}
+                            minSize={0.1}
+                            collapsible
+                            class={styles.resizablePanel}
+                          >
+                            <Show
+                              when={
+                                editorUi.get.rightPanel !== 'none' &&
+                                editorUi.get.rightPanel
+                              }
+                            >
+                              {rightPanel => (
+                                <>
+                                  <EditorSidebar position={'right'}>
+                                    <Switch>
+                                      <Match
+                                        when={rightPanel() === 'properties'}
+                                      >
+                                        <Show
+                                          fallback={<PropertiesPanelEditor />}
+                                          when={editor.selectedJob()}
+                                        >
+                                          <JobPanelEditor />
+                                        </Show>
+                                      </Match>
+                                    </Switch>
+                                  </EditorSidebar>
+                                </>
+                              )}
+                            </Show>
+                          </Resizable.Panel>
+                        </>
+                      );
+                    }}
+                  </Resizable>
                 </Resizable.Panel>
 
                 <EditorResizableHandler
                   hidden={editorUi.get.leftPanel === 'none'}
-                  position={'left'}
+                  position={'bottom'}
                 />
 
-                <Resizable.Panel initialSize={0.58}>
-                  <Suspense>
-                    <Canvas />
-                  </Suspense>
-                </Resizable.Panel>
-
-                <EditorResizableHandler
-                  hidden={editorUi.get.rightPanel === 'none'}
-                  position={'right'}
-                />
-
-                <Resizable.Panel
-                  initialSize={0.17}
-                  minSize={0.1}
-                  collapsible
-                  class={styles.resizablePanel}
-                >
-                  <Show
-                    when={
-                      editorUi.get.rightPanel !== 'none' &&
-                      editorUi.get.rightPanel
-                    }
-                  >
-                    {rightPanel => (
-                      <>
-                        <EditorSidebar position={'right'}>
-                          <Switch>
-                            <Match when={rightPanel() === 'properties'}>
-                              <Show
-                                fallback={<PropertiesPanelEditor />}
-                                when={editor.selectedJob()}
-                              >
-                                <JobPanelEditor />
-                              </Show>
-                            </Match>
-                          </Switch>
-                        </EditorSidebar>
-                      </>
-                    )}
-                  </Show>
+                <Resizable.Panel collapsible class={styles.resizablePanel}>
+                  <DiagnosticPanel />
                 </Resizable.Panel>
               </>
             );

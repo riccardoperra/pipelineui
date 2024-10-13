@@ -20,6 +20,7 @@ export const diagnosticState = StateField.define<
     }
     return value;
   },
+  compare: Object.is,
 });
 
 const severities = {
@@ -36,7 +37,7 @@ const lspLinter: LintSource = async view => {
     .map(({range, message, severity}) => ({
       from: posToOffset(view.state.doc, range.start)!,
       to: posToOffset(view.state.doc, range.end)!,
-      severity: severities[severity ?? DiagnosticSeverity.Information],
+      severity: severities[severity ?? DiagnosticSeverity.Error],
       message,
     }))
     .filter(

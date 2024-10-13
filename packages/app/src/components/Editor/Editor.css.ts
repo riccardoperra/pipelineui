@@ -36,13 +36,3 @@ export const resizablePanel = style({
   display: 'flex',
   overflow: 'hidden',
 });
-
-export const editorMergeViewContainer = style({
-  position: 'absolute',
-  left: 0,
-  top: 0,
-  width: '100%',
-  height: '100%',
-  overflow: 'hidden',
-  zIndex: 1,
-});

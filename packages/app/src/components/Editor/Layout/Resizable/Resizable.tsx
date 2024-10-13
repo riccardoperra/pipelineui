@@ -3,7 +3,7 @@ import Resizable from '@corvu/resizable';
 
 export interface EditorResizableHandlerProps {
   hidden: boolean;
-  position: 'left' | 'right';
+  position?: 'left' | 'right' | 'bottom';
 }
 
 export function EditorResizableHandler(props: EditorResizableHandlerProps) {

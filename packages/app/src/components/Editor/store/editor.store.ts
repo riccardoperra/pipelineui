@@ -21,11 +21,14 @@ import type {
 } from './editor.types';
 import {withProxyCommands} from 'statebuilder/commands';
 import {EditorContext} from '../editor.context';
+import type {Diagnostic} from 'vscode-languageserver-protocol';
+import type {EditorView} from '@codemirror/view';
 
 export interface EditorState {
   selectedJobId: string | null;
   template: WorkflowTemplate | null;
   structure: EditorWorkflowStructure;
+  diagnostics: readonly Diagnostic[];
 }
 
 export function getInitialWorkflowStructureState(): EditorWorkflowStructure {
@@ -45,12 +48,14 @@ export const EditorStore = defineStore<EditorState>(() => ({
   selectedJobId: null,
   template: null,
   structure: getInitialWorkflowStructureState(),
+  diagnostics: [],
 }))
   .extend(withYamlDocumentSession())
   .extend(withGithubYamlManager())
   .extend((_, context) => {
     const [session, setSession] =
       createSignal<Document.Parsed<ParsedNode, true>>();
+    const [editorView, setEditorView] = createSignal<EditorView | null>(null);
 
     const createStepJobUpdater = <
       T extends WorkflowStructureJobRunStep | WorkflowStructureJobActionStep,
@@ -85,6 +90,8 @@ export const EditorStore = defineStore<EditorState>(() => ({
 
     return {
       session,
+      editorView,
+      setEditorView,
 
       utils: {
         createStepJobUpdater,
@@ -199,6 +206,7 @@ export const EditorStore = defineStore<EditorState>(() => ({
   .extend(
     withProxyCommands<{
       setSelectedJobId: string | null;
+      setDiagnostics: Diagnostic[];
 
       addNewEnvironmentVariable: {value: WorkflowStructureEnvItem};
       // TODO: should add $nodeId
@@ -248,6 +256,10 @@ export const EditorStore = defineStore<EditorState>(() => ({
   .extend(_ => {
     _.hold(_.commands.setSelectedJobId, (value, {set}) =>
       set('selectedJobId', value),
+    );
+
+    _.hold(_.commands.setDiagnostics, (value, {set}) =>
+      set('diagnostics', value),
     );
 
     _.hold(_.commands.addNewEnvironmentVariable, ({value}) => {

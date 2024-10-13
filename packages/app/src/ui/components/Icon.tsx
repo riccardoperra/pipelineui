@@ -11,6 +11,7 @@ export type IconProps = IconVariants & {
 export function Icon(props: IconProps) {
   return (
     <span
+      {...props}
       class={mergeClasses(
         'material-symbols-rounded',
         icon({

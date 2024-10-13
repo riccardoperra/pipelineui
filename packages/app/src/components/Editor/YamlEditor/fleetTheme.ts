@@ -162,7 +162,7 @@ export const colors = EditorView.theme(
       fontFamily: 'JetBrains Mono, Inter, monospace',
     },
     '.cm-gutters': {
-      backgroundColor: 'transparent',
+      backgroundColor: tokens.gray10,
       border: 'none',
     },
     '.cm-gutters .cm-gutter.cm-lineNumbers .cm-gutterElement': {
