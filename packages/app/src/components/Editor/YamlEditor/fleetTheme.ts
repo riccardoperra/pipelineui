@@ -192,6 +192,10 @@ export const colors = EditorView.theme(
       color: tokens.gray120,
       borderRadius: '6px',
       overflow: 'hidden',
+      maxWidth: '400px',
+      fontSize: '14px',
+      whiteSpace: 'pre-wrap',
+      padding: '12px',
       boxShadow:
         'rgba(0, 0, 0, 0.4) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px',
     },
