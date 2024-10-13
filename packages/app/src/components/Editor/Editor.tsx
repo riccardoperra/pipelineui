@@ -11,6 +11,8 @@ import {EditorResizableHandler} from './Layout/Resizable/Resizable';
 import {EditorStore} from './store/editor.store';
 import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';
 import {JobPanelEditor} from './Jobs/JobPanelEditor/JobPanelEditor';
+import {YamlMergeView} from './YamlEditor/MergeView';
+import {Dialog} from '@codeui/kit';
 
 const Canvas = lazy(() =>
   Promise.all([import('elkjs'), import('./Canvas/Canvas')]).then(([, m]) => ({
@@ -53,6 +55,12 @@ export function Editor() {
                               <YamlEditor
                                 code={editor.yamlSession.source()}
                                 setCode={() => {}}
+                              />
+                            </Match>
+                            <Match when={leftPanel() === 'merge'}>
+                              <YamlMergeView
+                                leftSource={editor.yamlSession.initialSource()}
+                                rightSource={editor.yamlSession.source()}
                               />
                             </Match>
                           </Switch>

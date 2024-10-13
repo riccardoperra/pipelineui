@@ -1,6 +1,6 @@
 import {type GenericStoreApi, makePlugin} from 'statebuilder';
 import {type Accessor, createSignal, JSX} from 'solid-js';
-import {Document, type ParsedNode} from 'yaml';
+import YAML, {Document, type ParsedNode} from 'yaml';
 
 export type YAMLDocument = Document.Parsed<ParsedNode, true>;
 
@@ -10,18 +10,26 @@ export interface YamlDocumentSessionPlugin {
     init: (yaml: YAMLDocument) => void;
     updater: (cb: (yaml: YAMLDocument) => boolean | void) => void;
     source: Accessor<string>;
+    initialSource: Accessor<string>;
   };
 }
 
 export const withYamlDocumentSession = () => {
   return makePlugin(
     <S extends GenericStoreApi>(_: S): YamlDocumentSessionPlugin => {
-      const [yaml, setYaml] = createSignal<YAMLDocument>();
+      const [yaml, internalSetYaml] = createSignal<YAMLDocument>();
       const [notifier, setNotifier] = createSignal({}, {equals: false});
+
+      const [initialSource, setInitialSource] = createSignal('');
 
       const source = () => {
         notifier();
         return yaml()?.toString() ?? '';
+      };
+
+      const setYaml = (yaml: YAMLDocument) => {
+        internalSetYaml(() => yaml);
+        setInitialSource(yaml.toString() ?? '');
       };
 
       const yamlUpdater = (cb: (yaml: YAMLDocument) => boolean | void) => {
@@ -42,6 +50,7 @@ export const withYamlDocumentSession = () => {
           document: yaml,
           init: setYaml,
           updater: yamlUpdater,
+          initialSource: initialSource,
           source,
         },
       };

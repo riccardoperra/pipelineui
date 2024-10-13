@@ -1,6 +1,7 @@
 import {style} from '@vanilla-extract/css';
-import {themeVars} from '@codeui/kit';
+import {themeVars, buttonStyles} from '@codeui/kit';
 import {appTheme} from '#ui/theme.css';
+import {recipe} from '@vanilla-extract/recipes';
 
 export const header = style({
   height: '48px',
@@ -17,8 +18,6 @@ export const subHeader = style({
   height: '32px',
   width: '100%',
   display: 'flex',
-  paddingLeft: appTheme.spacing['2'],
-  paddingRight: appTheme.spacing['2'],
   alignItems: 'center',
   backgroundColor: themeVars.accent2,
   borderBottom: `1px solid ${themeVars.accent6}`,
@@ -53,4 +52,12 @@ export const headerRightSide = style({
   marginLeft: 'auto',
   display: 'flex',
   gap: appTheme.spacing['2'],
+});
+
+export const subHeaderAction = recipe({
+  base: {
+    vars: {
+      [buttonStyles.buttonVars.borderRadius]: '0px',
+    },
+  },
 });

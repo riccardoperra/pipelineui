@@ -15,12 +15,14 @@ export const editor = style({
   width: '100%',
   minHeight: 0,
   flex: 1,
+  position: 'relative',
 });
 
 export const editorResizable = style({
   width: '100%',
   display: 'flex',
   flexDirection: 'row',
+  zIndex: 0,
 });
 
 export const canvas = style({
@@ -35,23 +37,12 @@ export const resizablePanel = style({
   overflow: 'hidden',
 });
 
-export const resizableHandlerContainer = recipe({
-  base: {
-    backgroundColor: 'transparent',
-    width: '4px',
-    padding: 0,
-    flexBasis: '4px',
-    border: 0,
-    transition: 'background-color 150ms ease-in-out',
-    // ':hover': {
-    //   backgroundColor:q themeVars.brand,
-    // },
-  },
-  variants: {
-    hidden: {
-      true: {
-        display: 'none',
-      },
-    },
-  },
+export const editorMergeViewContainer = style({
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  width: '100%',
+  height: '100%',
+  overflow: 'hidden',
+  zIndex: 1,
 });

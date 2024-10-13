@@ -28,6 +28,9 @@ importers:
       '@codemirror/legacy-modes':
         specifier: ^6.4.1
         version: 6.4.1
+      '@codemirror/merge':
+        specifier: ^6.7.2
+        version: 6.7.2
       '@codemirror/search':
         specifier: ^6.5.6
         version: 6.5.6
@@ -472,6 +475,9 @@ packages:
 
   '@codemirror/legacy-modes@6.4.1':
     resolution: {integrity: sha512-vdg3XY7OAs5uLDx2Iw+cGfnwtd7kM+Et/eMsqAGTfT/JKiVBQZXosTzjEbWAi/FrY6DcQIz8mQjBozFHZEUWQA==}
+
+  '@codemirror/merge@6.7.2':
+    resolution: {integrity: sha512-HSzuWoV4E+F0DROOSwGZMYIDXh+y4iA64ffRADXPBbKKSwx9bsYNM4i7qN8t0mc8H0PYNBoehOvsW2Nitmnx9g==}
 
   '@codemirror/search@6.5.6':
     resolution: {integrity: sha512-rpMgcsh7o0GuCDUXKPvww+muLA1pDJaFrpq/CCHtpQJYz8xopu4D1hPcKRoDD0YlF8gZaqTNIRa4VRBWyhyy7Q==}
@@ -5333,6 +5339,14 @@ snapshots:
   '@codemirror/legacy-modes@6.4.1':
     dependencies:
       '@codemirror/language': 6.10.3
+
+  '@codemirror/merge@6.7.2':
+    dependencies:
+      '@codemirror/language': 6.10.3
+      '@codemirror/state': 6.4.1
+      '@codemirror/view': 6.34.1
+      '@lezer/highlight': 1.2.1
+      style-mod: 4.1.2
 
   '@codemirror/search@6.5.6':
     dependencies:
