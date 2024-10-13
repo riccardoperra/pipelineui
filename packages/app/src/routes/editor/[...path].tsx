@@ -9,6 +9,7 @@ import {EditorContext} from '~/components/Editor/editor.context';
 import {Editor} from '~/components/Editor/Editor';
 import {getGithubRepoFileContent} from '~/lib/api';
 import {StateProvider} from 'statebuilder';
+import {createEffect} from 'solid-js';
 
 const getWorkflowFromUrl = cache(async (path: string) => {
   'use server';
@@ -44,7 +45,9 @@ export default function EditorPage(props: RouteSectionProps) {
   return (
     <EditorContext.Provider
       value={{
-        source: workflowContent()?.file.contents ?? '',
+        get source() {
+          return workflowContent()?.file.contents ?? '';
+        },
       }}
     >
       <StateProvider>

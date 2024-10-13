@@ -1,6 +1,6 @@
 import {defineStore} from 'statebuilder';
 import {Document, type ParsedNode, parseDocument} from 'yaml';
-import {createSignal, untrack, useContext} from 'solid-js';
+import {createEffect, createSignal, on, untrack, useContext} from 'solid-js';
 import {reconcile, type SetStoreFunction} from 'solid-js/store';
 import {
   getWorkflowJson,
@@ -21,7 +21,6 @@ import type {
 } from './editor.types';
 import {withProxyCommands} from 'statebuilder/commands';
 import {EditorContext} from '../editor.context';
-import {resolve} from 'vinxi/dist/types/lib/resolve';
 
 export interface EditorState {
   selectedJobId: string | null;
@@ -183,8 +182,18 @@ export const EditorStore = defineStore<EditorState>(() => ({
   })
   .extend((_, context) => {
     context.hooks.onInit(() => {
-      const {source} = useContext(EditorContext)!;
-      _.initEditSession(source).then();
+      const context = useContext(EditorContext)!;
+      _.initEditSession(context.source).then();
+      // Support reactivity when using hybrid routing
+      createEffect(
+        on(
+          () => context.source,
+          source => {
+            _.initEditSession(context.source);
+          },
+          {defer: true},
+        ),
+      );
     });
   })
   .extend(
