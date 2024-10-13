@@ -32,7 +32,7 @@ export type WorkflowStructureJobBaseStep = {
   name?: string;
   if: string;
   // "continue-on-error"?: boolean | ScalarToken;
-  // env?: MappingToken;
+  env?: WorkflowStructureEnv;
 };
 
 export interface WorkflowStructureJobActionStep
@@ -60,6 +60,7 @@ export interface WorkflowStructureJob {
   runsOn: string;
   needs: string[];
   environment: JobEnvironment | null | undefined;
+  env: WorkflowStructureEnv;
   steps: WorkflowStructureJobStep[];
 }
 

@@ -13,8 +13,23 @@ export const withGithubYamlManager = () => {
     _ => {
       const {yamlSession} = _;
 
+      const convertEnvItemFieldToYaml = (envItem: WorkflowStructureEnvItem) => {
+        let value: unknown;
+        if (
+          envItem.type === 'string' ||
+          envItem.type === 'number' ||
+          envItem.type === 'boolean'
+        ) {
+          value = new YAML.Scalar(String(envItem.value));
+        } else if (envItem.type === 'expression') {
+          // TODO parse value?
+          value = new YAML.Scalar(envItem.value as StringExpression).value;
+        }
+        return value;
+      };
+
       const modifyEnvField = (
-        yaml: YAMLDocument,
+        yaml: YAMLDocument | YAMLMap,
         createIfNotExists: boolean = true,
         updater: (on: YAMLMap<Scalar<string>>) => void,
       ) => {
@@ -140,23 +155,24 @@ export const withGithubYamlManager = () => {
               });
               return;
             }
-
-            let value;
-            if (
-              envItem.type === 'string' ||
-              envItem.type === 'number' ||
-              envItem.type === 'boolean'
-            ) {
-              value = new YAML.Scalar(String(envItem.value));
-            } else if (envItem.type === 'expression') {
-              // TODO parse value?
-              value = new YAML.Scalar(envItem.value as StringExpression).value;
-            }
+            const value = convertEnvItemFieldToYaml(envItem);
             if (!envAtIndex) {
               env.add(new YAML.Pair(new YAML.Scalar(envItem.name), value));
             } else {
               envAtIndex.key = new YAML.Scalar<string>(envItem.name);
               envAtIndex.value = value;
+            }
+          });
+        });
+      };
+
+      const deleteEnvironmentVariable = (index: number) => {
+        yamlSession.updater(yaml => {
+          modifyEnvField(yaml, true, env => {
+            const updatedItems = env.items.toSpliced(index, 1);
+            env.items = updatedItems;
+            if (updatedItems.length === 0) {
+              yaml.delete('env');
             }
           });
         });
@@ -210,6 +226,52 @@ export const withGithubYamlManager = () => {
             }
             needs.forEach(need => needsSeq.add(need));
           }
+        });
+      };
+
+      const setJobEnv = (
+        jobIdOrIndex: string | number,
+        index: number,
+        envItem: WorkflowStructureEnvItem,
+      ) => {
+        yamlSession.updater(yaml => {
+          const job = findJob(yaml, jobIdOrIndex)!;
+          if (!job) {
+            return false;
+          }
+          modifyEnvField(job, true, env => {
+            const envAtIndex = env.items.at(index);
+            if (!envItem.name) {
+              console.warn('Missing `name` for env variable. Skipping update', {
+                index,
+                data: envItem,
+              });
+              return;
+            }
+            const value = convertEnvItemFieldToYaml(envItem);
+            if (!envAtIndex) {
+              env.add(new YAML.Pair(new YAML.Scalar(envItem.name), value));
+            } else {
+              envAtIndex.key = new YAML.Scalar<string>(envItem.name);
+              envAtIndex.value = value;
+            }
+          });
+        });
+      };
+
+      const deleteJobEnv = (jobIdOrIndex: string | number, index: number) => {
+        yamlSession.updater(yaml => {
+          const job = findJob(yaml, jobIdOrIndex)!;
+          if (!job) {
+            return false;
+          }
+          modifyEnvField(job, true, env => {
+            const updatedItems = env.items.toSpliced(index, 1);
+            env.items = updatedItems;
+            if (updatedItems.length === 0) {
+              job.delete('env');
+            }
+          });
         });
       };
 
@@ -318,6 +380,65 @@ export const withGithubYamlManager = () => {
         });
       };
 
+      const setJobStepEnv = (
+        jobIdOrIndex: string | number,
+        stepIndex: number,
+        index: number,
+        envItem: WorkflowStructureEnvItem,
+      ) => {
+        yamlSession.updater(yaml => {
+          const job = findJob(yaml, jobIdOrIndex)!;
+          if (!job) {
+            return false;
+          }
+          const step = findJobStep(job, stepIndex);
+          if (!step) {
+            return false;
+          }
+          modifyEnvField(step, true, env => {
+            const envAtIndex = env.items.at(index);
+            if (!envItem.name) {
+              console.warn('Missing `name` for env variable. Skipping update', {
+                index,
+                data: envItem,
+              });
+              return;
+            }
+            const value = convertEnvItemFieldToYaml(envItem);
+            if (!envAtIndex) {
+              env.add(new YAML.Pair(new YAML.Scalar(envItem.name), value));
+            } else {
+              envAtIndex.key = new YAML.Scalar<string>(envItem.name);
+              envAtIndex.value = value;
+            }
+          });
+        });
+      };
+
+      const deleteJobStepEnv = (
+        jobIdOrIndex: string | number,
+        stepIndex: number,
+        index: number,
+      ) => {
+        yamlSession.updater(yaml => {
+          const job = findJob(yaml, jobIdOrIndex)!;
+          if (!job) {
+            return false;
+          }
+          const step = findJobStep(job, stepIndex);
+          if (!step) {
+            return false;
+          }
+          modifyEnvField(step, true, env => {
+            const updatedItems = env.items.toSpliced(index, 1);
+            env.items = updatedItems;
+            if (updatedItems.length === 0) {
+              step.delete('env');
+            }
+          });
+        });
+      };
+
       const setJobStepUses = (
         jobIdOrIndex: string | number,
         stepIndex: number,
@@ -358,15 +479,20 @@ export const withGithubYamlManager = () => {
         yamlSession: Object.assign(_.yamlSession, {
           deleteWorkflowDispatchItem,
           setEnvironmentVariable,
+          deleteEnvironmentVariable,
           setWorkflowDispatch,
           setJobName,
           setJobNeeds,
           setJobRunsOn,
           setJobEnvironment,
+          setJobEnv,
+          deleteJobEnv,
           setJobStepName,
           setJobStepIf,
           setJobStepRun,
           setJobStepUses,
+          setJobStepEnv,
+          deleteJobStepEnv,
           deleteJobStep,
         }),
       };

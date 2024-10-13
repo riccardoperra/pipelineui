@@ -10,12 +10,14 @@ import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '#editor-store/editor.store';
 import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
-import {createEffect, createMemo, on, Show} from 'solid-js';
+import {Show} from 'solid-js';
 import type {
   WorkflowStructureJobActionStep,
   WorkflowStructureJobRunStep,
 } from '#editor-store/editor.types';
 import {PanelEditorStore} from '../../panel-editor.store';
+import {PanelDivider} from '#editor-layout/Panel/Form/PanelDivider';
+import {EnvironmentVariablesForm} from '../../../../common/EnvironmentVariables/EnvironmentVariablesForm';
 
 export function JobStepForm() {
   const {selectedJob, actions, get} = provideState(EditorStore);
@@ -157,6 +159,38 @@ export function JobStepForm() {
               )}
             </Show>
           </PanelContent>
+
+          <PanelDivider />
+
+          <EnvironmentVariablesForm
+            onAddNew={() => {
+              actions.addNewJobStepEnv({
+                jobId: selectedJob()!.$nodeId,
+                stepId: jobStep().$nodeId,
+                value: {
+                  name: '',
+                  type: 'string',
+                  value: '',
+                },
+              });
+            }}
+            items={jobStep().env?.array ?? []}
+            onUpdate={(value, index) => {
+              actions.updateJobStepEnv({
+                jobId: selectedJob()!.$nodeId,
+                stepId: jobStep().$nodeId,
+                index,
+                value,
+              });
+            }}
+            onDelete={(item, index) => {
+              actions.deleteJobStepEnv({
+                jobId: selectedJob()!.$nodeId,
+                stepId: jobStep().$nodeId,
+                index,
+              });
+            }}
+          />
         </>
       )}
     </Show>

@@ -9,6 +9,7 @@ import {formStyles} from '#editor-layout/Panel/Form/Form.css';
 import {provideState} from 'statebuilder';
 import {PanelEditorStore} from '../panel-editor.store';
 import {EditorStore} from '#editor-store/editor.store';
+import {EnvironmentVariablesForm} from '../../../common/EnvironmentVariables/EnvironmentVariablesForm';
 
 export function JobForm() {
   const panelStore = provideState(PanelEditorStore);
@@ -112,6 +113,35 @@ export function JobForm() {
           />
         </FullWidthPanelRow>
       </PanelContent>
+
+      <PanelDivider />
+
+      <EnvironmentVariablesForm
+        onAddNew={() => {
+          editorStore.actions.addNewJobEnv({
+            jobId: job()!.$nodeId,
+            value: {
+              name: '',
+              type: 'string',
+              value: '',
+            },
+          });
+        }}
+        items={job().env?.array ?? []}
+        onUpdate={(value, index) => {
+          editorStore.actions.updateJobEnv({
+            jobId: job()!.$nodeId,
+            index,
+            value,
+          });
+        }}
+        onDelete={(item, index) => {
+          editorStore.actions.deleteJobEnv({
+            jobId: job()!.$nodeId,
+            index,
+          });
+        }}
+      />
 
       <PanelDivider />
 

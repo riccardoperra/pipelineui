@@ -13,7 +13,7 @@ export interface EnvironmentVariablesItemFormProps {
   value: WorkflowStructureEnvItem;
   index: number;
   onChange: (value: WorkflowStructureEnvItem) => void;
-  onDelete: () => void;
+  onDelete: (index: number) => void;
 }
 
 export function EnvironmentVariablesItemForm(
@@ -36,7 +36,7 @@ export function EnvironmentVariablesItemForm(
     <PanelAccordionItem
       value={`${props.index}`}
       name={props.value.name || `Env variable #${props.index}`}
-      onDelete={() => {}}
+      onDelete={() => props.onDelete(props.index)}
     >
       <FullWidthPanelRow>
         <TextField

@@ -8,7 +8,6 @@ import {
   type ParseWorkflowResult,
   Tokens,
   type WorkflowTemplate,
-  WorkflowTemplateTypes,
 } from '@pipelineui/workflow-parser';
 import type {
   EditorWorkflowStructure,
@@ -25,7 +24,7 @@ export function getStructureFromWorkflow(
 ): EditorWorkflowStructure {
   return {
     name: 'fileName',
-    env: getWorkflowStructureEnv(result, template),
+    env: getWorkflowStructureEnv(result, template.env),
     events: {
       workflowDispatch: Object.entries(
         template.events?.workflow_dispatch?.inputs ?? {},
@@ -54,6 +53,9 @@ export function getStructureFromWorkflow(
             runsOn: job['runs-on']?.value,
             environment: getWorkflowJobEnvironment(result, job),
             needs: [...(job.needs?.values() ?? [])].map(value => value.value),
+            env: job.env
+              ? getWorkflowStructureEnv(result, job.env)
+              : {array: []},
             steps: job.steps.map((step, $index) => {
               if ('run' in step) {
                 return {
@@ -62,7 +64,9 @@ export function getStructureFromWorkflow(
                   type: 'run',
                   id: step.id,
                   name: step.name?.toString(),
-                  env: step.env,
+                  env: step.env
+                    ? getWorkflowStructureEnv(result, step.env)
+                    : {array: []},
                   // @ts-expect-error TODO: fix type
                   run: step.run['value'],
                 };
@@ -73,7 +77,9 @@ export function getStructureFromWorkflow(
                   type: 'action',
                   id: step.id,
                   name: step.name?.toString(),
-                  env: step.env,
+                  env: step.env
+                    ? getWorkflowStructureEnv(result, step.env)
+                    : {array: []},
                   uses: step.uses.value,
                 };
               }
@@ -89,20 +95,18 @@ export function getStructureFromWorkflow(
   };
 }
 
-function getWorkflowStructureJobEnvironment() {}
-
 function getWorkflowStructureEnv(
   result: ParseWorkflowResult,
-  template: WorkflowTemplate,
+  template: Tokens.TemplateToken,
 ): WorkflowStructureEnv {
   const defaultValue = {array: []} satisfies WorkflowStructureEnv;
   return handleTemplateTokenErrors(
-    template.env,
+    template,
     result.context,
     defaultValue,
     () => {
-      if (template.env.assertMapping('template env')) {
-        const token = template.env as Tokens.MappingToken;
+      if (template.assertMapping('template env')) {
+        const token = template as Tokens.MappingToken;
         const array: WorkflowStructureEnvItem[] = [];
         for (const pair of token) {
           const name = handleTemplateTokenErrors(

@@ -195,25 +195,50 @@ export const EditorStore = defineStore<EditorState>(() => ({
         ),
       );
     });
-    context.hooks.onDestroy(() => console.log('should destroy'));
   })
   .extend(
     withProxyCommands<{
       setSelectedJobId: string | null;
 
       addNewEnvironmentVariable: {value: WorkflowStructureEnvItem};
+      // TODO: should add $nodeId
       updateEnvironmentVariableByIndex: {
         index: number;
         value: WorkflowStructureEnvItem;
       };
+      // TODO: should add $nodeId
+      deleteEnvironmentVariableByIndex: {index: number};
 
       updateJobName: {jobId: string; name: string | null};
       updateJobRunsOn: {jobId: string; runsOn: string | null};
       updateJobEnvironment: {jobId: string; value: JobEnvironment};
+      addNewJobEnv: {jobId: string; value: WorkflowStructureEnvItem};
+      updateJobEnv: {
+        jobId: string;
+        index: number;
+        value: WorkflowStructureEnvItem;
+      };
+      deleteJobEnv: {jobId: string; index: number};
       updateJobStepName: {jobId: string; stepId: string; name: string | null};
       updateJobStepIf: {jobId: string; stepId: string; value: string | null};
       updateJobStepType: {jobId: string; stepId: string; type: string};
       updateJobStepRun: {jobId: string; stepId: string; run: string | null};
+      addNewJobStepEnv: {
+        jobId: string;
+        stepId: string;
+        value: WorkflowStructureEnvItem;
+      };
+      updateJobStepEnv: {
+        jobId: string;
+        stepId: string;
+        index: number;
+        value: WorkflowStructureEnvItem;
+      };
+      deleteJobStepEnv: {
+        jobId: string;
+        stepId: string;
+        index: number;
+      };
       updateJobStepUses: {jobId: string; stepId: string; uses: string | null};
       deleteJobStep: {jobId: string; stepId: string};
     }>({
@@ -236,6 +261,11 @@ export const EditorStore = defineStore<EditorState>(() => ({
       _.yamlSession.setEnvironmentVariable(index, value);
     });
 
+    _.hold(_.commands.deleteEnvironmentVariableByIndex, ({index}) => {
+      _.set('structure', 'env', 'array', array => array.toSpliced(index, 1));
+      _.yamlSession.deleteEnvironmentVariable(index);
+    });
+
     _.hold(_.commands.updateJobName, ({jobId, name}) => {
       const index = _.get.structure.jobs.findIndex(
         job => job.$nodeId === jobId,
@@ -250,6 +280,47 @@ export const EditorStore = defineStore<EditorState>(() => ({
       );
       _.set('structure', 'jobs', index, 'environment', value);
       _.yamlSession.setJobEnvironment(index, value);
+    });
+
+    _.hold(_.commands.updateJobEnv, ({jobId, value, index}) => {
+      const jobIndex = _.get.structure.jobs.findIndex(
+        job => job.$nodeId === jobId,
+      );
+      if (jobIndex === -1) {
+        return;
+      }
+      _.set('structure', 'jobs', index, 'env', 'array', index, value);
+      _.yamlSession.setJobEnv(jobIndex, index, value);
+    });
+
+    _.hold(_.commands.deleteJobEnv, ({jobId, index}) => {
+      const jobIndex = _.get.structure.jobs.findIndex(
+        job => job.$nodeId === jobId,
+      );
+      if (jobIndex === -1) {
+        return;
+      }
+      _.set('structure', 'jobs', index, 'env', 'array', array =>
+        array.toSpliced(index, 1),
+      );
+      _.yamlSession.deleteJobEnv(jobIndex, index);
+    });
+
+    _.hold(_.commands.addNewJobEnv, ({value, jobId}) => {
+      const jobIndex = _.get.structure.jobs.findIndex(
+        job => job.$nodeId === jobId,
+      );
+      if (jobIndex === -1) {
+        return;
+      }
+      const length = untrack(
+        () => _().structure.jobs[jobIndex].env?.array?.length ?? 0,
+      );
+      _.set('structure', 'jobs', jobIndex, 'env', 'array', items => [
+        ...items,
+        value,
+      ]);
+      _.yamlSession.setJobEnv(jobIndex, length, value);
     });
 
     _.hold(_.commands.updateJobRunsOn, ({jobId, runsOn}) => {
@@ -328,6 +399,61 @@ export const EditorStore = defineStore<EditorState>(() => ({
       }
       updater.update('run', run ?? '');
       _.yamlSession.setJobStepRun(updater.jobIndex, updater.stepIndex, run);
+    });
+
+    _.hold(_.commands.updateJobStepEnv, ({jobId, stepId, value, index}) => {
+      const updater = _.utils.createStepJobUpdater<WorkflowStructureJobRunStep>(
+        jobId,
+        stepId,
+      );
+      if (!updater) {
+        return;
+      }
+      updater.update('env', 'array', index, value);
+      _.yamlSession.setJobStepEnv(
+        updater.jobIndex,
+        updater.stepIndex,
+        index,
+        value,
+      );
+    });
+
+    _.hold(_.commands.deleteJobStepEnv, ({jobId, stepId, index}) => {
+      const updater = _.utils.createStepJobUpdater<WorkflowStructureJobRunStep>(
+        jobId,
+        stepId,
+      );
+      if (!updater) {
+        return;
+      }
+      updater.update('env', 'array', array => array.toSpliced(index, 1));
+      _.yamlSession.deleteJobStepEnv(
+        updater.jobIndex,
+        updater.stepIndex,
+        index,
+      );
+    });
+
+    _.hold(_.commands.addNewJobStepEnv, ({value, jobId, stepId}) => {
+      const updater = _.utils.createStepJobUpdater<WorkflowStructureJobRunStep>(
+        jobId,
+        stepId,
+      );
+      if (!updater) {
+        return;
+      }
+      const length = untrack(
+        () =>
+          _().structure.jobs[updater.jobIndex].steps[updater.stepIndex].env
+            ?.array?.length ?? 0,
+      );
+      updater.update('env', 'array', items => [...items, value]);
+      _.yamlSession.setJobStepEnv(
+        updater.jobIndex,
+        updater.stepIndex,
+        length,
+        value,
+      );
     });
 
     _.hold(_.commands.updateJobStepUses, ({jobId, stepId, uses}) => {
