@@ -1,0 +1,1 @@
+import '@pipelineui/workflow-languageserver';
