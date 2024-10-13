@@ -195,6 +195,7 @@ export const EditorStore = defineStore<EditorState>(() => ({
         ),
       );
     });
+    context.hooks.onDestroy(() => console.log('should destroy'));
   })
   .extend(
     withProxyCommands<{

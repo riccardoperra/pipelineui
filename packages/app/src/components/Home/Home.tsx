@@ -32,26 +32,19 @@ export function Home() {
           <RepoSearch />
 
           <Suspense fallback={<RepoCardFallback />}>
-            <Show when={repo()} keyed>
+            <Show when={repo()}>
               {response => (
                 <Show
                   fallback={
-                    <div class={errorBanner}>{response.error?.message}</div>
+                    <div class={errorBanner}>{response().error?.message}</div>
                   }
-                  when={!response.failed && response}
+                  when={!response().failed && response()}
                 >
-                  {response => <RepoCard repo={response().data.repo} />}
+                  {response => <RepoCard repo={response().data!.repo} />}
                 </Show>
               )}
             </Show>
           </Suspense>
-
-          <div role={'separator'} class={choiceSeparator}>
-            Or
-          </div>
-          <Button size={'lg'} theme={'tertiary'}>
-            Create from scratch
-          </Button>
         </div>
       </div>
     </div>

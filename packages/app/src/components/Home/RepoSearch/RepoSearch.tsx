@@ -5,6 +5,7 @@ import {
   submitRepoInputContainer,
   submitRepoInputRoot,
   submitRepoSubmitButton,
+  wrapper,
 } from './RepoSearch.css';
 import {IconButton, TextField} from '@codeui/kit';
 import {createSignal, Show, useTransition} from 'solid-js';
@@ -17,7 +18,7 @@ export function RepoSearch() {
   const [, setParams] = useSearchParams();
 
   return (
-    <>
+    <div class={wrapper}>
       <h2 class={contentTitle}>Search for existing github repositories...</h2>
       <form
         role={'search'}
@@ -77,6 +78,6 @@ export function RepoSearch() {
           </IconButton>
         </div>
       </form>
-    </>
+    </div>
   );
 }

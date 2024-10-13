@@ -2,6 +2,12 @@ import {style} from '@vanilla-extract/css';
 import {buttonStyles, themeVars} from '@codeui/kit';
 import {appTheme} from '#ui/theme.css';
 
+export const wrapper = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: appTheme.spacing['4'],
+});
+
 export const contentTitle = style({
   textAlign: 'center',
   color: themeVars.accent10,
