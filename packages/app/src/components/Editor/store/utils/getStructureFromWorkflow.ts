@@ -8,6 +8,7 @@ import {
   type ParseWorkflowResult,
   Tokens,
   type WorkflowTemplate,
+  WorkflowTemplateTypes,
 } from '@pipelineui/workflow-parser';
 import type {
   EditorWorkflowStructure,
@@ -27,7 +28,7 @@ export function getStructureFromWorkflow(
     env: getWorkflowStructureEnv(result, template),
     events: {
       workflowDispatch: Object.entries(
-        template.events.workflow_dispatch?.inputs ?? {},
+        template.events?.workflow_dispatch?.inputs ?? {},
       ).map(([key, input], $index) => {
         return {
           $index,

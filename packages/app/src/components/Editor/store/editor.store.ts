@@ -1,6 +1,6 @@
 import {defineStore} from 'statebuilder';
 import {Document, type ParsedNode, parseDocument} from 'yaml';
-import {createSignal, untrack} from 'solid-js';
+import {createSignal, untrack, useContext} from 'solid-js';
 import {reconcile, type SetStoreFunction} from 'solid-js/store';
 import {
   getWorkflowJson,
@@ -20,6 +20,8 @@ import type {
   WorkflowStructureJobRunStep,
 } from './editor.types';
 import {withProxyCommands} from 'statebuilder/commands';
+import {EditorContext} from '../editor.context';
+import {resolve} from 'vinxi/dist/types/lib/resolve';
 
 export interface EditorState {
   selectedJobId: string | null;
@@ -47,7 +49,7 @@ export const EditorStore = defineStore<EditorState>(() => ({
 }))
   .extend(withYamlDocumentSession())
   .extend(withGithubYamlManager())
-  .extend(_ => {
+  .extend((_, context) => {
     const [session, setSession] =
       createSignal<Document.Parsed<ParsedNode, true>>();
 
@@ -97,7 +99,7 @@ export const EditorStore = defineStore<EditorState>(() => ({
         }
         // TODO: Fix type ! . here the job should always be valuated
         return _.get.structure?.jobs.find(job => {
-          return job.id === selectedJobId;
+          return job.$nodeId === selectedJobId;
         })!;
       },
 
@@ -147,30 +149,43 @@ export const EditorStore = defineStore<EditorState>(() => ({
         },
       },
 
-      initEditSession(source: string): void {
-        _.yamlSession.init(
-          parseDocument(source, {
-            merge: false,
-            toStringDefaults: {
-              simpleKeys: true,
-              collectionStyle: 'any',
-              flowCollectionPadding: true,
-            },
-          }),
-        );
-        const {result, template} = getWorkflowJson(
-          './yaml.json',
-          _.yamlSession.document()!.toString()!,
-        );
-        template.then(resolvedTemplate => {
-          _.set('template', reconcile(resolvedTemplate));
-          _.set(
-            'structure',
-            reconcile(getStructureFromWorkflow(result, resolvedTemplate)),
-          );
+      async initEditSession(source: string) {
+        const yaml = parseDocument(source, {
+          merge: false,
+          toStringDefaults: {
+            simpleKeys: true,
+            collectionStyle: 'any',
+            flowCollectionPadding: true,
+          },
         });
+        _.yamlSession.init(yaml);
+
+        if (source.length === 0) {
+          source = `
+            name: Blank
+            on: {}
+            jobs: {}
+          `;
+        }
+
+        const {result, template} = getWorkflowJson('./yaml.json', source);
+
+        const resolvedTemplate = await template;
+
+        const parsedStructure = getStructureFromWorkflow(
+          result,
+          resolvedTemplate,
+        );
+        _.set('template', reconcile(resolvedTemplate));
+        _.set('structure', reconcile(parsedStructure));
       },
     };
+  })
+  .extend((_, context) => {
+    context.hooks.onInit(() => {
+      const {source} = useContext(EditorContext)!;
+      _.initEditSession(source).then();
+    });
   })
   .extend(
     withProxyCommands<{

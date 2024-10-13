@@ -1,11 +1,10 @@
 import {createContext, useContext} from 'solid-js';
-import type {WorkflowTemplate} from '@pipelineui/workflow-parser';
 
-export const EditorContext = createContext<{
-  context: any;
-  template: WorkflowTemplate;
+export interface EditorPageContext {
   source: string;
-} | null>(null);
+}
+
+export const EditorContext = createContext<EditorPageContext>();
 
 export function useEditorContext() {
   return useContext(EditorContext)!;

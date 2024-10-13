@@ -2,19 +2,13 @@ import * as styles from './Canvas.css';
 import {FlowContainer} from '../Flow/FlowContainer';
 import {batch, createEffect, createSignal, lazy} from 'solid-js';
 import type {ElkExtendedEdge, ElkNode} from 'elkjs';
-import {useEditorContext} from '../editor.context';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '#editor-store/editor.store';
 import {FlowRenderer} from '../Flow/engine/FlowRenderer';
 import type {FlowConnection, FlowNodeMap} from '../Flow/engine/types';
 import {FlowItem} from '../Flow/FlowItem';
 
-export const Canvas = lazy(() => {
-  return import('elkjs').then(() => ({default: _Canvas}));
-});
-
-function _Canvas() {
-  const {template} = useEditorContext();
+export function Canvas() {
   const editor = provideState(EditorStore);
 
   const [mappedNodes, setMappedNodes] = createSignal<FlowNodeMap>({});
@@ -23,19 +17,22 @@ function _Canvas() {
   const [elkNode, setElkNode] = createSignal<ElkNode | null>(null);
 
   createEffect(() => {
-    const mappedNodes: FlowNodeMap = template.jobs.reduce((acc, job) => {
-      acc[job.id.value] = {
-        id: job.id.value,
-        position: {
-          x: 0,
-          y: 0,
-        },
-        data: {
-          job,
-        },
-      };
-      return acc;
-    }, {} as FlowNodeMap);
+    const mappedNodes: FlowNodeMap = editor.get.structure.jobs.reduce(
+      (acc, job) => {
+        acc[job.id] = {
+          id: job.id,
+          position: {
+            x: 0,
+            y: 0,
+          },
+          data: {
+            job,
+          },
+        };
+        return acc;
+      },
+      {} as FlowNodeMap,
+    );
 
     import('elkjs').then(({default: ELK}) => {
       const graph: ElkNode = {
@@ -68,12 +65,12 @@ function _Canvas() {
           }),
         ],
         edges: Object.values(mappedNodes).reduce((acc, node, index, array) => {
-          const nodeJob = template.jobs.find(
+          const nodeJob = editor.get.structure.jobs.find(
             job => node.id === `${job.id!.toString()}`,
           );
           if (nodeJob && nodeJob.needs?.length) {
             const targets = nodeJob.needs.reduce((acc, need) => {
-              const job = template.jobs.find(
+              const job = editor.get.structure.jobs.find(
                 n => n.id.toString() === need.toString(),
               );
               if (!job) {
@@ -103,10 +100,10 @@ function _Canvas() {
           }
         });
 
-        const edges = template.jobs.reduce((acc, job) => {
+        const edges = editor.get.structure.jobs.reduce((acc, job) => {
           const jobEdge: FlowConnection[] = (job.needs ?? []).reduce(
             (acc, need) => {
-              const cJob = template.jobs.find(
+              const cJob = editor.get.structure.jobs.find(
                 n => n.id.toString() === need.toString(),
               );
               if (!cJob) {
@@ -116,13 +113,13 @@ function _Canvas() {
                 ...acc,
                 {
                   target: {
-                    nodeId: job.id.value,
-                    connectorId: `${job.id.value}-output`,
+                    nodeId: job.id,
+                    connectorId: `${job.id}-output`,
                     connectorType: 'output',
                   },
                   source: {
-                    nodeId: need.value,
-                    connectorId: `${need.value}-input`,
+                    nodeId: need,
+                    connectorId: `${need}-input`,
                     connectorType: 'input',
                   },
                 } satisfies FlowConnection,

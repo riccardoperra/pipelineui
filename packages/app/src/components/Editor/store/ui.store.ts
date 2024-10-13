@@ -1,6 +1,6 @@
 import {defineStore} from 'statebuilder';
 import {withProxyCommands} from 'statebuilder/commands';
-import {createSignal} from 'solid-js';
+import {createEffect, createSignal} from 'solid-js';
 import Resizable from '@corvu/resizable';
 
 interface EditorUiState {
@@ -18,7 +18,7 @@ export const EditorUiStore = defineStore<EditorUiState>(() => ({
   rightPanel: 'properties',
 }))
   .extend(withProxyCommands<EditorUiCommands>())
-  .extend(_ => {
+  .extend((_, context) => {
     const [resizableContext, setResizableContext] =
       createSignal<ReturnType<typeof Resizable.useContext>>();
     return {

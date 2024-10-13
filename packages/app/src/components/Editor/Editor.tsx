@@ -1,38 +1,26 @@
 import {EditorSidebar} from './LeftSidebar/EditorSidebar';
 import * as styles from './Editor.css';
-import {JobPanelEditor} from './Jobs/JobPanelEditor/JobPanelEditor';
-import type {WorkflowTemplate} from '@pipelineui/workflow-parser';
 import {EditorHeader} from './Header/Header';
 import {provideState} from 'statebuilder';
 import {EditorUiStore} from './store/ui.store';
-import {lazy, Match, onMount, Show, Suspense, Switch} from 'solid-js';
+import {lazy, Match, Show, Suspense, Switch} from 'solid-js';
 import {YamlEditor} from './YamlEditor/YamlEditor';
 import {EditorStatusBar} from './StatusBar/StatusBar';
 import Resizable from '@corvu/resizable';
 import {EditorResizableHandler} from './Layout/Resizable/Resizable';
 import {EditorStore} from './store/editor.store';
-import {useEditorContext} from './editor.context';
 import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';
-
-interface EditorProps {
-  content: string;
-  template: WorkflowTemplate;
-}
+import {JobPanelEditor} from './Jobs/JobPanelEditor/JobPanelEditor';
 
 const Canvas = lazy(() =>
-  import('./Canvas/Canvas').then(({Canvas}) => ({
-    default: Canvas,
+  Promise.all([import('elkjs'), import('./Canvas/Canvas')]).then(([, m]) => ({
+    default: m.Canvas,
   })),
 );
 
-export function Editor(props: EditorProps) {
+export function Editor() {
   const editorUi = provideState(EditorUiStore);
   const editor = provideState(EditorStore);
-  const {source} = useEditorContext();
-
-  onMount(() => {
-    editor.initEditSession(source);
-  });
 
   return (
     <div class={styles.wrapper}>
@@ -80,11 +68,9 @@ export function Editor(props: EditorProps) {
                 />
 
                 <Resizable.Panel initialSize={0.58}>
-                  <Show when={editor.get.template}>
-                    <Suspense>
-                      <Canvas />
-                    </Suspense>
-                  </Show>
+                  <Suspense>
+                    <Canvas />
+                  </Suspense>
                 </Resizable.Panel>
 
                 <EditorResizableHandler

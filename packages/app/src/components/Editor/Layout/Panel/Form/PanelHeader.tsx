@@ -3,7 +3,7 @@ import {Component, JSX, Show} from 'solid-js';
 
 interface PanelHeaderProps {
   label: string;
-  rightContent?: JSX.Element;
+  rightContent?: () => JSX.Element;
 }
 
 export const PanelHeader: Component<PanelHeaderProps> = props => {
@@ -11,7 +11,7 @@ export const PanelHeader: Component<PanelHeaderProps> = props => {
     <div class={styles.panelHeader}>
       <span>{props.label}</span>
 
-      <Show when={props.rightContent}>
+      <Show when={props.rightContent} keyed>
         {rightContent => (
           <div class={styles.panelHeaderRight}>{rightContent()}</div>
         )}

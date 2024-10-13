@@ -1,30 +1,27 @@
 import * as styles from './FlowItem.css';
-import type {WorkflowTemplate} from '@pipelineui/workflow-parser';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '../store/editor.store';
-import {flowItemContent} from './FlowItem.css';
 import {Show} from 'solid-js';
+import type {WorkflowStructureJob} from '#editor-store/editor.types';
 
 interface FlowItemProps {
-  job: WorkflowTemplate['jobs'][number];
+  job: WorkflowStructureJob;
 }
 
 export function FlowItem(props: FlowItemProps) {
   const editor = provideState(EditorStore);
 
   const job = () =>
-    editor.get.structure.jobs.find(job => job.id === props.job.id.value);
+    editor.get.structure.jobs.find(job => job.$nodeId === props.job.$nodeId);
 
   const onClick = () => {
-    editor.actions.setSelectedJobId(props.job.id.value);
+    editor.actions.setSelectedJobId(props.job.$nodeId);
   };
 
   return (
     <div
       class={styles.flowItem}
-      data-selected={
-        editor.get.selectedJobId === props.job.id.value ? '' : null
-      }
+      data-selected={editor.get.selectedJobId === props.job.$nodeId ? '' : null}
       onClick={onClick}
     >
       <div class={styles.flowItemHeader}>{job()?.name}</div>
@@ -49,7 +46,7 @@ export function FlowItem(props: FlowItemProps) {
                   'border-radius': '8px',
                 }}
               >
-                {job()?.runsOn}
+                {runsOn()}
               </span>
             )}
           </Show>

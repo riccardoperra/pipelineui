@@ -1,9 +1,7 @@
 import {PanelHeader} from '../../Layout/Panel/Form/PanelHeader';
 import {TextField} from '@codeui/kit';
-import {createEffect} from 'solid-js';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '../../store/editor.store';
-import {useEditorContext} from '../../editor.context';
 import {FullWidthPanelRow} from '../../Layout/Panel/Form/PanelRow';
 import {formStyles} from '#editor-layout/Panel/Form/Form.css';
 import {PanelPlusButton} from '#editor-layout/Panel/Form/PanelPlusButton';
@@ -15,11 +13,6 @@ export interface WorkflowConcurrency {
 
 export function WorkflowConcurrencyForm() {
   const editor = provideState(EditorStore);
-  const {template, context} = useEditorContext();
-
-  createEffect(() => {
-    const concurrency = template.concurrency;
-  });
 
   const setConcurrency = (concurrency: WorkflowConcurrency | null) => {
     editor.sessionUpdate.setConcurrency(concurrency);
@@ -29,7 +22,7 @@ export function WorkflowConcurrencyForm() {
     <>
       <PanelHeader
         label={'Concurrency'}
-        rightContent={
+        rightContent={() => (
           <PanelPlusButton
             aria-label={'Add concurrency group'}
             onClick={() =>
@@ -39,7 +32,7 @@ export function WorkflowConcurrencyForm() {
               })
             }
           />
-        }
+        )}
       />
 
       <FullWidthPanelRow>

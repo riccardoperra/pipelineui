@@ -30,12 +30,12 @@ export function WorkflowDispatchForm() {
     <>
       <PanelHeader
         label={'Workflow Dispatch'}
-        rightContent={
+        rightContent={() => (
           <PanelPlusButton
             aria-label={'Add workflow dispatch item'}
             onClick={addNew}
           />
-        }
+        )}
       />
 
       <Show when={workflowDispatchInputs().length}>

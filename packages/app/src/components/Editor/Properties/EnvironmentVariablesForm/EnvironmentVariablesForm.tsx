@@ -25,12 +25,12 @@ export function EnvironmentVariablesForm() {
     <>
       <PanelHeader
         label={'Environment variables'}
-        rightContent={
+        rightContent={() => (
           <PanelPlusButton
             aria-label={'Add environment variable'}
             onClick={addNew}
           />
-        }
+        )}
       />
 
       <Show when={envItems().length}>
