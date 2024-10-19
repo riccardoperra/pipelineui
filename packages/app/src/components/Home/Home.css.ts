@@ -62,3 +62,8 @@ export const errorBanner = style({
   background: themeVars.critical,
   borderRadius: '12px',
 });
+
+export const form = style({
+  width: '100%',
+  display: 'flex',
+});

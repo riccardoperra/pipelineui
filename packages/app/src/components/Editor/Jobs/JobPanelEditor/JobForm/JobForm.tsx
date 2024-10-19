@@ -168,8 +168,6 @@ export function JobForm() {
 
       <PanelDivider />
 
-      <PanelHeader label={'Steps'} />
-
       <JobStepsForm />
 
       <PanelDivider />

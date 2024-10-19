@@ -13,6 +13,11 @@ import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';
 import {JobPanelEditor} from './Jobs/JobPanelEditor/JobPanelEditor';
 import {YamlMergeView} from './YamlEditor/MergeView';
 import {DiagnosticPanel} from './DiagnosticPanel/DiagnosticPanel';
+import {headerRepoNavLi, headerRepoNavOl} from './Header/EditorHeader.css';
+import {Link} from '@codeui/kit';
+import {A, useParams} from '@solidjs/router';
+import {Icon} from '#ui/components/Icon';
+import {EditorRepositoryHeaderName} from './Header/RepositoryHeaderName';
 
 const Canvas = lazy(() =>
   Promise.all([import('elkjs'), import('./Canvas/Canvas')]).then(([, m]) => ({
@@ -20,13 +25,27 @@ const Canvas = lazy(() =>
   })),
 );
 
-export function Editor() {
+export interface EditorProps {
+  type?: 'scratch' | 'repository';
+}
+
+export function Editor(props: EditorProps) {
   const editorUi = provideState(EditorUiStore);
   const editor = provideState(EditorStore);
 
   return (
     <div class={styles.wrapper}>
-      <EditorHeader showBack />
+      <EditorHeader
+        showBack
+        name={
+          <Show
+            fallback={<div>Scratch file</div>}
+            when={props.type === 'repository'}
+          >
+            <EditorRepositoryHeaderName />
+          </Show>
+        }
+      />
       <div class={styles.editor}>
         <Resizable
           sizes={editorUi.verticalSizes()}

@@ -6,6 +6,7 @@ import type {
   StringExpression,
   WorkflowDispatchInput,
   WorkflowStructureEnvItem,
+  WorkflowStructureJobStep,
 } from '../editor.types';
 
 export const withGithubYamlManager = () => {
@@ -394,6 +395,31 @@ export const withGithubYamlManager = () => {
         });
       };
 
+      const addNewJobStep = (
+        jobIdOrIndex: string | number,
+        newStep: WorkflowStructureJobStep,
+      ) => {
+        yamlSession.updater(yaml => {
+          const job = findJob(yaml, jobIdOrIndex)!;
+          if (!job) {
+            return false;
+          }
+          let steps: YAMLSeq<YAMLMap>;
+          if (!job.has('steps')) {
+            steps = new YAML.YAMLSeq<YAMLMap<unknown, unknown>>(yaml.schema);
+            job.set('steps', steps);
+          } else {
+            steps = job.get('steps') as YAMLSeq<YAMLMap>;
+          }
+          const step = new YAML.YAMLMap(yaml.schema);
+          step.add(new Pair('name', newStep.name));
+          if ('run' in newStep) {
+            step.add(new Pair('run', newStep.run ?? ''));
+          }
+          steps.add(step);
+        });
+      };
+
       const setJobStepRun = (
         jobIdOrIndex: string | number,
         stepIndex: number,
@@ -530,6 +556,7 @@ export const withGithubYamlManager = () => {
           setJobStepName,
           setJobStepIf,
           setJobStepRun,
+          addNewJobStep,
           setJobStepUses,
           setJobStepEnv,
           deleteJobStepEnv,

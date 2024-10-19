@@ -1,14 +1,14 @@
 import * as styles from './EditorHeader.css';
-import {headerRepoNavLi, headerRepoNavOl} from './EditorHeader.css';
 import {Button, IconButton, Link} from '@codeui/kit';
 import {provideState} from 'statebuilder';
 import {EditorUiStore} from '../store/ui.store';
-import {type ParentProps, Show} from 'solid-js';
+import {JSX, type ParentProps, Show} from 'solid-js';
 import {Icon} from '#ui/components/Icon';
 import {A, useParams} from '@solidjs/router';
 
 export interface EditorHeaderProps {
   showBack: boolean;
+  name: JSX.Element;
 }
 
 function EditorHeaderActionButton(
@@ -32,17 +32,6 @@ function EditorHeaderActionButton(
 
 export function EditorHeader(props: EditorHeaderProps) {
   const editorUi = provideState(EditorUiStore);
-  const params = useParams();
-
-  const resolvedPath = () => {
-    const [owner, repoName, branchName, ...filePath] = params.path.split('/');
-    return {
-      owner,
-      repoName,
-      branchName,
-      filePath,
-    };
-  };
 
   return (
     <>
@@ -61,38 +50,7 @@ export function EditorHeader(props: EditorHeaderProps) {
           </IconButton>
         </Show>
 
-        <Show when={resolvedPath()} keyed>
-          {path => (
-            <nav class={styles.headerRepoNavContent}>
-              <ol class={headerRepoNavOl}>
-                <li class={headerRepoNavLi}>
-                  <Link
-                    variant={'underline'}
-                    as={A}
-                    href={`/?repo=${path.owner}/${path.repoName}`}
-                  >
-                    {path.owner}/{path.repoName}
-                  </Link>
-                </li>
-                <li class={headerRepoNavLi} role={'separator'}>
-                  <Icon name={'arrow_right_alt'} />
-                </li>
-                <li class={headerRepoNavLi}>
-                  <Icon name={'account_tree'} />
-                  {path.branchName}
-                </li>
-                <li class={headerRepoNavLi} role={'separator'}>
-                  <Icon name={'arrow_right_alt'} />
-                </li>
-                <li class={headerRepoNavLi}>
-                  <Link variant={'underline'} href={''} aria-current={'page'}>
-                    {path.filePath.join('/')}
-                  </Link>
-                </li>
-              </ol>
-            </nav>
-          )}
-        </Show>
+        {props.name}
 
         <div class={styles.headerRightSide}>
           <Button theme={'primary'} size={'sm'}>

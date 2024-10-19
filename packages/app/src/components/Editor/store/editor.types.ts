@@ -30,9 +30,9 @@ export type WorkflowStructureJobBaseStep = {
 
   id: string;
   name?: string;
-  if: string;
+  if?: string;
   // "continue-on-error"?: boolean | ScalarToken;
-  env?: WorkflowStructureEnv;
+  env: WorkflowStructureEnv;
 };
 
 export interface WorkflowStructureJobActionStep

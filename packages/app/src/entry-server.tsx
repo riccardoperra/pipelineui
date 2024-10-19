@@ -2,8 +2,8 @@
 import {createHandler, StartServer} from '@solidjs/start/server';
 
 if (import.meta.env.DEV) {
-  const {server} = await import('./mocks/node');
-  server.listen();
+  // const {server} = await import('./mocks/node');
+  // server.listen();
 }
 
 export default createHandler(() => (

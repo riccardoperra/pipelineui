@@ -18,6 +18,7 @@ import type {
   WorkflowStructureJob,
   WorkflowStructureJobActionStep,
   WorkflowStructureJobRunStep,
+  WorkflowStructureJobStep,
 } from './editor.types';
 import {withProxyCommands} from 'statebuilder/commands';
 import {EditorContext} from '../editor.context';
@@ -160,8 +161,8 @@ export const EditorStore = defineStore<EditorState>(() => ({
           merge: false,
           toStringDefaults: {
             simpleKeys: true,
-            collectionStyle: 'any',
-            flowCollectionPadding: true,
+            collectionStyle: 'block',
+            flowCollectionPadding: false,
           },
         });
         _.yamlSession.init(yaml);
@@ -177,6 +178,8 @@ export const EditorStore = defineStore<EditorState>(() => ({
         const {result, template} = getWorkflowJson('./yaml.json', source);
 
         const resolvedTemplate = await template;
+
+        console.log(resolvedTemplate);
 
         const parsedStructure = getStructureFromWorkflow(
           result,
@@ -252,6 +255,7 @@ export const EditorStore = defineStore<EditorState>(() => ({
         index: number;
       };
       updateJobStepUses: {jobId: string; stepId: string; uses: string | null};
+      addNewJobStep: {jobId: string};
       deleteJobStep: {jobId: string; stepId: string};
     }>({
       devtools: {storeName: 'editor'},
@@ -556,6 +560,28 @@ export const EditorStore = defineStore<EditorState>(() => ({
         ...steps.toSpliced(stepIndex, 1),
       ]);
       _.yamlSession.deleteJobStep(jobIndex, stepIndex);
+    });
+
+    _.hold(_.commands.addNewJobStep, ({jobId}) => {
+      const jobIndex = untrack(() =>
+        _.get.structure.jobs.findIndex(job => job.$nodeId === jobId),
+      );
+      if (jobIndex === -1) {
+        return;
+      }
+      const newIndex = _.get.structure.jobs[jobIndex].steps.length;
+      const step: WorkflowStructureJobStep = {
+        $nodeId: crypto.randomUUID(),
+        $index: newIndex,
+        id: `step-${newIndex}`,
+        name: `Step ${newIndex}`,
+        type: 'run',
+        run: '',
+        env: {array: []},
+        if: undefined,
+      };
+      _.set('structure', 'jobs', jobIndex, 'steps', steps => [...steps, step]);
+      _.yamlSession.addNewJobStep(jobIndex, step);
     });
   })
   .extend((_, context) => {

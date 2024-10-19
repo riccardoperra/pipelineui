@@ -3,6 +3,7 @@ import {vanillaExtractPlugin} from '@vanilla-extract/vite-plugin';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
+  middleware: './src/middleware.ts',
   vite: {
     plugins: [vanillaExtractPlugin(), viteTsConfigPaths()],
     optimizeDeps: {
