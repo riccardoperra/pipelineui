@@ -30,7 +30,7 @@ export function FlowRenderer(props: FlowRendererProps) {
 
   const [selectedNodeId, setSelectedNodeId] = createSignal<string | null>(null);
 
-  const [scene, setScene] = createSignal();
+  const [scene, setScene] = createSignal<HTMLDivElement | null>(null);
 
   createEffect(() => {
     setNodes(props.nodes);

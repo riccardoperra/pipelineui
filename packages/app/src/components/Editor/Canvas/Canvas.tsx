@@ -14,7 +14,6 @@ export function Canvas() {
   const [mappedNodes, setMappedNodes] = createSignal<FlowNodeMap>({});
   const [connections, setConnections] = createSignal<FlowConnection[]>([]);
   const [size, setSize] = createSignal({width: 0, height: 0});
-  const [elkNode, setElkNode] = createSignal<ElkNode | null>(null);
 
   createEffect(() => {
     const mappedNodes: FlowNodeMap = editor.get.structure.jobs.reduce(
@@ -133,6 +132,10 @@ export function Canvas() {
 
         batch(() => {
           setSize(() => ({width: layout.width!, height: layout.height!}));
+          console.log('new', {
+            mappedNodes,
+            edges,
+          });
           setMappedNodes(mappedNodes);
           setConnections(edges);
         });

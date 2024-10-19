@@ -17,11 +17,9 @@ export interface NodeStoreContextValue {
   registerNode: (data: RegisterNodeOptions) => () => void;
   nodes: FlowNodeMap;
   renderNode: (node: FlowNode) => JSX.Element;
-  sceneRef: Accessor<HTMLDivElement>;
-  setSceneRef: Setter<HTMLDivElement>;
+  sceneRef: Accessor<HTMLDivElement | null>;
+  setSceneRef: Setter<HTMLDivElement | null>;
   connections: FlowConnection[];
-  width: number;
-  height: number;
 }
 
 export const NodeStoreContext = createContext<NodeStoreContextValue>();

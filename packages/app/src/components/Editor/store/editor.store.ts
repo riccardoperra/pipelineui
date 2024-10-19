@@ -218,6 +218,7 @@ export const EditorStore = defineStore<EditorState>(() => ({
       deleteEnvironmentVariableByIndex: {index: number};
 
       updateJobName: {jobId: string; name: string | null};
+      updateJobNeeds: {jobId: string; needs: string[]};
       updateJobRunsOn: {jobId: string; runsOn: string | null};
       updateJobEnvironment: {jobId: string; value: JobEnvironment};
       addNewJobEnv: {jobId: string; value: WorkflowStructureEnvItem};
@@ -341,6 +342,14 @@ export const EditorStore = defineStore<EditorState>(() => ({
       );
       _.set('structure', 'jobs', index, 'runsOn', runsOn ?? '');
       _.yamlSession.setJobRunsOn(index, runsOn ?? '');
+    });
+
+    _.hold(_.commands.updateJobNeeds, ({jobId, needs}) => {
+      const index = _.get.structure.jobs.findIndex(
+        job => job.$nodeId === jobId,
+      );
+      _.set('structure', 'jobs', index, 'needs', needs);
+      _.yamlSession.setJobNeeds(index, needs ?? []);
     });
 
     _.hold(_.commands.updateJobStepName, ({jobId, stepId, name}) => {
@@ -506,5 +515,10 @@ export const EditorStore = defineStore<EditorState>(() => ({
         ...steps.toSpliced(stepIndex, 1),
       ]);
       _.yamlSession.deleteJobStep(jobIndex, stepIndex);
+    });
+  })
+  .extend((_, context) => {
+    context.hooks.onInit(() => {
+      _.watchCommand([_.commands.updateJobNeeds]).subscribe(command => {});
     });
   });

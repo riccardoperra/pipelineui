@@ -217,7 +217,9 @@ export const withGithubYamlManager = () => {
         yamlSession.updater(yaml => {
           const job = findJob(yaml, jobIdOrIndex)!;
           if (!job.has('needs')) {
-            job.set('needs', needs);
+            const seq = new YAML.YAMLSeq();
+            needs.forEach(need => seq.add(need));
+            job.set('needs', seq);
           } else {
             const needsSeq = job.get('needs') as YAMLSeq;
             const jsonSeq = needsSeq.toJSON();

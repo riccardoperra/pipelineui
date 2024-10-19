@@ -71,13 +71,17 @@ export function JobForm() {
         </FullWidthPanelRow>
 
         <FullWidthPanelRow>
-          <Select
+          <Select<string[]>
             aria-label={'Needs input'}
             multiple={true}
             options={needsOptions()}
             value={job().needs}
             onChange={options => {
-              console.log('change needs', options);
+              editorStore.actions.updateJobNeeds({
+                jobId: job().$nodeId,
+                // TODO: Fix select types
+                needs: options as unknown as string[],
+              });
             }}
             size={'sm'}
             theme={'filled'}
