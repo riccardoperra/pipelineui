@@ -32,23 +32,25 @@ export function EnvironmentVariablesForm(props: EnvironmentVariablesFormProps) {
         )}
       />
 
-      <Show when={envItems().length}>
-        <PanelContent>
-          <PanelAccordion>
-            <For each={envItems()}>
-              {(input, index) => {
-                return (
-                  <EnvironmentVariablesItemForm
-                    value={input}
-                    index={index()}
-                    onChange={value => props.onUpdate(value, index())}
-                    onDelete={() => props.onDelete(input, index())}
-                  />
-                );
-              }}
-            </For>
-          </PanelAccordion>
-        </PanelContent>
+      <Show when={!!envItems().length && envItems()}>
+        {envItems => (
+          <PanelContent>
+            <PanelAccordion>
+              <For each={envItems()}>
+                {(input, index) => {
+                  return (
+                    <EnvironmentVariablesItemForm
+                      value={input}
+                      index={index()}
+                      onChange={value => props.onUpdate(value, index())}
+                      onDelete={() => props.onDelete(input, index())}
+                    />
+                  );
+                }}
+              </For>
+            </PanelAccordion>
+          </PanelContent>
+        )}
       </Show>
     </>
   );

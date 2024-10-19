@@ -46,7 +46,6 @@ export function YamlEditor(props: YamlEditorProps) {
       },
     }),
   );
-  createEditorControlledValue(editorView, () => props.code ?? '');
   createExtension(() => lintGutter());
 
   createExtension(() => [
@@ -70,5 +69,6 @@ export function YamlEditor(props: YamlEditorProps) {
     ];
   }, editorView);
 
+  createEditorControlledValue(editorView, () => props.code ?? '');
   return <div ref={setRef} style={{height: '100%', width: '100%'}}></div>;
 }

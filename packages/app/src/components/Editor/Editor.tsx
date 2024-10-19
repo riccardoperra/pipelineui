@@ -143,11 +143,16 @@ export function Editor() {
                 </Resizable.Panel>
 
                 <EditorResizableHandler
-                  hidden={editorUi.get.leftPanel === 'none'}
+                  hidden={editorUi.get.bottomPanel === 'none'}
                   position={'bottom'}
                 />
 
-                <Resizable.Panel collapsible class={styles.resizablePanel}>
+                <Resizable.Panel
+                  initialSize={0}
+                  minSize={0.1}
+                  collapsible
+                  class={styles.resizablePanel}
+                >
                   <DiagnosticPanel />
                 </Resizable.Panel>
               </>

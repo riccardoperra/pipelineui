@@ -74,6 +74,7 @@ export const EditorUiStore = defineStore<EditorUiState>(() => ({
         context.collapse(1);
       } else {
         context.expand(1);
+        context.resize(1, 0.2, 'preceding');
       }
     });
   });
