@@ -2,6 +2,7 @@ import {defineStore} from 'statebuilder';
 import {withProxyCommands} from 'statebuilder/commands';
 import {createEffect, createSignal} from 'solid-js';
 import Resizable from '@corvu/resizable';
+import {cookieStorage, makePersisted} from '@solid-primitives/storage';
 
 interface EditorUiState {
   leftPanel: 'code' | 'merge' | 'none';
@@ -30,11 +31,35 @@ export const EditorUiStore = defineStore<EditorUiState>(() => ({
     const [horizontalResizableContext, setHorizontalResizableContext] =
       createSignal<ReturnType<typeof Resizable.useContext>>();
 
+    const [horizontalSizes, setHorizontalSizes] = makePersisted(
+      createSignal<number[]>([]),
+      {
+        storage: cookieStorage,
+        name: 'horizontal-resizable-sizes',
+      },
+    );
+
+    const [verticalSizes, setVerticalSizes] = makePersisted(
+      createSignal<number[]>([1, 0]),
+      {
+        storage: cookieStorage,
+        name: 'vertical-resizable-sizes',
+      },
+    );
+
+    if (horizontalSizes()[1] !== 0) {
+      _.set('bottomPanel', 'diagnostic');
+    }
+
     return {
       verticalResizableContext,
       setVerticalResizableContext,
       horizontalResizableContext,
       setHorizontalResizableContext,
+      horizontalSizes,
+      setHorizontalSizes,
+      verticalSizes,
+      setVerticalSizes,
     };
   })
   .extend(_ => {

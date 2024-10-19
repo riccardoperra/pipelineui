@@ -40,6 +40,25 @@ export function JobForm() {
             }}
             size={'sm'}
             theme={'filled'}
+            label={'Id'}
+            value={job()?.id}
+            onChange={value => {
+              editorStore.actions.updateJobId({
+                jobId: job().$nodeId,
+                id: value,
+              });
+            }}
+          />
+        </FullWidthPanelRow>
+
+        <FullWidthPanelRow>
+          <TextField
+            slotClasses={{
+              root: formStyles.inlineInputRoot,
+              label: formStyles.inlineInputLabel,
+            }}
+            size={'sm'}
+            theme={'filled'}
             label={'Name'}
             value={job()?.name}
             onChange={value => {

@@ -29,7 +29,8 @@ export function Editor() {
       <EditorHeader showBack />
       <div class={styles.editor}>
         <Resizable
-          initialSizes={[1, 0]}
+          sizes={editorUi.verticalSizes()}
+          onSizesChange={editorUi.setVerticalSizes}
           orientation={'vertical'}
           class={styles.editorResizable}
         >
@@ -43,6 +44,8 @@ export function Editor() {
                   <Resizable
                     orientation={'horizontal'}
                     class={styles.editorResizable}
+                    sizes={editorUi.horizontalSizes()}
+                    onSizesChange={editorUi.setHorizontalSizes}
                   >
                     {() => {
                       const context = Resizable.useContext();
@@ -148,7 +151,6 @@ export function Editor() {
                 />
 
                 <Resizable.Panel
-                  initialSize={0}
                   minSize={0.1}
                   collapsible
                   class={styles.resizablePanel}

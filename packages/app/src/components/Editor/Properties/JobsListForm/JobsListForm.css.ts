@@ -20,3 +20,14 @@ export const listItem = style({
   justifyContent: 'space-between',
   paddingLeft: appTheme.spacing['2'],
 });
+
+export const listItemContent = style({
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+});
+
+export const listItemActions = style({
+  flexShrink: 0,
+  minWidth: 0,
+});

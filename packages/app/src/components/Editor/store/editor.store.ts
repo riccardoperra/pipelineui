@@ -217,7 +217,10 @@ export const EditorStore = defineStore<EditorState>(() => ({
       // TODO: should add $nodeId
       deleteEnvironmentVariableByIndex: {index: number};
 
+      addNewJob: void;
+      deleteJob: {jobId: string};
       updateJobName: {jobId: string; name: string | null};
+      updateJobId: {jobId: string; id: string};
       updateJobNeeds: {jobId: string; needs: string[]};
       updateJobRunsOn: {jobId: string; runsOn: string | null};
       updateJobEnvironment: {jobId: string; value: JobEnvironment};
@@ -277,6 +280,44 @@ export const EditorStore = defineStore<EditorState>(() => ({
     _.hold(_.commands.deleteEnvironmentVariableByIndex, ({index}) => {
       _.set('structure', 'env', 'array', array => array.toSpliced(index, 1));
       _.yamlSession.deleteEnvironmentVariable(index);
+    });
+
+    _.hold(_.commands.addNewJob, () => {
+      const job: WorkflowStructureJob = {
+        $nodeId: crypto.randomUUID().toString(),
+        needs: [],
+        name: 'New job',
+        steps: [],
+        id: 'new-job',
+        env: {array: []},
+        runsOn: '',
+        environment: null,
+        $index: _.get.structure.jobs.length,
+      };
+
+      _.set('structure', 'jobs', jobs => [...jobs, job]);
+      _.yamlSession.addNewJob();
+    });
+
+    _.hold(_.commands.deleteJob, ({jobId}) => {
+      const index = _.get.structure.jobs.findIndex(
+        job => job.$nodeId === jobId,
+      );
+      if (index !== -1) {
+        const existingJob = _.get.structure.jobs[index];
+        _.set('structure', 'jobs', jobs =>
+          jobs.filter(job => job.id !== existingJob.id),
+        );
+        _.yamlSession.removeJob(existingJob.id);
+      }
+    });
+
+    _.hold(_.commands.updateJobId, ({jobId, id}) => {
+      const index = _.get.structure.jobs.findIndex(
+        job => job.$nodeId === jobId,
+      );
+      _.set('structure', 'jobs', index, 'id', id);
+      _.yamlSession.setJobId(index, id);
     });
 
     _.hold(_.commands.updateJobName, ({jobId, name}) => {

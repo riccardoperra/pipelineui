@@ -1,4 +1,9 @@
-import {container, listItem} from './JobsListForm.css';
+import {
+  container,
+  listItem,
+  listItemActions,
+  listItemContent,
+} from './JobsListForm.css';
 import {createSignal, For} from 'solid-js';
 import {provideState} from 'statebuilder';
 import {
@@ -23,7 +28,12 @@ export function JobsListForm() {
       <PanelHeader
         label={'Jobs'}
         rightContent={() => (
-          <PanelPlusButton aria-label={'Add job step'} onClick={() => {}} />
+          <PanelPlusButton
+            aria-label={'Add job step'}
+            onClick={() => {
+              editorStore.actions.addNewJob();
+            }}
+          />
         )}
       />
       <ul class={container}>
@@ -32,9 +42,9 @@ export function JobsListForm() {
             const [deleting, setDeleting] = createSignal(false);
             return (
               <li class={listItem}>
-                {job.name || job.id}
+                <span class={listItemContent}>{job.name || job.id}</span>
 
-                <div>
+                <div class={listItemActions}>
                   <IconButton
                     size={'xs'}
                     theme={'secondary'}
@@ -86,10 +96,9 @@ export function JobsListForm() {
                           size={'xs'}
                           onClick={() => {
                             setDeleting(false);
-                            // editorStore.actions.deleteJob({
-                            //   jobId: editorStore.selectedJob().$nodeId,
-                            //   stepId: step.$nodeId,
-                            // });
+                            editorStore.actions.deleteJob({
+                              jobId: job.$nodeId,
+                            });
                           }}
                         >
                           Confirm

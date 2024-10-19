@@ -19,7 +19,9 @@ import {languageServerPlugin} from './lsp/plugin';
 import {githubLanguageServerTransport} from './lsp/plugins/githubLanguageServerTransport';
 import {diagnosticState} from './lsp/plugins/diagnostics';
 import type {Diagnostic} from 'vscode-languageserver-protocol';
-import {createEffect, onMount} from 'solid-js';
+import {createEffect, onCleanup, onMount} from 'solid-js';
+import {editor} from '../Editor.css';
+import {SelectionRange} from '@codemirror/state';
 
 interface YamlEditorProps {
   code: string;
@@ -38,7 +40,7 @@ export function YamlEditor(props: YamlEditorProps) {
     onValueChange: props.setCode,
   });
 
-  createEffect(() => {
+  onMount(() => {
     props.onMount(editorView());
   });
 
@@ -77,6 +79,22 @@ export function YamlEditor(props: YamlEditorProps) {
     ];
   }, editorView);
 
-  createEditorControlledValue(editorView, () => props.code ?? '');
+  createEffect(() => {
+    const code = props.code;
+    const view = editorView();
+    if (!view) {
+      return;
+    }
+    const to = view.state.doc.length;
+    // TODO: should restore selection
+    editorView().dispatch({
+      changes: {
+        from: 0,
+        to: to,
+        insert: code ?? '',
+      },
+    });
+  });
+
   return <div ref={setRef} style={{height: '100%', width: '100%'}}></div>;
 }

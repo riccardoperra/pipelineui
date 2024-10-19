@@ -197,6 +197,41 @@ export const withGithubYamlManager = () => {
         return steps.get(stepIndex);
       };
 
+      const addNewJob = () => {
+        yamlSession.updater(yaml => {
+          let jobs = yaml.get('jobs') as YAMLMap<string, YAMLMap> | null;
+          if (!jobs) {
+            jobs = new YAML.YAMLMap<string, YAMLMap<unknown, unknown>>();
+            yaml.set('jobs', jobs);
+          }
+
+          const job = new YAML.YAMLMap();
+          job.set('steps', new YAML.YAMLMap());
+          job.set('runs-on', '');
+          jobs.add(new Pair('new-job', job));
+        });
+      };
+
+      const removeJob = (jobId: string) => {
+        yamlSession.updater(yaml => {
+          let jobs = yaml.get('jobs') as YAMLMap<string, YAMLMap> | null;
+          if (!jobs) {
+            return;
+          }
+          jobs.delete(jobId);
+        });
+      };
+
+      const setJobId = (index: number, id: string) => {
+        yamlSession.updater(yaml => {
+          const jobs = yaml.get('jobs') as YAMLMap<Scalar<string>, YAMLMap>;
+          const pair = jobs.items[index];
+          if (pair) {
+            pair.key = new Scalar(id);
+          }
+        });
+      };
+
       const setJobName = (jobIdOrIndex: string | number, name: string) => {
         yamlSession.updater(yaml => {
           const job = findJob(yaml, jobIdOrIndex)!;
@@ -483,6 +518,9 @@ export const withGithubYamlManager = () => {
           setEnvironmentVariable,
           deleteEnvironmentVariable,
           setWorkflowDispatch,
+          addNewJob,
+          removeJob,
+          setJobId,
           setJobName,
           setJobNeeds,
           setJobRunsOn,
