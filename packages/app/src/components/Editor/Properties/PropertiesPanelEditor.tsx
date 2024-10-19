@@ -3,6 +3,7 @@ import {WorkflowConcurrencyForm} from './WorkflowConcurrencyForm/WorkflowConcurr
 import {PanelGroup} from '#editor-layout/Panel/Form/PanelGroup';
 import {PropertiesEnvironmentVariablesForm} from './EnvironmentVariablesForm/EnvironmentVariablesForm';
 import {PanelDivider} from '#editor-layout/Panel/Form/PanelDivider';
+import {JobsListForm} from './JobsListForm/JobsListForm';
 
 export function PropertiesPanelEditor() {
   return (
@@ -15,7 +16,7 @@ export function PropertiesPanelEditor() {
 
       <PanelDivider />
 
-      <WorkflowConcurrencyForm />
+      <JobsListForm />
     </PanelGroup>
   );
 }
