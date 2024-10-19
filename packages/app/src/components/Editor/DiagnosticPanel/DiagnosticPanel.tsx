@@ -6,10 +6,9 @@ import {
 } from './DiagnosticPanel.css';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '#editor-store/editor.store';
-import {createEffect, For} from 'solid-js';
+import {For} from 'solid-js';
 import {Icon} from '#ui/components/Icon';
 import type {Diagnostic} from 'vscode-languageserver-protocol';
-import {unwrap} from 'solid-js/store';
 
 const diagnosticIconSeverity = {
   1: 'error',
@@ -28,21 +27,8 @@ export function DiagnosticPanel() {
     if (!view) {
       return;
     }
-
     const line = view.state.doc.line(diagnostic.range.start.line + 1);
     const endLine = view.state.doc.line(diagnostic.range.end.line + 1);
-
-    console.log({
-      line,
-      head: line.from,
-      anchor: diagnostic.range.end.character,
-    });
-
-    console.log({
-      line,
-      endLine,
-      diagnostic: unwrap({...diagnostic}),
-    });
     view.dispatch({
       selection: {
         head: line.from + diagnostic.range.start.character,
@@ -51,10 +37,6 @@ export function DiagnosticPanel() {
       scrollIntoView: true,
     });
   };
-
-  createEffect(() => {
-    console.log(diagnostics());
-  });
 
   return (
     <div class={panel}>

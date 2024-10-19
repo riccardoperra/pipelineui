@@ -5,7 +5,13 @@ import {
 } from 'solid-codemirror';
 import {fleetDark} from './fleetTheme';
 import {yaml} from '@codemirror/lang-yaml';
-import {EditorView, keymap, lineNumbers} from '@codemirror/view';
+import {
+  EditorView,
+  keymap,
+  lineNumbers,
+  highlightActiveLine,
+  highlightActiveLineGutter,
+} from '@codemirror/view';
 import {search, searchKeymap} from '@codemirror/search';
 import {lintGutter, lintKeymap} from '@codemirror/lint';
 import {defaultKeymap} from '@codemirror/commands';
@@ -52,6 +58,8 @@ export function YamlEditor(props: YamlEditorProps) {
     keymap.of([...defaultKeymap, ...searchKeymap, ...lintKeymap]),
     search(),
     lineNumbers(),
+    highlightActiveLine(),
+    highlightActiveLineGutter(),
   ]);
 
   createLazyCompartmentExtension(async () => {
