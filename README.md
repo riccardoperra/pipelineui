@@ -26,12 +26,14 @@ The YAML editor has been made with:
 
 > [!WARNING]
 >
-> The source code of @actions/workflow-parser has been altered in order to be built without getting errors and to
-> extend some functionality that was not available before (e.g. expression parsing)
+> The source code of @actions/workflow-parser has been altered in order to be built into node/browser without getting errors and to
+> extend some functionalities that were not available before (e.g. expression parsing)
 >
 > Read more about this in the package [README](./packages/workflow-parser/README.md).
-> Their MIT License: https://github.com/actions/languageservices/blob/main/LICENSE
-> [Patch file](./patches/@actions__workflow-parser@0.3.13.patch)
+> 
+> [MIT License](https://github.com/actions/languageservices/blob/main/LICENSE)
+> 
+> [My patch file](./patches/@actions__workflow-parser@0.3.13.patch)
 
 The UI has been built with:
 
@@ -46,7 +48,7 @@ Flow diagram has been built from scratch taking advantage of some other dependen
 
 - [elkjs](https://github.com/kieler/elkjs): Elk layout algorithm, used to calculate the flow item positions
 - [panzoom](https://github.com/anvaka/panzoom): Cross-browser compatible pan and zoom library
-- [@xyflow/system](): Core of xyflow, currently using to build the smooth edge curve
+- [@xyflow/system](): Core of xyflow, currently used to build the smooth edge curve
   svg (https://github.com/xyflow/xyflow/blob/97fdff59d40071aee0b3192f7b571c6bdd4d09fd/packages/system/src/utils/edges/smoothstep-edge.ts#L215)
 
 ---
