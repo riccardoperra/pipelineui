@@ -62,8 +62,8 @@ export const signupWithGithub = action(async () => {
   const {account} = await createAdminClient();
 
   const origin = getHeaders().origin;
-  const successUrl = `https://pipelineui.dev/api/oauth`;
-  const failureUrl = `https://pipelineui.dev/`;
+  const successUrl = `${origin}/api/oauth`;
+  const failureUrl = `${origin}/`;
 
   try {
     const redirectUrl = await account.createOAuth2Token(

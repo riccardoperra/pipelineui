@@ -8,17 +8,19 @@ import {
 import {adjectives, colors, uniqueNamesGenerator} from 'unique-names-generator';
 import type {EditorParsedRepository} from '../components/Editor/editor.context';
 
-const databaseId = import.meta.env.VITE_APPWRITE_CLOUD_DATABASE_ID;
-const scratchCollectionId = import.meta.env
-  .VITE_APPWRITE_CLOUD_SCRATCH_COLLECTION_ID;
+function getScratchAppwriteVars() {
+  'use server';
+  return {
+    databaseId: process.env.APPWRITE_CLOUD_DATABASE_ID!,
+    scratchCollectionId: process.env.APPWRITE_CLOUD_SCRATCH_COLLECTION_ID!,
+  };
+}
 
 export const updateScratch = action(async (id: string, newCode: string) => {
   'use server';
   const projectId = process.env.VITE_APPWRITE_CLOUD_PROJECT_ID!;
   const endpoint = process.env.VITE_APPWRITE_CLOUD_URL!;
-  const databaseId = process.env.VITE_APPWRITE_CLOUD_DATABASE_ID!;
-  const scratchCollectionId =
-    process.env.VITE_APPWRITE_CLOUD_SCRATCH_COLLECTION_ID!;
+  const {databaseId, scratchCollectionId} = getScratchAppwriteVars();
   const user = await getLoggedInUser();
   if (!user) {
     return;
@@ -39,9 +41,7 @@ export const updateScratch = action(async (id: string, newCode: string) => {
 
 export const createScratch = action(async () => {
   'use server';
-  const databaseId = process.env.VITE_APPWRITE_CLOUD_DATABASE_ID!;
-  const scratchCollectionId =
-    process.env.VITE_APPWRITE_CLOUD_SCRATCH_COLLECTION_ID!;
+  const {databaseId, scratchCollectionId} = getScratchAppwriteVars();
   const user = await getLoggedInUser();
 
   if (!user) {
@@ -112,9 +112,7 @@ export const createScratchFork = action(
     initialCode: string,
   ) => {
     'use server';
-    const databaseId = process.env.VITE_APPWRITE_CLOUD_DATABASE_ID!;
-    const scratchCollectionId =
-      process.env.VITE_APPWRITE_CLOUD_SCRATCH_COLLECTION_ID!;
+    const {databaseId, scratchCollectionId} = getScratchAppwriteVars();
     const user = await getLoggedInUser();
     if (!user) {
       return;
@@ -168,13 +166,8 @@ export const deleteScratch = action(async scratchId => {
     return;
   }
 
-  const client = new Client()
-    .setProject('6713d930003dd483eb11')
-    .setEndpoint('https://cloud.appwrite.io/v1')
-    .setSelfSigned(true)
-    .setSession(user.$id);
-
-  const database = new Databases(client);
+  const {database} = await createSessionClient();
+  const {databaseId, scratchCollectionId} = getScratchAppwriteVars();
 
   return json(
     await database.deleteDocument(databaseId, scratchCollectionId, scratchId),
@@ -186,9 +179,7 @@ export const getScratch = cache(async (id: string) => {
   'use server';
 
   const {database} = await createAdminClient();
-  const databaseId = process.env.VITE_APPWRITE_CLOUD_DATABASE_ID!;
-  const scratchCollectionId =
-    process.env.VITE_APPWRITE_CLOUD_SCRATCH_COLLECTION_ID!;
+  const {databaseId, scratchCollectionId} = getScratchAppwriteVars();
 
   try {
     return await database.getDocument(databaseId, scratchCollectionId, id);
@@ -203,9 +194,7 @@ export const listUserScratches = cache(async () => {
   if (!user) {
     return {documents: [], total: 0};
   }
-  const databaseId = process.env.VITE_APPWRITE_CLOUD_DATABASE_ID!;
-  const scratchCollectionId =
-    process.env.VITE_APPWRITE_CLOUD_SCRATCH_COLLECTION_ID!;
+  const {databaseId, scratchCollectionId} = getScratchAppwriteVars();
   const {database} = await createSessionClient();
   return database.listDocuments(databaseId, scratchCollectionId, [
     Query.equal('userId', user.$id),
