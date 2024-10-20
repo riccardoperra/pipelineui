@@ -39,6 +39,13 @@ export async function getLoggedInUser() {
 export async function createAdminClient() {
   'use server';
   const apiKey = import.meta.env.VITE_APPWRITE_CLOUD_FULL_ACCESS_API_KEY;
+
+  console.log({
+    apiKey,
+    projectId,
+    endpoint,
+  });
+
   const client = new Client()
     .setProject(projectId)
     .setEndpoint(endpoint)
@@ -60,12 +67,18 @@ export const signupWithGithub = action(async () => {
   const {account} = await createAdminClient();
 
   const origin = getHeaders().origin;
-  const successUrl = `${origin}/api/oauth`;
-  const failureUrl = `${origin}/`;
-  const redirectUrl = await account.createOAuth2Token(
-    OAuthProvider.Github,
-    successUrl,
-    failureUrl,
-  );
-  return redirect(redirectUrl);
+  const successUrl = `https://pipelineui.dev/api/oauth`;
+  const failureUrl = `https://pipelineui.dev/`;
+
+  try {
+    const redirectUrl = await account.createOAuth2Token(
+      OAuthProvider.Github,
+      successUrl,
+      failureUrl,
+    );
+    return redirect(redirectUrl);
+  } catch (e) {
+    console.error(e);
+    return redirect('error');
+  }
 }, 'signup-with-github');
