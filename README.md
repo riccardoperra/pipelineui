@@ -13,7 +13,9 @@ updates the YAML configuration files, ensuring seamless integration with GitHub.
 
 PipelineUI is entirely built with Solid and [SolidStart](https://github.com/solidjs/solid-start).
 
-There are a few core external dependencies that should be listed here for the awesome work:
+There are a few core external dependencies that should be listed here for the awesome work.
+
+The YAML editor has been made with:
 
 - [CodeMirror6](https://codemirror.net/): used to display the YAML editor and merge view. The LSP integration is an
   adapted fork of [codemirror-languageserver](https://github.com/FurqanSoftware/codemirror-languageserver), which was a
@@ -22,12 +24,16 @@ There are a few core external dependencies that should be listed here for the aw
   workflows and expressions. This was used to parse the workflow files and validate them, and enhance the editor code
   through linting and hover-in code documentation.
 
-> [!NOTE]
+> [!WARNING]
 >
 > The source code of @actions/workflow-parser has been altered in order to be built without getting errors and to
 > extend some functionality that was not available before (e.g. expression parsing)
 >
-> Read more about this in the package [README](./packages/workflow-parser/README.md)
+> Read more about this in the package [README](./packages/workflow-parser/README.md).
+> Their MIT License: https://github.com/actions/languageservices/blob/main/LICENSE
+> [Patch file](./patches/@actions__workflow-parser@0.3.13.patch)
+
+The UI has been built with:
 
 - [@kobalte/core](https://github.com/kobaltedev/kobalte): used to build accessible components in the UI
 - [@solid-primitives/*](https://github.com/solidjs-community/solid-primitives): SolidJS primitives library
