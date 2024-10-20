@@ -70,13 +70,18 @@ export const signupWithGithub = action(async () => {
     failureUrl,
   });
 
-  const redirectUrl = await account.createOAuth2Token(
-    OAuthProvider.Github,
-    successUrl,
-    failureUrl,
-  );
+  try {
+    const redirectUrl = await account.createOAuth2Token(
+      OAuthProvider.Github,
+      successUrl,
+      failureUrl,
+    );
 
-  console.warn(redirectUrl);
-
-  return redirect(redirectUrl);
+    return redirect(redirectUrl);
+  } catch (e) {
+    console.log('test error', {
+      e,
+    });
+    throw new Error('Error creating oauth2 token');
+  }
 }, 'signup-with-github');
