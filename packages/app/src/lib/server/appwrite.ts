@@ -43,7 +43,6 @@ export async function createAdminClient() {
   const client = new Client()
     .setProject(projectId)
     .setEndpoint(endpoint)
-    .setSelfSigned(true)
     .setKey(apiKey);
 
   return {
