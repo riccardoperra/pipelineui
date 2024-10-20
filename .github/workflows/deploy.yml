@@ -31,6 +31,7 @@ jobs:
         working-directory: packages/app/.output
         run: |
           pnpm i -g @railway/cli
+          pnpm railway login --browserless
           pnpm railway link --environment production ${{secrets.RAILWAY_API_PROJECT_ID}}
           pnpm railway up -s pipelineui-server
         env:
