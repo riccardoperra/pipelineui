@@ -65,11 +65,18 @@ export const signupWithGithub = action(async () => {
   const successUrl = `${origin}/api/oauth`;
   const failureUrl = `${origin}/`;
 
+  console.log({
+    successUrl,
+    failureUrl,
+  });
+
   const redirectUrl = await account.createOAuth2Token(
     OAuthProvider.Github,
     successUrl,
     failureUrl,
   );
 
+  console.warn(redirectUrl);
+
   return redirect(redirectUrl);
-});
+}, 'signup-with-github');
