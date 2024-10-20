@@ -5,8 +5,8 @@ Built with SolidStart, this tool simplifies the process of defining GitHub pipel
 by allowing users to visually edit and update workflows. It automatically generates and
 updates the YAML configuration files, ensuring seamless integration with GitHub.
 
-> [!NOTE]  
-> 
+> [!NOTE]
+>
 > This project has been made for [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement)
 
 ## 🤖 Tech stack
@@ -21,12 +21,14 @@ There are a few core external dependencies that should be listed here for the aw
 - [actions/languageservices](https://github.com/actions/languageservices): The language service repo for GitHub
   workflows and expressions. This was used to parse the workflow files and validate them, and enhance the editor code
   through linting and hover-in code documentation.
-  > [!NOTE]
-  > 
-  > The source code of @actions/workflow-parser has been altered in order to be built without getting errors and to
-  extend some functionality that was not available before (e.g. expression parsing)
-  >
-  > Read more about this in the package [README](./packages/workflow-parser/README.md)
+
+> [!NOTE]
+>
+> The source code of @actions/workflow-parser has been altered in order to be built without getting errors and to
+> extend some functionality that was not available before (e.g. expression parsing)
+>
+> Read more about this in the package [README](./packages/workflow-parser/README.md)
+
 - [@kobalte/core](https://github.com/kobaltedev/kobalte): used to build accessible components in the UI
 - [@solid-primitives/*](https://github.com/solidjs-community/solid-primitives): SolidJS primitives library
 - [vanilla-extract](https://vanilla-extract.style/): Zero-runtime CSS in typescript
@@ -40,7 +42,6 @@ Flow diagram has been built from scratch taking advantage of some other dependen
 - [panzoom](https://github.com/anvaka/panzoom): Cross-browser compatible pan and zoom library
 - [@xyflow/system](): Core of xyflow, currently using to build the smooth edge curve
   svg (https://github.com/xyflow/xyflow/blob/97fdff59d40071aee0b3192f7b571c6bdd4d09fd/packages/system/src/utils/edges/smoothstep-edge.ts#L215)
-
 
 ---
 
@@ -57,7 +58,6 @@ Mine dependencies:
 - [solid-codemirror](https://github.com/riccardoperra/solid-codemirror): SolidJS adapter for CodeMirror
 
 ---
-
 
 ## Features
 
