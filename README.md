@@ -24,19 +24,6 @@ The UI has been built with:
 - [vanilla-extract](https://vanilla-extract.style/): Zero-runtime CSS in typescript
 - [corvu](https://corvu.dev/): UI primitives for SolidJS
 
-> [!WARNING]
->
-> The source code of @actions/workflow-parser has been altered in order to be built into node/browser without getting errors and to
-> extend some functionalities that were not available before (e.g. expression parsing).
-> 
-> Currently @actions/languageserver has been wrapped to ship only browser compatible packages and the patche workflow-parser in order to skip all the used node dependencies.
->
-> Read more about this in the package [README](./packages/workflow-parser/README.md).
->
-> [MIT License](https://github.com/actions/languageservices/blob/main/LICENSE)
->
-> [My patch file](./patches/@actions__workflow-parser@0.3.13.patch)
-
 ---
 
 ### YAML Editor
@@ -47,6 +34,20 @@ The UI has been built with:
 - [actions/languageservices](https://github.com/actions/languageservices): The language service repo for GitHub
   workflows and expressions. This was used to parse the workflow files and validate them, and enhance the editor code
   through linting and hover-in code documentation.
+
+> [!WARNING]
+>
+> The source code of @actions/workflow-parser has been altered in order to be built into node/browser without getting errors and to
+> extend some functionalities that were not available before (e.g. expression parsing).
+>
+> Currently @actions/languageserver has been wrapped to ship only browser compatible packages and the patche workflow-parser in order to skip all the used node dependencies.
+>
+> Read more about this in the package [README](./packages/workflow-parser/README.md).
+>
+> [MIT License](https://github.com/actions/languageservices/blob/main/LICENSE)
+>
+> [My patch file](./patches/@actions__workflow-parser@0.3.13.patch)
+
 
 ---
 
