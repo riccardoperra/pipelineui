@@ -22,6 +22,7 @@ There are a few core external dependencies that should be listed here for the aw
   workflows and expressions. This was used to parse the workflow files and validate them, and enhance the editor code
   through linting and hover-in code documentation.
   > [!NOTE]
+  > 
   > The source code of @actions/workflow-parser has been altered in order to be built without getting errors and to
   extend some functionality that was not available before (e.g. expression parsing)
   >
