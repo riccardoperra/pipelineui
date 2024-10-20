@@ -70,6 +70,8 @@ to provide authentication and the database persistence.
 
 Most of the code is available into [packages/app/lib/server](packages/app/src/lib/server).
 
+---
+
 ### Other dependencies
 
 This projects also uses some of mine older dependencies that which were used to speed up the writing of the application.
