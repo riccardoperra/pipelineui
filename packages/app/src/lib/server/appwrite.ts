@@ -1,8 +1,7 @@
-import {Account, Client, Databases} from 'node-appwrite';
+import {Account, Client, Databases, OAuthProvider} from 'node-appwrite';
 import {getHeaders} from 'vinxi/http';
 import {getSession} from './session';
 import {action, redirect} from '@solidjs/router';
-import {OAuthProvider} from 'appwrite';
 
 const projectId = import.meta.env.VITE_APPWRITE_CLOUD_PROJECT_ID;
 const endpoint = import.meta.env.VITE_APPWRITE_CLOUD_URL;
@@ -63,24 +62,10 @@ export const signupWithGithub = action(async () => {
   const origin = getHeaders().origin;
   const successUrl = `${origin}/api/oauth`;
   const failureUrl = `${origin}/`;
-
-  console.log({
+  const redirectUrl = await account.createOAuth2Token(
+    OAuthProvider.Github,
     successUrl,
     failureUrl,
-  });
-
-  try {
-    const redirectUrl = await account.createOAuth2Token(
-      OAuthProvider.Github,
-      successUrl,
-      failureUrl,
-    );
-
-    return redirect(redirectUrl);
-  } catch (e) {
-    console.log('test error', {
-      e,
-    });
-    throw new Error('Error creating oauth2 token');
-  }
+  );
+  return redirect(redirectUrl);
 }, 'signup-with-github');
