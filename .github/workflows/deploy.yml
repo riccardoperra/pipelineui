@@ -28,7 +28,9 @@ jobs:
           pnpm --filter @pipelineui/app build
 
       - name: Deploy to Railway
-        working-directory: packages/app/.output
         run: |
-          RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} pnpm railway link --environment production ${{secrets.RAILWAY_API_PROJECT_ID}}
+          cd packages/app
+          cp nixpacks.toml .output
+          cp .output/server/package.json .output
+          cd .output
           RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} pnpm railway up -s pipelineui-server

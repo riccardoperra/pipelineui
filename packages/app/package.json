@@ -48,7 +48,7 @@
     "solid-codemirror": "^2.3.1",
     "solid-js": "^1.9.1",
     "solid-jsx": "^1.1.4",
-    "statebuilder": "^0.6.1",
+    "statebuilder": "^0.6.2",
     "unique-names-generator": "^4.7.1",
     "vinxi": "^0.4.3",
     "vscode-languageserver-protocol": "^3.17.5",
@@ -61,5 +61,6 @@
   "devDependencies": {
     "@types/ws": "^8.5.12",
     "vite-tsconfig-paths": "^5.0.1"
-  }
+  },
+  "packageManager": "pnpm@9.5.0"
 }
