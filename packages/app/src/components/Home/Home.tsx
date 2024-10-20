@@ -20,7 +20,7 @@ import {RepoCard} from './RepoCard/RepoCard';
 import {RepoCardFallback} from './RepoCard/RepoCardFallback';
 import {RepoSearch} from './RepoSearch/RepoSearch';
 import {HomeTitle} from './HomeTitle/HomeTitle';
-import {createScratch, listUserScratches} from '../../lib/scratchApi';
+import {createScratch} from '../../lib/scratchApi';
 import {CurrentUserBar} from './CurrentUser/CurrentUser';
 import {ScratchList} from './ScratchList/ScratchList';
 import {getLoggedInUser} from '../../lib/server/appwrite';

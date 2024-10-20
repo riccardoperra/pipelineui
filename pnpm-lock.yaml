@@ -95,11 +95,11 @@ importers:
         specifier: ^0.29.4
         version: 0.29.4(solid-js@1.9.1)
       '@solidjs/router':
-        specifier: ^0.14.7
-        version: 0.14.7(solid-js@1.9.1)
+        specifier: ^0.14.10
+        version: 0.14.10(solid-js@1.9.1)
       '@solidjs/start':
-        specifier: ^1.0.8
-        version: 1.0.8(solid-js@1.9.1)(vinxi@0.4.3(@types/node@22.7.4)(ioredis@5.4.1)(terser@5.34.1))(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
+        specifier: ^1.0.9
+        version: 1.0.9(solid-js@1.9.1)(vinxi@0.4.3(@types/node@22.7.4)(ioredis@5.4.1)(terser@5.34.1))(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
       '@vanilla-extract/css':
         specifier: ^1.16.0
         version: 1.16.0
@@ -1726,13 +1726,13 @@ packages:
     peerDependencies:
       solid-js: '>=1.8.4'
 
-  '@solidjs/router@0.14.7':
-    resolution: {integrity: sha512-agLf8AUz5XnW6+F64a4Iq+QQQobI5zGHQ/gUYd/WHSwcbnFpavbsiwRLob3YhWMXVX3sQyn4ekUN+uchMCRupw==}
+  '@solidjs/router@0.14.10':
+    resolution: {integrity: sha512-5B8LVgvvXijfXyXWPVLUm7RQ05BhjIpAyRkYVDZtrR3OaSvftXobWc6qSEwk4ICLoGi/IE9CUp2LUdCBIs9AXg==}
     peerDependencies:
       solid-js: ^1.8.6
 
-  '@solidjs/start@1.0.8':
-    resolution: {integrity: sha512-5JfIa305L898GkUxVDtxqujLYqCjuekJvXDl9uysZmPqtfFMcDmJyfnfkmoIOgGRyswKcyEWySYru8ZRYCIBuw==}
+  '@solidjs/start@1.0.9':
+    resolution: {integrity: sha512-dZ1b4Oa5gXk95eVxHAj/W+sQIY3yevYeerrxKNWPqwTyzZYvwUwpnU7Ph3sMduo5LnL/USQ66AloLTs2FX94ZA==}
 
   '@swc/helpers@0.5.13':
     resolution: {integrity: sha512-UoKGxQ3r5kYI9dALKJapMmuK+1zWM/H17Z1+iwnNmzcJRnfFuevZs375TA5rW31pu4BS4NoSy1fRsexDXfWn5w==}
@@ -7106,18 +7106,17 @@ snapshots:
     dependencies:
       solid-js: 1.9.1
 
-  '@solidjs/router@0.14.7(solid-js@1.9.1)':
+  '@solidjs/router@0.14.10(solid-js@1.9.1)':
     dependencies:
       solid-js: 1.9.1
 
-  '@solidjs/start@1.0.8(solid-js@1.9.1)(vinxi@0.4.3(@types/node@22.7.4)(ioredis@5.4.1)(terser@5.34.1))(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))':
+  '@solidjs/start@1.0.9(solid-js@1.9.1)(vinxi@0.4.3(@types/node@22.7.4)(ioredis@5.4.1)(terser@5.34.1))(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))':
     dependencies:
       '@vinxi/plugin-directives': 0.4.3(vinxi@0.4.3(@types/node@22.7.4)(ioredis@5.4.1)(terser@5.34.1))
       '@vinxi/server-components': 0.4.3(vinxi@0.4.3(@types/node@22.7.4)(ioredis@5.4.1)(terser@5.34.1))
       '@vinxi/server-functions': 0.4.3(vinxi@0.4.3(@types/node@22.7.4)(ioredis@5.4.1)(terser@5.34.1))
       defu: 6.1.4
       error-stack-parser: 2.1.4
-      glob: 10.4.5
       html-to-image: 1.11.11
       radix3: 1.1.2
       seroval: 1.1.1
@@ -7125,6 +7124,7 @@ snapshots:
       shikiji: 0.9.19
       source-map-js: 1.2.1
       terracotta: 1.0.6(solid-js@1.9.1)
+      tinyglobby: 0.2.9
       vite-plugin-solid: 2.10.2(solid-js@1.9.1)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
     transitivePeerDependencies:
       - '@testing-library/jest-dom'

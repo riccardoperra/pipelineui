@@ -1,5 +1,5 @@
 {
-  "name": "example-basic",
+  "name": "@pipelineui/app",
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",
@@ -33,8 +33,8 @@
     "@solid-primitives/keyed": "^1.2.2",
     "@solid-primitives/storage": "^4.2.1",
     "@solidjs/meta": "^0.29.4",
-    "@solidjs/router": "^0.14.7",
-    "@solidjs/start": "^1.0.8",
+    "@solidjs/router": "^0.14.10",
+    "@solidjs/start": "^1.0.9",
     "@vanilla-extract/css": "^1.16.0",
     "@vanilla-extract/dynamic": "^2.1.2",
     "@vanilla-extract/recipes": "^0.5.5",

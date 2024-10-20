@@ -1,0 +1,38 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: Build workflow parser
+        run: |
+          pnpm --filter @pipelineui/workflow-parser build
+
+      - name: Build language-server
+        run: |
+          pnpm --filter @pipelineui/workflow-languageserver build
+
+      - name: Build app
+        run: |
+          pnpm --filter @pipelineui/app build
+
+      - name: Deploy to Railway
+        working-directory: packages/app/.output
+        run: |
+          pnpm i -g @railway/cli
+          pnpm railway link --environment production $RAILWAY_API_PROJECT_ID
+          pnpm railway up -s pipelineui-server
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_API_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}

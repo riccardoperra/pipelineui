@@ -5,7 +5,12 @@ import viteTsConfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   middleware: './src/middleware.ts',
   vite: {
-    plugins: [vanillaExtractPlugin(), viteTsConfigPaths()],
+    plugins: [
+      vanillaExtractPlugin({
+        // unstable_mode: 'transform',
+      }),
+      viteTsConfigPaths(),
+    ],
     optimizeDeps: {
       exclude: [
         '@codemirror/state',
