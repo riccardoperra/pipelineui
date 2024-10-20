@@ -58,7 +58,8 @@ Flow diagram has been built from scratch taking advantage of some other dependen
 - [elkjs](https://github.com/kieler/elkjs): Elk layout algorithm, used to calculate the flow item positions
 - [panzoom](https://github.com/anvaka/panzoom): Cross-browser compatible pan and zoom library
 - [@xyflow/system](): Core of xyflow, currently used to build the smooth edge curve
-  svg (https://github.com/xyflow/xyflow/blob/97fdff59d40071aee0b3192f7b571c6bdd4d09fd/packages/system/src/utils/edges/smoothstep-edge.ts#L215)
+  svg 
+  - [smootstep-edge.ts](https://github.com/xyflow/xyflow/blob/97fdff59d40071aee0b3192f7b571c6bdd4d09fd/packages/system/src/utils/edges/smoothstep-edge.ts#L215)
 
 ---
 
