@@ -15,25 +15,7 @@ PipelineUI is entirely built with Solid and [SolidStart](https://github.com/soli
 
 There are a few core external dependencies that should be listed here for the awesome work.
 
-The YAML editor has been made with:
-
-- [CodeMirror6](https://codemirror.net/): used to display the YAML editor and merge view. The LSP integration is an
-  adapted fork of [codemirror-languageserver](https://github.com/FurqanSoftware/codemirror-languageserver), which was a
-  good starting point to integrate the GitHub workflow language server.
-- [actions/languageservices](https://github.com/actions/languageservices): The language service repo for GitHub
-  workflows and expressions. This was used to parse the workflow files and validate them, and enhance the editor code
-  through linting and hover-in code documentation.
-
-> [!WARNING]
->
-> The source code of @actions/workflow-parser has been altered in order to be built into node/browser without getting errors and to
-> extend some functionalities that were not available before (e.g. expression parsing)
->
-> Read more about this in the package [README](./packages/workflow-parser/README.md).
-> 
-> [MIT License](https://github.com/actions/languageservices/blob/main/LICENSE)
-> 
-> [My patch file](./patches/@actions__workflow-parser@0.3.13.patch)
+### UI
 
 The UI has been built with:
 
@@ -42,7 +24,33 @@ The UI has been built with:
 - [vanilla-extract](https://vanilla-extract.style/): Zero-runtime CSS in typescript
 - [corvu](https://corvu.dev/): UI primitives for SolidJS
 
+> [!WARNING]
+>
+> The source code of @actions/workflow-parser has been altered in order to be built into node/browser without getting errors and to
+> extend some functionalities that were not available before (e.g. expression parsing).
+> 
+> Currently @actions/languageserver has been wrapped to ship only browser compatible packages and the patche workflow-parser in order to skip all the used node dependencies.
+>
+> Read more about this in the package [README](./packages/workflow-parser/README.md).
+>
+> [MIT License](https://github.com/actions/languageservices/blob/main/LICENSE)
+>
+> [My patch file](./patches/@actions__workflow-parser@0.3.13.patch)
+
 ---
+
+### YAML Editor
+
+- [CodeMirror6](https://codemirror.net/): used to display the YAML editor and merge view. The LSP integration is an
+  adapted fork of [codemirror-languageserver](https://github.com/FurqanSoftware/codemirror-languageserver), which was a
+  good starting point to integrate the GitHub workflow language server.
+- [actions/languageservices](https://github.com/actions/languageservices): The language service repo for GitHub
+  workflows and expressions. This was used to parse the workflow files and validate them, and enhance the editor code
+  through linting and hover-in code documentation.
+
+---
+
+### Flow diagram
 
 Flow diagram has been built from scratch taking advantage of some other dependencies:
 
@@ -53,12 +61,22 @@ Flow diagram has been built from scratch taking advantage of some other dependen
 
 ---
 
+### Backend
+
+The UI has been built with:
+
+- [@kobalte/core](https://github.com/kobaltedev/kobalte): used to build accessible components in the UI
+- [@solid-primitives/*](https://github.com/solidjs-community/solid-primitives): SolidJS primitives library
+- [vanilla-extract](https://vanilla-extract.style/): Zero-runtime CSS in typescript
+- [corvu](https://corvu.dev/): UI primitives for SolidJS
+
 Backend has been built with [appwrite](https://appwrite.io/), which has been wrapped via solid server functions
 to provide authentication and the database persistence.
 
----
+### Other dependencies
 
-Mine dependencies:
+This projects also uses some of mine older dependencies that which were used to speed up the writing of the application.
+These have also been updated to fix the bugs encountered.
 
 - [@codeui/kit](https://github.com/riccardoperra/codeui): [CodeImage](https://github.com/riccardoperra/codeimage) design
   system which wraps Kobalte.
