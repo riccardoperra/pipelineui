@@ -30,9 +30,5 @@ jobs:
       - name: Deploy to Railway
         working-directory: packages/app/.output
         run: |
-          pnpm i -g @railway/cli
-          pnpm railway login --browserless
-          pnpm railway link --environment production ${{secrets.RAILWAY_API_PROJECT_ID}}
-          pnpm railway up -s pipelineui-server
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} pnpm railway link --environment production ${{secrets.RAILWAY_API_PROJECT_ID}}
+          RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} pnpm railway up -s pipelineui-server
