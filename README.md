@@ -6,6 +6,7 @@ by allowing users to visually edit and update workflows. It automatically genera
 updates the YAML configuration files, ensuring seamless integration with GitHub.
 
 > [!NOTE]  
+> 
 > This project has been made for [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement)
 
 ## 🤖 Tech stack
