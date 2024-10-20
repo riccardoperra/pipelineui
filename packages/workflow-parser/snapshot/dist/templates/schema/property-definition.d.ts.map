@@ -1,0 +1,1 @@
+{"version":3,"file":"property-definition.d.ts","sourceRoot":"","sources":["../../../src/templates/schema/property-definition.ts"],"names":[],"mappings":"AACA,OAAO,EAAC,aAAa,EAAc,MAAM,WAAW,CAAC;AAGrD,qBAAa,kBAAkB;IAC7B,SAAgB,IAAI,EAAE,MAAM,CAAM;IAClC,SAAgB,QAAQ,EAAE,OAAO,CAAS;IAC1C,SAAgB,WAAW,EAAE,MAAM,GAAG,SAAS,CAAC;gBAE7B,KAAK,EAAE,aAAa;CAuBxC"}

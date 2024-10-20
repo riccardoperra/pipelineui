@@ -1,0 +1,1 @@
+{"version":3,"file":"referencedWorkflow.d.ts","sourceRoot":"","sources":["../../../src/model/converter/referencedWorkflow.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,eAAe,EAAC,MAAM,kCAAkC,CAAC;AACjE,OAAO,EAAC,aAAa,EAAC,MAAM,wBAAwB,CAAC;AAErD,OAAO,EAAC,mBAAmB,EAAC,MAAM,sBAAsB,CAAC;AAMzD,wBAAgB,yBAAyB,CACvC,OAAO,EAAE,eAAe,EACxB,kBAAkB,EAAE,aAAa,EACjC,GAAG,EAAE,mBAAmB,QAuBzB"}

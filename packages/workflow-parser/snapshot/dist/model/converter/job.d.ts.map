@@ -1,0 +1,1 @@
+{"version":3,"file":"job.d.ts","sourceRoot":"","sources":["../../../src/model/converter/job.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,eAAe,EAAC,MAAM,kCAAkC,CAAC;AACjE,OAAO,EAAuB,YAAY,EAAe,WAAW,EAAgB,MAAM,wBAAwB,CAAC;AAEnH,OAAO,EAAO,WAAW,EAAC,MAAM,sBAAsB,CAAC;AASvD,wBAAgB,UAAU,CAAC,OAAO,EAAE,eAAe,EAAE,MAAM,EAAE,WAAW,EAAE,KAAK,EAAE,YAAY,GAAG,WAAW,CA4I1G"}

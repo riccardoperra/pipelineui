@@ -1,0 +1,1 @@
+{"version":3,"file":"allowed-context.d.ts","sourceRoot":"","sources":["../../src/templates/allowed-context.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,YAAY,EAAC,MAAM,iCAAiC,CAAC;AAG7D,wBAAgB,mBAAmB,CAAC,cAAc,EAAE,MAAM,EAAE,GAAG;IAC7D,aAAa,EAAE,MAAM,EAAE,CAAC;IACxB,SAAS,EAAE,YAAY,EAAE,CAAC;CAC3B,CA6BA"}

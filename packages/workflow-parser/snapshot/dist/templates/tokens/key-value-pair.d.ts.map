@@ -1,0 +1,1 @@
+{"version":3,"file":"key-value-pair.d.ts","sourceRoot":"","sources":["../../../src/templates/tokens/key-value-pair.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,WAAW,EAAC,MAAM,gBAAgB,CAAC;AAC3C,OAAO,EAAC,aAAa,EAAC,MAAM,kBAAkB,CAAC;AAE/C,qBAAa,YAAY;IACvB,SAAgB,GAAG,EAAE,WAAW,CAAC;IACjC,SAAgB,KAAK,EAAE,aAAa,CAAC;gBAClB,GAAG,EAAE,WAAW,EAAE,KAAK,EAAE,aAAa;CAI1D"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"concurrency.d.ts","sourceRoot":"","sources":["../../../src/model/converter/concurrency.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,eAAe,EAAC,MAAM,kCAAkC,CAAC;AACjE,OAAO,EAAC,aAAa,EAAC,MAAM,uCAAuC,CAAC;AAEpE,OAAO,EAAC,kBAAkB,EAAC,MAAM,sBAAsB,CAAC;AAExD,wBAAgB,kBAAkB,CAAC,OAAO,EAAE,eAAe,EAAE,KAAK,EAAE,aAAa,GAAG,kBAAkB,CA6BrG"}

@@ -1,3 +1,4 @@
 dist
+!snapshot/dist
 node_modules
 example/*.generated.json

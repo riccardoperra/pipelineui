@@ -1,0 +1,1 @@
+{"version":3,"file":"token-range.d.ts","sourceRoot":"","sources":["../../../src/templates/tokens/token-range.ts"],"names":[],"mappings":"AAAA,uDAAuD;AACvD,MAAM,MAAM,QAAQ,GAAG;IACrB,+BAA+B;IAC/B,IAAI,EAAE,MAAM,CAAC;IAEb,iCAAiC;IACjC,MAAM,EAAE,MAAM,CAAC;CAChB,CAAC;AAEF,MAAM,MAAM,UAAU,GAAG;IACvB,KAAK,EAAE,QAAQ,CAAC;IAChB,GAAG,EAAE,QAAQ,CAAC;CACf,CAAC"}

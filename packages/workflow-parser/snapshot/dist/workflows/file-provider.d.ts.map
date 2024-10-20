@@ -1,0 +1,1 @@
+{"version":3,"file":"file-provider.d.ts","sourceRoot":"","sources":["../../src/workflows/file-provider.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,IAAI,EAAC,MAAM,QAAQ,CAAC;AAC5B,OAAO,EAAC,aAAa,EAAC,MAAM,kBAAkB,CAAC;AAE/C,MAAM,WAAW,YAAY;IAC3B,cAAc,CAAC,GAAG,EAAE,aAAa,GAAG,OAAO,CAAC,IAAI,CAAC,CAAC;CACnD"}

@@ -16,11 +16,11 @@ import {
 } from '@actions/workflow-parser';
 import type * as WorkflowTemplateTypes from '@actions/workflow-parser/model/workflow-template';
 
-import * as environmentConverters from '../snapshot/dist/model/converter/job/environment';
-import * as inputConverters from '../snapshot/dist/model/converter/job/inputs';
-import * as secretConverters from '../snapshot/dist/model/converter/job/secrets';
-import * as runsOnConverters from '../snapshot/dist/model/converter/job/runs-on';
-import {handleTemplateTokenErrors} from '../snapshot/dist/model/converter/handle-errors';
+import * as environmentConverters from '@actions/workflow-parser/model/converter/job/environment';
+import * as inputConverters from '@actions/workflow-parser/model/converter/job/inputs';
+import * as secretConverters from '@actions/workflow-parser/model/converter/job/secrets';
+import * as runsOnConverters from '@actions/workflow-parser/model/converter/job/runs-on';
+import {handleTemplateTokenErrors} from '@actions/workflow-parser/model/converter/handle-errors';
 
 export {
   isString,

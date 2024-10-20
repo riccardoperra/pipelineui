@@ -1,0 +1,1 @@
+{"version":3,"file":"scalar-definition.js","sourceRoot":"","sources":["../../../src/templates/schema/scalar-definition.ts"],"names":[],"mappings":"AACA,OAAO,EAAC,UAAU,EAAC,MAAM,cAAc,CAAC;AAExC,MAAM,OAAgB,gBAAiB,SAAQ,UAAU;IACvD,YAAmB,GAAW,EAAE,UAAyB;QACvD,KAAK,CAAC,GAAG,EAAE,UAAU,CAAC,CAAC;IACzB,CAAC;CAGF"}

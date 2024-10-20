@@ -1,0 +1,1 @@
+{"version":3,"file":"environment.d.ts","sourceRoot":"","sources":["../../../../src/model/converter/job/environment.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,eAAe,EAAC,MAAM,qCAAqC,CAAC;AACpE,OAAO,EAAC,aAAa,EAAC,MAAM,0CAA0C,CAAC;AAEvE,OAAO,EAAC,2BAA2B,EAAC,MAAM,yBAAyB,CAAC;AAEpE,wBAAgB,8BAA8B,CAC5C,OAAO,EAAE,eAAe,EACxB,KAAK,EAAE,aAAa,GACnB,2BAA2B,CAgC7B"}

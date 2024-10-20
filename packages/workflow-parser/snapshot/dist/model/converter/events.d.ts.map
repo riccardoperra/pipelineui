@@ -1,0 +1,1 @@
+{"version":3,"file":"events.d.ts","sourceRoot":"","sources":["../../../src/model/converter/events.ts"],"names":[],"mappings":"AAAA,OAAO,EAAC,eAAe,EAAC,MAAM,kCAAkC,CAAC;AAGjE,OAAO,EAAC,aAAa,EAAC,MAAM,uCAAuC,CAAC;AAGpE,OAAO,EAEL,YAAY,EAMb,MAAM,sBAAsB,CAAC;AAM9B,wBAAgB,SAAS,CAAC,OAAO,EAAE,eAAe,EAAE,KAAK,EAAE,aAAa,GAAG,YAAY,CAmEtF"}
