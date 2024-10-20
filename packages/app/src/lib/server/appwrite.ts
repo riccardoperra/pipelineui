@@ -38,7 +38,9 @@ export async function getLoggedInUser() {
 
 export async function createAdminClient() {
   'use server';
-  const apiKey = import.meta.env.VITE_APPWRITE_CLOUD_FULL_ACCESS_API_KEY;
+  const apiKey = process.env.VITE_APPWRITE_CLOUD_FULL_ACCESS_API_KEY!;
+  const projectId = process.env.VITE_APPWRITE_CLOUD_PROJECT_ID!;
+  const endpoint = process.env.VITE_APPWRITE_CLOUD_URL!;
 
   console.log({
     apiKey,
