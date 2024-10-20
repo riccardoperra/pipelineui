@@ -31,7 +31,7 @@ jobs:
         working-directory: packages/app/.output
         run: |
           pnpm i -g @railway/cli
-          pnpm railway link --environment production $RAILWAY_API_PROJECT_ID
+          pnpm railway link --environment production ${{RAILWAY_API_PROJECT_ID}}
           pnpm railway up -s pipelineui-server
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
