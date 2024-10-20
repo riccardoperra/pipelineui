@@ -65,15 +65,10 @@ Flow diagram has been built from scratch taking advantage of some other dependen
 
 ### Backend
 
-The UI has been built with:
-
-- [@kobalte/core](https://github.com/kobaltedev/kobalte): used to build accessible components in the UI
-- [@solid-primitives/*](https://github.com/solidjs-community/solid-primitives): SolidJS primitives library
-- [vanilla-extract](https://vanilla-extract.style/): Zero-runtime CSS in typescript
-- [corvu](https://corvu.dev/): UI primitives for SolidJS
-
 Backend has been built with [appwrite](https://appwrite.io/), which has been wrapped via solid server functions
 to provide authentication and the database persistence.
+
+Most of the code is available into [packages/app/lib/server](packages/app/src/lib/server).
 
 ### Other dependencies
 
