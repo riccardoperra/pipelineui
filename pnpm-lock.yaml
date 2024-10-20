@@ -50,8 +50,8 @@ importers:
         specifier: ^6.34.1
         version: 6.34.1
       '@codeui/kit':
-        specifier: file:/Users/riccardoperra/WebstormProjects/codeui/packages/kit
-        version: file:../codeui/packages/kit(@types/node@22.7.4)(solid-js@1.9.1)(terser@5.34.1)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
+        specifier: 0.1.3
+        version: 0.1.3(@types/node@22.7.4)(solid-js@1.9.1)(terser@5.34.1)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
       '@corvu/resizable':
         specifier: ^0.2.3
         version: 0.2.3(solid-js@1.9.1)
@@ -566,8 +566,8 @@ packages:
   '@codemirror/view@6.34.1':
     resolution: {integrity: sha512-t1zK/l9UiRqwUNPm+pdIT0qzJlzuVckbTEMVNFhfWkGiBQClstzg+78vedCvLSX0xJEZ6lwZbPpnljL7L6iwMQ==}
 
-  '@codeui/kit@file:../codeui/packages/kit':
-    resolution: {directory: ../codeui/packages/kit, type: directory}
+  '@codeui/kit@0.1.3':
+    resolution: {integrity: sha512-DszHU5uEnTbhgC10XjwC4qkIyua5FSkEqpC8UIsQIJ7yoXK63CoPz53vpZwFW7c3kOSj2ZD8f/QbdfIfTT/raw==}
     peerDependencies:
       solid-js: ^1.7.0
 
@@ -5952,7 +5952,7 @@ snapshots:
       style-mod: 4.1.2
       w3c-keyname: 2.2.8
 
-  '@codeui/kit@file:../codeui/packages/kit(@types/node@22.7.4)(solid-js@1.9.1)(terser@5.34.1)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))':
+  '@codeui/kit@0.1.3(@types/node@22.7.4)(solid-js@1.9.1)(terser@5.34.1)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))':
     dependencies:
       '@kobalte/core': 0.13.6(solid-js@1.9.1)
       '@kobalte/utils': 0.9.1(solid-js@1.9.1)
