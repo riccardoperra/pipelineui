@@ -84,6 +84,12 @@ These have also been updated to fix the bugs encountered.
 
 ---
 
+### Hosting
+
+This application is hosted on Railway.
+
+[//]: # (// TODO add)
+
 ## Features
 
 ## Supported GitHub Workflow features
