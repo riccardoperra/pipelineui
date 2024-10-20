@@ -7,7 +7,8 @@ export default defineConfig({
   vite: {
     plugins: [
       vanillaExtractPlugin({
-        // unstable_mode: 'transform',
+        // TODO: this is a workaround
+        unstable_mode: 'transform',
       }),
       viteTsConfigPaths(),
     ],
