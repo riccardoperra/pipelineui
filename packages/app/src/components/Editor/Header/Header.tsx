@@ -1,10 +1,19 @@
 import * as styles from './EditorHeader.css';
-import {Button, IconButton, Link} from '@codeui/kit';
+import {
+  Button,
+  IconButton,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@codeui/kit';
 import {provideState} from 'statebuilder';
 import {EditorUiStore} from '../store/ui.store';
-import {JSX, type ParentProps, Show} from 'solid-js';
+import {createSignal, JSX, type ParentProps, Show, useContext} from 'solid-js';
 import {Icon} from '#ui/components/Icon';
-import {A, useParams} from '@solidjs/router';
+import {A, useSubmission} from '@solidjs/router';
+import {createScratchFork, updateScratch} from '../../../lib/scratchApi';
+import {EditorStore} from '#editor-store/editor.store';
+import {EditorContext} from '../editor.context';
 
 export interface EditorHeaderProps {
   showBack: boolean;
@@ -30,8 +39,50 @@ function EditorHeaderActionButton(
   );
 }
 
+function EditorHeaderForkButton() {
+  const [isOpen, setOpen] = createSignal(false);
+  const editorStore = provideState(EditorStore);
+  const editorContext = useContext(EditorContext)!;
+
+  return (
+    <Popover open={isOpen()} onOpenChange={setOpen}>
+      <PopoverTrigger
+        as={triggerProps => (
+          <Button theme={'primary'} {...triggerProps}>
+            Fork
+          </Button>
+        )}
+      />
+      <PopoverContent variant={'bordered'}>
+        Forking this source will create a new scratch remotely connected to your
+        profile, that can be modified only by you.
+        <div>
+          <form
+            method={'post'}
+            action={createScratchFork.with(
+              editorContext.repository!,
+              editorStore.yamlSession.initialSource(),
+              editorStore.yamlSession.source(),
+            )}
+          >
+            <Button size={'xs'} theme={'primary'} type={'submit'}>
+              Confirm
+            </Button>
+          </form>
+          <Button size={'xs'} theme={'secondary'}>
+            Cancel
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 export function EditorHeader(props: EditorHeaderProps) {
   const editorUi = provideState(EditorUiStore);
+  const editorStore = provideState(EditorStore);
+
+  const isUpdating = useSubmission(updateScratch);
 
   return (
     <>
@@ -53,9 +104,33 @@ export function EditorHeader(props: EditorHeaderProps) {
         {props.name}
 
         <div class={styles.headerRightSide}>
-          <Button theme={'primary'} size={'sm'}>
-            Save
-          </Button>
+          <Show
+            fallback={
+              <>
+                <EditorHeaderForkButton />
+              </>
+            }
+            when={editorStore.get.remoteId}
+          >
+            {remoteId => (
+              <form
+                action={updateScratch.with(
+                  remoteId(),
+                  editorStore.yamlSession.source(),
+                )}
+                method={'post'}
+              >
+                <Button
+                  type={'submit'}
+                  theme={'primary'}
+                  size={'sm'}
+                  loading={isUpdating.pending}
+                >
+                  Save
+                </Button>
+              </form>
+            )}
+          </Show>
         </div>
       </header>
       <div class={styles.subHeader}>

@@ -5,11 +5,13 @@ import {
   type RouteDefinition,
   type RouteSectionProps,
 } from '@solidjs/router';
-import {EditorContext} from '~/components/Editor/editor.context';
+import {
+  EditorContext,
+  type EditorParsedRepository,
+} from '~/components/Editor/editor.context';
 import {Editor} from '~/components/Editor/Editor';
-import {getGithubRepoFileContent} from '~/lib/api';
+import {getGithubRepoFileContent} from '~/lib/githubApi';
 import {StateProvider} from 'statebuilder';
-import {createEffect} from 'solid-js';
 
 const getWorkflowFromUrl = cache(async (path: string) => {
   'use server';
@@ -24,7 +26,15 @@ const getWorkflowFromUrl = cache(async (path: string) => {
       if (response.failed) {
         throw redirect('/not-found');
       }
-      return response.data;
+      return {
+        ...response.data,
+        repository: {
+          owner,
+          repoName,
+          branchName,
+          filePath,
+        } as EditorParsedRepository,
+      };
     })
     .catch(() => {
       throw redirect('/not-found');
@@ -48,10 +58,14 @@ export default function EditorPage(props: RouteSectionProps) {
         get source() {
           return workflowContent()?.file.contents ?? '';
         },
+        remoteId: null,
+        get repository() {
+          return workflowContent()?.repository ?? null;
+        },
       }}
     >
       <StateProvider>
-        <Editor />
+        <Editor type={'repository'} />
       </StateProvider>
     </EditorContext.Provider>
   );

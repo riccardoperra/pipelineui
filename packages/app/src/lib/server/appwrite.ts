@@ -1,21 +1,75 @@
-import {Client} from 'node-appwrite';
-import {useSession} from 'vinxi/http';
+import {Account, Client, Databases} from 'node-appwrite';
+import {getHeaders} from 'vinxi/http';
 import {getSession} from './session';
+import {action, redirect} from '@solidjs/router';
+import {OAuthProvider} from 'appwrite';
+
+const projectId = import.meta.env.VITE_APPWRITE_CLOUD_PROJECT_ID;
+const endpoint = import.meta.env.VITE_APPWRITE_CLOUD_URL;
 
 export async function createSessionClient() {
-  const client = new Client()
-    .setProject('6713d930003dd483eb11')
-    .setEndpoint('https://cloud.appwrite.io/v1')
-    .setSelfSigned(true)
-    .setKey(
-      'standard_a70b44d44ccfd2fdd62748e6a2cd51590a712d440a1649be2fb493813b5c3ffe55519f45e15919248216e832d60a72394826e50bfff3f53d8cddd449ce41aa6710a360a7f94f4d35061cb81d7ea70b633d9f463c07baaefa0dfca17ccd1a83c51a6b5529b5d9c381f80f1c67f0f48586f1ec1508e9781f2dc71b361a83e03c6c',
-    );
-
+  'use server';
+  const client = new Client().setProject(projectId).setEndpoint(endpoint);
   const session = await getSession();
   if (!session || !session.data.session?.$id) {
     await session?.clear();
     throw new Error('No session');
   }
-
   client.setSession(session.data.session.secret);
+
+  return {
+    get database() {
+      return new Databases(client);
+    },
+    get account() {
+      return new Account(client);
+    },
+  };
 }
+
+export async function getLoggedInUser() {
+  'use server';
+  try {
+    const {account} = await createSessionClient();
+    return await account.get();
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function createAdminClient() {
+  'use server';
+  const apiKey = import.meta.env.VITE_APPWRITE_CLOUD_FULL_ACCESS_API_KEY;
+  const client = new Client()
+    .setProject(projectId)
+    .setEndpoint(endpoint)
+    .setSelfSigned(true)
+    .setKey(apiKey);
+
+  return {
+    get database() {
+      return new Databases(client);
+    },
+    get account() {
+      return new Account(client);
+    },
+  };
+}
+
+export const signupWithGithub = action(async () => {
+  'use server';
+
+  const {account} = await createAdminClient();
+
+  const origin = getHeaders().origin;
+  const successUrl = `${origin}/api/oauth`;
+  const failureUrl = `${origin}/`;
+
+  const redirectUrl = await account.createOAuth2Token(
+    OAuthProvider.Github,
+    successUrl,
+    failureUrl,
+  );
+
+  return redirect(redirectUrl);
+});

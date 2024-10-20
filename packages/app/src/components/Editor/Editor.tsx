@@ -13,10 +13,6 @@ import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';
 import {JobPanelEditor} from './Jobs/JobPanelEditor/JobPanelEditor';
 import {YamlMergeView} from './YamlEditor/MergeView';
 import {DiagnosticPanel} from './DiagnosticPanel/DiagnosticPanel';
-import {headerRepoNavLi, headerRepoNavOl} from './Header/EditorHeader.css';
-import {Link} from '@codeui/kit';
-import {A, useParams} from '@solidjs/router';
-import {Icon} from '#ui/components/Icon';
 import {EditorRepositoryHeaderName} from './Header/RepositoryHeaderName';
 
 const Canvas = lazy(() =>

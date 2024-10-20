@@ -1,15 +1,8 @@
 import {defineStore} from 'statebuilder';
-import {Document, type ParsedNode, parseDocument} from 'yaml';
-import {createEffect, createSignal, on, untrack, useContext} from 'solid-js';
-import {reconcile, type SetStoreFunction} from 'solid-js/store';
-import {
-  getWorkflowJson,
-  type WorkflowTemplate,
-} from '@pipelineui/workflow-parser';
-import type {WorkflowConcurrency} from '../Properties/WorkflowConcurrencyForm/WorkflowConcurrencyForm';
+import {createEffect, on, untrack, useContext} from 'solid-js';
+import {type WorkflowTemplate} from '@pipelineui/workflow-parser';
 import {withGithubYamlManager} from './plugins/githubYamlManager';
 import {withYamlDocumentSession} from './plugins/yamlSession';
-import {getStructureFromWorkflow} from './utils/getStructureFromWorkflow';
 import type {
   EditorWorkflowStructure,
   JobEnvironment,
@@ -23,13 +16,14 @@ import type {
 import {withProxyCommands} from 'statebuilder/commands';
 import {EditorContext} from '../editor.context';
 import type {Diagnostic} from 'vscode-languageserver-protocol';
-import type {EditorView} from '@codemirror/view';
+import {withEditorSessionState} from './plugins/editorUpdater';
 
 export interface EditorState {
   selectedJobId: string | null;
   template: WorkflowTemplate | null;
   structure: EditorWorkflowStructure;
   diagnostics: readonly Diagnostic[];
+  remoteId: string | null;
 }
 
 export function getInitialWorkflowStructureState(): EditorWorkflowStructure {
@@ -50,54 +44,13 @@ export const EditorStore = defineStore<EditorState>(() => ({
   template: null,
   structure: getInitialWorkflowStructureState(),
   diagnostics: [],
+  remoteId: null,
 }))
   .extend(withYamlDocumentSession())
   .extend(withGithubYamlManager())
+  .extend(withEditorSessionState())
   .extend((_, context) => {
-    const [session, setSession] =
-      createSignal<Document.Parsed<ParsedNode, true>>();
-    const [editorView, setEditorView] = createSignal<EditorView | null>(null);
-
-    const createStepJobUpdater = <
-      T extends WorkflowStructureJobRunStep | WorkflowStructureJobActionStep,
-    >(
-      jobId: string,
-      stepId: string,
-    ) => {
-      const jobIndex = untrack(() =>
-        _.get.structure.jobs.findIndex(job => job.$nodeId === jobId),
-      );
-      if (jobIndex === -1) {
-        return;
-      }
-      const stepIndex = _.get.structure.jobs[jobIndex].steps.findIndex(
-        step => step.$nodeId === stepId,
-      );
-      if (stepIndex === -1) {
-        return;
-      }
-
-      const setter = (...args: any[]) => {
-        // @ts-expect-error
-        _.set('structure', 'jobs', jobIndex, 'steps', stepIndex, ...args);
-      };
-
-      return {
-        update: setter as SetStoreFunction<T>,
-        jobIndex,
-        stepIndex,
-      } as const;
-    };
-
     return {
-      session,
-      editorView,
-      setEditorView,
-
-      utils: {
-        createStepJobUpdater,
-      },
-
       selectedJob: (): WorkflowStructureJob => {
         const selectedJobId = _.get.selectedJobId;
         if (!selectedJobId) {
@@ -138,70 +91,31 @@ export const EditorStore = defineStore<EditorState>(() => ({
           },
         },
       },
-
-      sessionUpdate: {
-        setConcurrency: (data: WorkflowConcurrency | null) => {
-          const workflow = session()!;
-          // TODO: add update
-          // yamlUpdater(() => {
-          //   if (data === null) {
-          //     workflow.delete('concurrency');
-          //   } else {
-          //     const concurrency = new YAMLMap();
-          //     concurrency.set('group', data.group);
-          //     concurrency.set('cancel-in-progress', data.cancelInProgress);
-          //     workflow.set('concurrency', concurrency);
-          //   }
-          // });
-        },
-      },
-
-      async initEditSession(source: string) {
-        const yaml = parseDocument(source, {
-          merge: false,
-          toStringDefaults: {
-            simpleKeys: true,
-            collectionStyle: 'block',
-            flowCollectionPadding: false,
-          },
-        });
-        _.yamlSession.init(yaml);
-
-        if (source.length === 0) {
-          source = `
-            name: Blank
-            on: {}
-            jobs: {}
-          `;
-        }
-
-        const {result, template} = getWorkflowJson('./yaml.json', source);
-
-        const resolvedTemplate = await template;
-
-        console.log(resolvedTemplate);
-
-        const parsedStructure = getStructureFromWorkflow(
-          result,
-          resolvedTemplate,
-        );
-        _.set('template', reconcile(resolvedTemplate));
-        _.set('structure', reconcile(parsedStructure));
-      },
     };
   })
   .extend((_, context) => {
+    context.hooks.onDestroy(() => console.log('destroy this'));
     context.hooks.onInit(() => {
       const context = useContext(EditorContext)!;
       _.initEditSession(context.source).then();
+
       // Support reactivity when using hybrid routing
       createEffect(
         on(
           () => context.source,
           source => {
-            _.initEditSession(context.source);
+            _.initEditSession(context.source).then();
           },
           {defer: true},
+        ),
+      );
+
+      createEffect(
+        on(
+          () => context.remoteId,
+          remoteId => {
+            _.set('remoteId', remoteId);
+          },
         ),
       );
     });

@@ -67,3 +67,9 @@ export const form = style({
   width: '100%',
   display: 'flex',
 });
+
+export const loggedInBar = style({
+  position: 'absolute',
+  right: '16px',
+  top: '16px',
+});

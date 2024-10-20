@@ -142,6 +142,9 @@ importers:
       statebuilder:
         specifier: file:/Users/riccardoperra/WebstormProjects/statebuilder/packages/state
         version: file:../statebuilder/packages/state
+      unique-names-generator:
+        specifier: ^4.7.1
+        version: 4.7.1
       vinxi:
         specifier: ^0.4.3
         version: 0.4.3(@types/node@22.7.4)(ioredis@5.4.1)(terser@5.34.1)
@@ -5034,6 +5037,10 @@ packages:
 
   unimport@3.13.1:
     resolution: {integrity: sha512-nNrVzcs93yrZQOW77qnyOVHtb68LegvhYFwxFMfuuWScmwQmyVCG/NBuN8tYsaGzgQUVYv34E/af+Cc9u4og4A==}
+
+  unique-names-generator@4.7.1:
+    resolution: {integrity: sha512-lMx9dX+KRmG8sq6gulYYpKWZc9RlGsgBR6aoO8Qsm3qvkSJ+3rAymr+TnV8EDMrIrwuFJ4kruzMWM/OpYzPoow==}
+    engines: {node: '>=8'}
 
   unist-util-is@6.0.0:
     resolution: {integrity: sha512-2qCTHimwdxLfz+YzdGfkqNlH0tLi9xjTnHddPmJwtIG9MGsdbutfTc4P+haPD7l7Cjxf/WZj+we5qfVPvvxfYw==}
@@ -11131,6 +11138,8 @@ snapshots:
     transitivePeerDependencies:
       - rollup
       - webpack-sources
+
+  unique-names-generator@4.7.1: {}
 
   unist-util-is@6.0.0:
     dependencies:

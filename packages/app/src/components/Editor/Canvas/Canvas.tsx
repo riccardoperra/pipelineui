@@ -1,12 +1,13 @@
 import * as styles from './Canvas.css';
 import {FlowContainer} from '../Flow/FlowContainer';
-import {batch, createEffect, createSignal, lazy} from 'solid-js';
+import {batch, createEffect, createSignal} from 'solid-js';
 import type {ElkExtendedEdge, ElkNode} from 'elkjs';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '#editor-store/editor.store';
 import {FlowRenderer} from '../Flow/engine/FlowRenderer';
 import type {FlowConnection, FlowNodeMap} from '../Flow/engine/types';
 import {FlowItem} from '../Flow/FlowItem';
+import type {WorkflowStructureJob} from '#editor-store/editor.types';
 
 export function Canvas() {
   const editor = provideState(EditorStore);
@@ -158,7 +159,9 @@ export function Canvas() {
     >
       <FlowContainer size={size()}>
         <FlowRenderer
-          renderNode={node => <FlowItem job={node.data.job} />}
+          renderNode={node => (
+            <FlowItem job={node.data.job as WorkflowStructureJob} />
+          )}
           connections={connections()}
           nodes={mappedNodes()}
           width={size().width}

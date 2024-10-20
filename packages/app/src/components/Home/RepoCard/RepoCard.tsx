@@ -1,7 +1,7 @@
 import {
   getGithubRepoWorkflowFiles,
   type GithubRepository,
-} from '../../../lib/api';
+} from '~/lib/githubApi';
 import * as styles from './RepoCard.css';
 import {Icon} from '#ui/components/Icon';
 import {createAsync, A} from '@solidjs/router';

@@ -5,6 +5,7 @@ import {
   form,
   homeContainer,
   homeLayoutWrapper,
+  loggedInBar,
 } from './Home.css';
 import {Button} from '@codeui/kit';
 import {
@@ -14,12 +15,15 @@ import {
   useSubmission,
 } from '@solidjs/router';
 import {Show, Suspense} from 'solid-js';
-import {getGithubRepo} from '../../lib/api';
+import {getGithubRepo} from '~/lib/githubApi';
 import {RepoCard} from './RepoCard/RepoCard';
 import {RepoCardFallback} from './RepoCard/RepoCardFallback';
 import {RepoSearch} from './RepoSearch/RepoSearch';
 import {HomeTitle} from './HomeTitle/HomeTitle';
-import {createScratch} from '../../lib/scratchApi';
+import {createScratch, listUserScratches} from '../../lib/scratchApi';
+import {CurrentUserBar} from './CurrentUser/CurrentUser';
+import {ScratchList} from './ScratchList/ScratchList';
+import {getLoggedInUser} from '../../lib/server/appwrite';
 
 export const searchRepo = cache((path: string) => {
   return getGithubRepo(path);
@@ -27,6 +31,9 @@ export const searchRepo = cache((path: string) => {
 
 export function Home() {
   const [params] = useSearchParams();
+
+  const user = createAsync(() => getLoggedInUser(), {deferStream: true});
+
   const repo = createAsync(() => {
     return !params.repo ? Promise.resolve(null) : searchRepo(params.repo);
   });
@@ -35,6 +42,10 @@ export function Home() {
 
   return (
     <div class={homeLayoutWrapper}>
+      <div class={loggedInBar}>
+        <CurrentUserBar />
+      </div>
+
       <div class={homeContainer}>
         <HomeTitle />
         <div class={content}>
@@ -62,6 +73,12 @@ export function Home() {
               Create from scratch
             </Button>
           </form>
+
+          <Show when={user()}>
+            <div class={choiceSeparator}>Your scratches & forks</div>
+
+            <ScratchList />
+          </Show>
         </div>
       </div>
     </div>

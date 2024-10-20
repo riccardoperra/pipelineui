@@ -1,6 +1,5 @@
 import {A, useParams} from '@solidjs/router';
 import {Show} from 'solid-js';
-import * as styles from '../Editor.css';
 import {headerRepoNavLi, headerRepoNavOl} from './EditorHeader.css';
 import {Link} from '@codeui/kit';
 import {Icon} from '#ui/components/Icon';
@@ -20,7 +19,7 @@ export function EditorRepositoryHeaderName() {
   return (
     <Show when={resolvedPath()} keyed>
       {path => (
-        <nav class={styles.headerRepoNavContent}>
+        <nav>
           <ol class={headerRepoNavOl}>
             <li class={headerRepoNavLi}>
               <Link

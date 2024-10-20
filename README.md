@@ -1,12 +1,16 @@
 # PipelineUI
 
-> [!NOTE]  
-> This project has been made for [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement)
-
 Pipeline UI is a visual editor for creating and managing GitHub Actions workflows.
 Built with SolidStart, this tool simplifies the process of defining GitHub pipelines
 by allowing users to visually edit and update workflows. It automatically generates and
 updates the YAML configuration files, ensuring seamless integration with GitHub.
+
+> [!NOTE]  
+> This project has been made for [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement)
+
+## Tech stack
+
+PipelineUI is entirely built with Solid and [SolidStart](https://github.com/solidjs/solid-start)
 
 ## Features
 
