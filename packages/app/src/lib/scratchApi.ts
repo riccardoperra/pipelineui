@@ -14,14 +14,19 @@ const scratchCollectionId = import.meta.env
 
 export const updateScratch = action(async (id: string, newCode: string) => {
   'use server';
+  const projectId = process.env.VITE_APPWRITE_CLOUD_PROJECT_ID!;
+  const endpoint = process.env.VITE_APPWRITE_CLOUD_URL!;
+  const databaseId = process.env.VITE_APPWRITE_CLOUD_DATABASE_ID!;
+  const scratchCollectionId =
+    process.env.VITE_APPWRITE_CLOUD_SCRATCH_COLLECTION_ID!;
   const user = await getLoggedInUser();
   if (!user) {
     return;
   }
 
   const client = new Client()
-    .setProject('6713d930003dd483eb11')
-    .setEndpoint('https://cloud.appwrite.io/v1')
+    .setProject(projectId)
+    .setEndpoint(endpoint)
     .setSelfSigned(true)
     .setSession(user.$id);
 
@@ -34,7 +39,9 @@ export const updateScratch = action(async (id: string, newCode: string) => {
 
 export const createScratch = action(async () => {
   'use server';
-
+  const databaseId = process.env.VITE_APPWRITE_CLOUD_DATABASE_ID!;
+  const scratchCollectionId =
+    process.env.VITE_APPWRITE_CLOUD_SCRATCH_COLLECTION_ID!;
   const user = await getLoggedInUser();
 
   if (!user) {
@@ -105,7 +112,9 @@ export const createScratchFork = action(
     initialCode: string,
   ) => {
     'use server';
-
+    const databaseId = process.env.VITE_APPWRITE_CLOUD_DATABASE_ID!;
+    const scratchCollectionId =
+      process.env.VITE_APPWRITE_CLOUD_SCRATCH_COLLECTION_ID!;
     const user = await getLoggedInUser();
     if (!user) {
       return;
@@ -177,6 +186,9 @@ export const getScratch = cache(async (id: string) => {
   'use server';
 
   const {database} = await createAdminClient();
+  const databaseId = process.env.VITE_APPWRITE_CLOUD_DATABASE_ID!;
+  const scratchCollectionId =
+    process.env.VITE_APPWRITE_CLOUD_SCRATCH_COLLECTION_ID!;
 
   try {
     return await database.getDocument(databaseId, scratchCollectionId, id);
@@ -191,6 +203,9 @@ export const listUserScratches = cache(async () => {
   if (!user) {
     return {documents: [], total: 0};
   }
+  const databaseId = process.env.VITE_APPWRITE_CLOUD_DATABASE_ID!;
+  const scratchCollectionId =
+    process.env.VITE_APPWRITE_CLOUD_SCRATCH_COLLECTION_ID!;
   const {database} = await createSessionClient();
   return database.listDocuments(databaseId, scratchCollectionId, [
     Query.equal('userId', user.$id),
