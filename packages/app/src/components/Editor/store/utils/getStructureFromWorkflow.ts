@@ -15,8 +15,33 @@ import type {
   WorkflowDispatchInput,
   WorkflowStructureEnv,
   WorkflowStructureEnvItem,
+  WorkflowTypesTriggerEvent,
 } from '../editor.types';
 import type {WorkflowJob} from '@actions/workflow-parser/model/workflow-template';
+
+export function mapEventToWorkflowTriggerEventTypes(
+  eventConfig: WorkflowTemplate['events'] | null | undefined,
+): WorkflowTypesTriggerEvent[] {
+  if (!eventConfig) {
+    return [];
+  }
+
+  return Object.entries(eventConfig).reduce((acc, [event, value]) => {
+    const unsafeValue = value as any;
+    if (Array.isArray(unsafeValue)) {
+      // TODO: schedule not supported;
+      return acc;
+    }
+    if ('types' in unsafeValue) {
+      acc.push({
+        $nodeId: crypto.randomUUID().toString(),
+        type: event,
+        types: unsafeValue.types,
+      } satisfies WorkflowTypesTriggerEvent);
+    }
+    return acc;
+  }, [] as WorkflowTypesTriggerEvent[]);
+}
 
 export function getStructureFromWorkflow(
   result: ParseWorkflowResult,
@@ -26,6 +51,10 @@ export function getStructureFromWorkflow(
     name: 'fileName',
     env: getWorkflowStructureEnv(result, template.env),
     events: {
+      triggerEvents: [
+        ...mapEventToWorkflowTriggerEventTypes(template.events),
+      ].filter(value => !!value),
+
       workflowDispatch: Object.entries(
         template.events?.workflow_dispatch?.inputs ?? {},
       ).map(([key, input], $index) => {

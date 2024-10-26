@@ -1,8 +1,9 @@
-import {defineStore} from 'statebuilder';
-import {createEffect, on, untrack, useContext} from 'solid-js';
-import {type WorkflowTemplate} from '@pipelineui/workflow-parser';
-import {withGithubYamlManager} from './plugins/githubYamlManager';
-import {withYamlDocumentSession} from './plugins/yamlSession';
+import { type WorkflowTemplate } from '@pipelineui/workflow-parser';
+import { createEffect, on, untrack, useContext } from 'solid-js';
+import { defineStore } from 'statebuilder';
+import { withProxyCommands } from 'statebuilder/commands';
+import type { Diagnostic } from 'vscode-languageserver-protocol';
+import { EditorContext } from '../editor.context';
 import type {
   EditorWorkflowStructure,
   JobEnvironment,
@@ -12,11 +13,11 @@ import type {
   WorkflowStructureJobActionStep,
   WorkflowStructureJobRunStep,
   WorkflowStructureJobStep,
+  WorkflowTypesTriggerEvent,
 } from './editor.types';
-import {withProxyCommands} from 'statebuilder/commands';
-import {EditorContext} from '../editor.context';
-import type {Diagnostic} from 'vscode-languageserver-protocol';
-import {withEditorSessionState} from './plugins/editorUpdater';
+import { withEditorSessionState } from './plugins/editorUpdater';
+import { withGithubYamlManager } from './plugins/githubYamlManager';
+import { withYamlDocumentSession } from './plugins/yamlSession';
 
 export interface EditorState {
   selectedJobId: string | null;
@@ -30,6 +31,7 @@ export function getInitialWorkflowStructureState(): EditorWorkflowStructure {
   return {
     name: '',
     events: {
+      triggerEvents: [],
       workflowDispatch: [],
     },
     jobs: [],
@@ -125,6 +127,14 @@ export const EditorStore = defineStore<EditorState>(() => ({
       setSelectedJobId: string | null;
       setDiagnostics: Diagnostic[];
 
+      addNewTriggerEventTypes: {value: WorkflowTypesTriggerEvent};
+      // TODO: should add $nodeId
+      updateTriggerEventTypes: {
+        index: number;
+        value: WorkflowTypesTriggerEvent;
+      };
+      deleteTriggerEventTypes: {$nodeId: string};
+
       addNewEnvironmentVariable: {value: WorkflowStructureEnvItem};
       // TODO: should add $nodeId
       updateEnvironmentVariableByIndex: {
@@ -183,6 +193,29 @@ export const EditorStore = defineStore<EditorState>(() => ({
     _.hold(_.commands.setDiagnostics, (value, {set}) =>
       set('diagnostics', value),
     );
+
+    _.hold(_.commands.addNewTriggerEventTypes, ({value}) => {
+      _.set('structure', 'events', 'triggerEvents', items => [...items, value]);
+      _.yamlSession.setEventTriggerTypes(value);
+    });
+
+    _.hold(_.commands.updateTriggerEventTypes, ({value, index}) => {
+      _.set('structure', 'events', 'triggerEvents', index, value);
+      _.yamlSession.setEventTriggerTypes(value);
+    });
+
+    _.hold(_.commands.deleteTriggerEventTypes, ({$nodeId}) => {
+      const index = _().structure.events.triggerEvents.findIndex(
+        ev => ev.$nodeId === $nodeId,
+      );
+      const item = _().structure.events.triggerEvents[index];
+      if (index !== -1) {
+        _.set('structure', 'events', 'triggerEvents', items =>
+          items.toSpliced(index, 1),
+        );
+        _.yamlSession.deleteEventTriggerTypes(item);
+      }
+    });
 
     _.hold(_.commands.addNewEnvironmentVariable, ({value}) => {
       const length = untrack(() => _().structure.env.array.length);

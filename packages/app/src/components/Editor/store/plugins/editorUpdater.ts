@@ -81,12 +81,11 @@ export const withEditorSessionState = () =>
 
           const resolvedTemplate = await template;
 
-          console.log(resolvedTemplate);
-
           const parsedStructure = getStructureFromWorkflow(
             result,
             resolvedTemplate,
           );
+
           _.set('template', reconcile(resolvedTemplate));
           _.set('structure', reconcile(parsedStructure));
         },
