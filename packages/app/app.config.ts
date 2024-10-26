@@ -10,8 +10,6 @@ const defaultConfig: ViteCustomizableConfig = {
       '@codemirror/state',
       '@codemirror/view',
       '@pipelineui/workflow-parser',
-      '@codeui/kit',
-      '@codeui/kit/vanilla-extract',
       'yaml',
       'web-worker',
     ],

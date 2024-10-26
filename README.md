@@ -2,16 +2,17 @@
 
 Pipeline UI is a visual editor for creating and managing GitHub Actions workflows.
 Built with SolidStart, this tool simplifies the process of defining GitHub pipelines
-by allowing users to visually edit and update workflows. It automatically generates and
+by allowing users to visually editing and update workflows. It automatically generates and
 updates the YAML configuration files, ensuring seamless integration with GitHub.
 
 > [!NOTE]
 >
 > This project has been made for [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement)
+> Since October is the hacktoberfest month, this project use `AppWrite` for their [Appwrite’s Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024)
 
 ## 🤖 Tech stack
 
-PipelineUI is entirely built with Solid and [SolidStart](https://github.com/solidjs/solid-start).
+PipelineUI is entirely built with [Solid](https://github.com/solidjs/solid) and [SolidStart](https://github.com/solidjs/solid-start).
 
 There are a few core external dependencies that should be listed here for the awesome work.
 
@@ -23,6 +24,14 @@ The UI has been built with:
 - [@solid-primitives/*](https://github.com/solidjs-community/solid-primitives): SolidJS primitives library
 - [vanilla-extract](https://vanilla-extract.style/): Zero-runtime CSS in typescript
 - [corvu](https://corvu.dev/): UI primitives for SolidJS
+
+> [!WARNING]
+>
+> The source code of [@vanilla-extract/vite-plugin](https://github.com/vanilla-extract-css/vanilla-extract/tree/master/packages/vite-plugin) has been altered
+> in order to support solid start w/ vinxi in multiple build.
+>
+> [Patch file](./patches/@vanilla-extract__vite-plugin@4.0.17.patch)
+> [Custom app config](./packages/app/app.config.ts)
 
 ---
 
