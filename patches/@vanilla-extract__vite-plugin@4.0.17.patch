@@ -1,0 +1,56 @@
+diff --git a/dist/vanilla-extract-vite-plugin.cjs.d.ts b/dist/vanilla-extract-vite-plugin.cjs.d.ts
+index 894123b02572365e9179a39fad2f896de87e383d..7e0728093d80e5c31f4e107760dfa7a83833a18f 100644
+--- a/dist/vanilla-extract-vite-plugin.cjs.d.ts
++++ b/dist/vanilla-extract-vite-plugin.cjs.d.ts
+@@ -4,6 +4,8 @@ import { IdentifierOption } from '@vanilla-extract/integration';
+ interface Options {
+     identifiers?: IdentifierOption;
+     unstable_mode?: 'transform' | 'emitCss';
++    incompatiblePlugins?: string[];
++    
+ }
+ declare function vanillaExtractPlugin({ identifiers, unstable_mode: mode, }?: Options): Plugin;
+ 
+diff --git a/dist/vanilla-extract-vite-plugin.cjs.prod.js b/dist/vanilla-extract-vite-plugin.cjs.prod.js
+index 08b88d7eca505fc5a4517b34cc536389186a7eb8..bae59e6c045ad2b058fda219d9b17ca48e85cff1 100644
+--- a/dist/vanilla-extract-vite-plugin.cjs.prod.js
++++ b/dist/vanilla-extract-vite-plugin.cjs.prod.js
+@@ -13,7 +13,9 @@ const virtualExtCss = '.vanilla.css';
+ const isVirtualId = id => id.endsWith(virtualExtCss);
+ const fileIdToVirtualId = id => `${id}${virtualExtCss}`;
+ const virtualIdToFileId = virtualId => virtualId.slice(0, -virtualExtCss.length);
+-const removeIncompatiblePlugins = plugin => typeof plugin === 'object' && plugin !== null && 'name' in plugin &&
++
++const removeIncompatiblePlugins = (plugin, incompatiblePlugins) => {
++  return typeof plugin === 'object' && plugin !== null && 'name' in plugin &&
+ // Prevent an infinite loop where the compiler creates a new instance of the plugin,
+ // which creates a new compiler, which creates a new instance of the plugin, etc.
+ plugin.name !== 'vanilla-extract' &&
+@@ -26,10 +28,13 @@ plugin.name !== 'vanilla-extract' &&
+ // filter out all Remix-related plugins.
+ !plugin.name.startsWith('remix') &&
+ // As React-Router plugin works the same as Remix plugin, also ignore it.
+-!plugin.name.startsWith('react-router');
++!plugin.name.startsWith('react-router') && 
++!incompatiblePlugins.includes(plugin.name)
++};
+ function vanillaExtractPlugin({
+   identifiers,
+-  unstable_mode: mode = 'emitCss'
++  unstable_mode: mode = 'emitCss',
++  incompatiblePlugins
+ } = {}) {
+   let config;
+   let configEnv;
+@@ -107,8 +112,10 @@ function vanillaExtractPlugin({
+         }
+         const viteConfig = {
+           ...configForViteCompiler,
+-          plugins: (_configForViteCompile = configForViteCompiler) === null || _configForViteCompile === void 0 || (_configForViteCompile = _configForViteCompile.plugins) === null || _configForViteCompile === void 0 ? void 0 : _configForViteCompile.flat().filter(removeIncompatiblePlugins)
++          plugins: (_configForViteCompile = configForViteCompiler) === null || _configForViteCompile === void 0 || (_configForViteCompile = _configForViteCompile.plugins) === null || _configForViteCompile === void 0 ? void 0 : _configForViteCompile.flat(Infinity).filter(plugin => removeIncompatiblePlugins(plugin, incompatiblePlugins ?? []))
+         };
++        console.log(viteConfig.plugins);
++
+         compiler = integration.createCompiler({
+           root: config.root,
+           identifiers: getIdentOption(),

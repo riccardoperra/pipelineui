@@ -1,3 +1,8 @@
+import {A, createAsync, useAction} from '@solidjs/router';
+import {deleteScratch, listUserScratches} from '../../../lib/scratchApi';
+import {For, Match, Show, Switch} from 'solid-js';
+import {Icon} from '#ui/components/Icon';
+import {Button, buttonStyles, mergeClasses, PopoverTrigger} from '@codeui/kit';
 import {
   scratchList,
   scratchListItem,
@@ -7,11 +12,6 @@ import {
   scratchListItemInfoType,
   scratchListItemLink,
 } from './ScratchList.css';
-import {A, createAsync, useAction} from '@solidjs/router';
-import {deleteScratch, listUserScratches} from '../../../lib/scratchApi';
-import {For, Match, Show, Switch} from 'solid-js';
-import {Icon} from '#ui/components/Icon';
-import {Button, buttonStyles, mergeClasses, PopoverTrigger} from '@codeui/kit';
 import {ConfirmPopover} from '#ui/components/ConfirmPopover/ConfirmPopover';
 
 function ScratchListForkLabel(props: {url: string}) {

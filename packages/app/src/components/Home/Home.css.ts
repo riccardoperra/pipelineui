@@ -1,6 +1,6 @@
 import {createVar, style} from '@vanilla-extract/css';
-import {appTheme} from '#ui/theme.css';
 import {themeVars} from '@codeui/kit';
+import {appTheme} from '#ui/theme.css';
 
 const canvasPatternColor = createVar();
 
