@@ -9,7 +9,7 @@ patchedDependencies:
     hash: 4iwhasfxdlew752xdmdu6ekfya
     path: patches/@actions__workflow-parser@0.3.13.patch
   '@vanilla-extract/vite-plugin@4.0.17':
-    hash: gybooa5cck5wyitzya5nm6lzoy
+    hash: i44zwkor6nbxyrubqgkogc6t64
     path: patches/@vanilla-extract__vite-plugin@4.0.17.patch
 
 importers:
@@ -117,7 +117,7 @@ importers:
         version: 0.5.5(@vanilla-extract/css@1.16.0)
       '@vanilla-extract/vite-plugin':
         specifier: ^4.0.17
-        version: 4.0.17(patch_hash=gybooa5cck5wyitzya5nm6lzoy)(@types/node@22.7.4)(terser@5.34.1)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
+        version: 4.0.17(patch_hash=i44zwkor6nbxyrubqgkogc6t64)(@types/node@22.7.4)(terser@5.34.1)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
       '@xyflow/system':
         specifier: ^0.0.43
         version: 0.0.43
@@ -6016,7 +6016,7 @@ snapshots:
       '@vanilla-extract/css': 1.16.0
       '@vanilla-extract/dynamic': 2.1.2
       '@vanilla-extract/recipes': 0.5.5(@vanilla-extract/css@1.16.0)
-      '@vanilla-extract/vite-plugin': 4.0.17(patch_hash=gybooa5cck5wyitzya5nm6lzoy)(@types/node@22.7.4)(terser@5.34.1)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
+      '@vanilla-extract/vite-plugin': 4.0.17(patch_hash=i44zwkor6nbxyrubqgkogc6t64)(@types/node@22.7.4)(terser@5.34.1)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))
       example-basic: link:packages/app
       motion: 10.18.0
       polished: 4.3.1
@@ -7485,7 +7485,7 @@ snapshots:
     dependencies:
       '@vanilla-extract/css': 1.16.0
 
-  '@vanilla-extract/vite-plugin@4.0.17(patch_hash=gybooa5cck5wyitzya5nm6lzoy)(@types/node@22.7.4)(terser@5.34.1)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))':
+  '@vanilla-extract/vite-plugin@4.0.17(patch_hash=i44zwkor6nbxyrubqgkogc6t64)(@types/node@22.7.4)(terser@5.34.1)(vite@5.4.8(@types/node@22.7.4)(terser@5.34.1))':
     dependencies:
       '@vanilla-extract/integration': 7.1.10(@types/node@22.7.4)(terser@5.34.1)
       vite: 5.4.8(@types/node@22.7.4)(terser@5.34.1)
