@@ -1,5 +1,4 @@
 import {type GenericStoreApi, makePlugin} from 'statebuilder';
-import type {YAMLDocument, YamlDocumentSessionPlugin} from './yamlSession';
 import YAML, {Pair, Scalar, YAMLMap, YAMLSeq} from 'yaml';
 import type {
   JobEnvironment,
@@ -7,7 +6,9 @@ import type {
   WorkflowDispatchInput,
   WorkflowStructureEnvItem,
   WorkflowStructureJobStep,
+  WorkflowTypesTriggerEvent,
 } from '../editor.types';
+import type {YAMLDocument, YamlDocumentSessionPlugin} from './yamlSession';
 
 export const withGithubYamlManager = () => {
   return makePlugin.typed<GenericStoreApi & YamlDocumentSessionPlugin>()(
@@ -78,6 +79,29 @@ export const withGithubYamlManager = () => {
           }
           const inputAtIndex = inputs.items.at(index);
           inputs.delete(inputAtIndex?.key);
+        });
+      };
+
+      const setEventTriggerTypes = (data: WorkflowTypesTriggerEvent) => {
+        yamlSession.updater(yaml => {
+          modifyOnField(yaml, true, on => {
+            const map = new YAML.YAMLMap();
+
+            if (data.types?.length) {
+              map.set(new YAML.Scalar('types'), data.types);
+              on.set(new YAML.Scalar(data.type as string), map);
+            } else {
+              on.set(new YAML.Scalar(data.type as string), map);
+            }
+          });
+        });
+      };
+
+      const deleteEventTriggerTypes = (data: WorkflowTypesTriggerEvent) => {
+        yamlSession.updater(yaml => {
+          modifyOnField(yaml, true, on => {
+            on.delete(data.type);
+          });
         });
       };
 
@@ -540,10 +564,12 @@ export const withGithubYamlManager = () => {
 
       return {
         yamlSession: Object.assign(_.yamlSession, {
-          deleteWorkflowDispatchItem,
           setEnvironmentVariable,
           deleteEnvironmentVariable,
           setWorkflowDispatch,
+          deleteWorkflowDispatchItem,
+          setEventTriggerTypes,
+          deleteEventTriggerTypes,
           addNewJob,
           removeJob,
           setJobId,
