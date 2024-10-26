@@ -7,8 +7,8 @@ updates the YAML configuration files, ensuring seamless integration with GitHub.
 
 > [!NOTE]
 >
-> This project has been made for [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement)
-> Since October is the hacktoberfest month, this project use `AppWrite` for their [Appwrite’s Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024)
+> This project has been made for [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement). \n
+> Since October is the hacktoberfest month, this project has been made with `AppWrite Cloud (Free tier)` for their [Appwrite’s Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024).
 
 ## 🤖 Tech stack
 
@@ -40,6 +40,7 @@ The UI has been built with:
 - [CodeMirror6](https://codemirror.net/): used to display the YAML editor and merge view. The LSP integration is an
   adapted fork of [codemirror-languageserver](https://github.com/FurqanSoftware/codemirror-languageserver), which was a
   good starting point to integrate the GitHub workflow language server.
+  - [LSP Integration](./packages/app/src/components/Editor/YamlEditor/lsp)
 - [actions/languageservices](https://github.com/actions/languageservices): The language service repo for GitHub
   workflows and expressions. This was used to parse the workflow files and validate them, and enhance the editor code
   through linting and hover-in code documentation.
@@ -83,7 +84,7 @@ Most of the code is available into [packages/app/lib/server](packages/app/src/li
 
 ### Other dependencies
 
-This projects also uses some of mine older dependencies that which were used to speed up the writing of the application.
+This projects also uses some of mine older dependencies that were used to speed up the development.
 These have also been updated to fix the bugs encountered.
 
 - [@codeui/kit](https://github.com/riccardoperra/codeui): [CodeImage](https://github.com/riccardoperra/codeimage) design
@@ -95,9 +96,10 @@ These have also been updated to fix the bugs encountered.
 
 ### Hosting
 
-This application is hosted on Railway.
+This application is hosted on Railway. Deploy are made via github action CI/CD
 
-[//]: # (// TODO add)
+- [Workflow file](./.github/workflows/deploy.yml)
+- [See the workflow file on PipelineUI](https://pipelineui.dev/editor/riccardoperra/pipelineui/main/.github/workflows/deploy.yml)
 
 ## Features
 
