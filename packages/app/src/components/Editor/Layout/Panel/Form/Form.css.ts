@@ -2,16 +2,17 @@ import {style} from '@vanilla-extract/css';
 import {appTheme} from '#ui/theme.css';
 import {recipe} from '@vanilla-extract/recipes';
 
+// TODO: remove important, fix layer
 export const inlineInputRoot = style({
-  display: 'flex',
-  alignItems: 'center',
-  flexDirection: 'row',
-  width: '100%',
-  gap: appTheme.spacing['3'],
+  display: 'flex !important',
+  alignItems: 'center !important',
+  flexDirection: 'row !important',
+  width: '100% !important',
+  gap: `${appTheme.spacing['3']} !important`,
 });
 
 export const inlineInputLabel = style({
-  flex: '1 0 85px',
+  flex: '1 0 85px !important',
 });
 
 export const panelForm = recipe({
