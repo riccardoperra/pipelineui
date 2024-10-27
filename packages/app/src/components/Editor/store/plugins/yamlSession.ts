@@ -4,14 +4,15 @@ import YAML, {Document, type ParsedNode} from 'yaml';
 
 export type YAMLDocument = Document.Parsed<ParsedNode, true>;
 
+export interface YAMLSession {
+  document: Accessor<YAMLDocument | undefined>;
+  init: (yaml: YAMLDocument) => void;
+  updater: (cb: (yaml: YAMLDocument) => boolean | void) => void;
+  source: Accessor<string>;
+  initialSource: Accessor<string>;
+}
 export interface YamlDocumentSessionPlugin {
-  yamlSession: {
-    document: Accessor<YAMLDocument | undefined>;
-    init: (yaml: YAMLDocument) => void;
-    updater: (cb: (yaml: YAMLDocument) => boolean | void) => void;
-    source: Accessor<string>;
-    initialSource: Accessor<string>;
-  };
+  yamlSession: YAMLSession;
 }
 
 export const withYamlDocumentSession = () => {
