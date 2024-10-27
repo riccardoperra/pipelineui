@@ -18,8 +18,8 @@ function getScratchAppwriteVars() {
 
 export const updateScratch = action(async (id: string, newCode: string) => {
   'use server';
-  const projectId = process.env.VITE_APPWRITE_CLOUD_PROJECT_ID!;
-  const endpoint = process.env.VITE_APPWRITE_CLOUD_URL!;
+  const projectId = process.env.APPWRITE_CLOUD_PROJECT_ID!;
+  const endpoint = process.env.APPWRITE_CLOUD_URL!;
   const {databaseId, scratchCollectionId} = getScratchAppwriteVars();
   const user = await getLoggedInUser();
   if (!user) {

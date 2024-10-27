@@ -8,7 +8,7 @@ export function getSession() {
   return useSession<{
     session: NodeModels.Session | null;
   }>({
-    password: 'my-custom-secret-very-long-secret-very-long',
+    password: process.env.APP_SESSION_SECRET!,
   });
 }
 
@@ -16,6 +16,7 @@ export async function getUser(): Promise<NodeModels.User<any> | null> {
   'use server';
   const session = await getSession();
   const userId = session.data.session?.userId;
+  console.log("session", session.data);
   if (!userId) return null;
   return getLoggedInUser();
 }

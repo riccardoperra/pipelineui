@@ -5,8 +5,8 @@ import {action, redirect} from '@solidjs/router';
 
 export async function createSessionClient() {
   'use server';
-  const projectId = process.env.VITE_APPWRITE_CLOUD_PROJECT_ID!;
-  const endpoint = process.env.VITE_APPWRITE_CLOUD_URL!;
+  const projectId = process.env.APPWRITE_CLOUD_PROJECT_ID!;
+  const endpoint = process.env.APPWRITE_CLOUD_URL!;
   const client = new Client().setProject(projectId).setEndpoint(endpoint);
   const session = await getSession();
   if (!session || !session.data.session?.$id) {
