@@ -23,6 +23,9 @@ export const submitRepoInputRoot = style({
   flex: 1,
 });
 
+
+// TODO: fix style order in prod build 
+
 export const submitRepoInput = style({
   borderTopRightRadius: '0 !important',
   borderBottomRightRadius: '0 !important',

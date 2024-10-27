@@ -7,8 +7,9 @@ updates the YAML configuration files, ensuring seamless integration with GitHub.
 
 > [!NOTE]
 >
-> This project has been made for [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement). \n
-> Since October is the hacktoberfest month, this project has been made with `AppWrite Cloud (Free tier)` for their [Appwrite’s Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024).
+> This project has been made for [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement).
+>
+> Since October is the hacktoberfest month, this project use `AppWrite Cloud (Free tier)` for their [Appwrite’s Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024).
 
 ## 🤖 Tech stack
 
@@ -28,7 +29,7 @@ The UI has been built with:
 > [!WARNING]
 >
 > The source code of [@vanilla-extract/vite-plugin](https://github.com/vanilla-extract-css/vanilla-extract/tree/master/packages/vite-plugin) has been altered
-> in order to support solid start w/ vinxi in multiple build.
+> in order to support solid start w/ vinxi for ssr/csr build.
 >
 > [Patch file](./patches/@vanilla-extract__vite-plugin@4.0.17.patch)
 > [Custom app config](./packages/app/app.config.ts)
