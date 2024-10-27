@@ -133,10 +133,6 @@ export function Canvas() {
 
         batch(() => {
           setSize(() => ({width: layout.width!, height: layout.height!}));
-          console.log('new', {
-            mappedNodes,
-            edges,
-          });
           setMappedNodes(mappedNodes);
           setConnections(edges);
         });

@@ -27,7 +27,6 @@ export function PropertiesEnvironmentVariablesForm() {
         });
       }}
       onDelete={(value, index) => {
-        console.log('delete', index);
         editor.actions.deleteEnvironmentVariableByIndex({index: index});
       }}
     />

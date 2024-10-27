@@ -24,7 +24,6 @@ export const PanelEditorStore = defineStore<PanelEditorState>(() => ({
     context.hooks.onInit(() => {
       const command = `@@BEFORE/${editorStore.commands.setSelectedJobId.identity}`;
       editorStore.watchCommand(new RegExp(command)).subscribe(command => {
-        console.log(command);
         _.actions.setActiveStepId(null);
       });
     });
