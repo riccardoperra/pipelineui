@@ -5,7 +5,7 @@ on:
       - main
 
 jobs:
-  install:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PR

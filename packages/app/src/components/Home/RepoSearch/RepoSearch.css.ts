@@ -24,17 +24,15 @@ export const submitRepoInputRoot = style({
 });
 
 export const submitRepoInput = style({
-  borderTopRightRadius: 0,
-  borderBottomRightRadius: 0,
+  borderTopRightRadius: '0 !important',
+  borderBottomRightRadius: '0 !important',
 });
 
 export const submitRepoSubmitButton = style({
-  borderTopLeftRadius: 0,
-  borderBottomLeftRadius: 0,
-  width: '46px',
-  vars: {
-    [buttonStyles.buttonVars.buttonHeight]: '46px',
-  },
+  borderTopLeftRadius: '0 !important',
+  borderBottomLeftRadius: '0 !important',
+  width: '46px !important',
+  height: '46px !important'
 });
 
 export const resetRepoSubmitButton = style({
