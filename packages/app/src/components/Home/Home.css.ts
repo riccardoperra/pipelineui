@@ -12,7 +12,7 @@ export const homeLayoutWrapper = style({
   height: '100vh',
   background: `linear-gradient(90deg,#8882 1px,transparent 0),linear-gradient(180deg,#8882 1px,transparent 0)`,
   backgroundColor: '#000',
-  backgroundSize: '50px 50px',
+  backgroundSize: '24px 24px',
 });
 
 export const homeContainer = style({

@@ -58,7 +58,6 @@ export async function createAdminClient() {
 
 export const signupWithGithub = action(async () => {
   'use server';
-
   const {account} = await createAdminClient();
 
   const origin = getHeaders().origin;

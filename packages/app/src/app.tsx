@@ -8,17 +8,17 @@ import {StateProvider} from 'statebuilder';
 
 export default function App() {
   return (
-    <StateProvider>
-      <Router
-        root={props => (
-          <MetaProvider>
-            <Title>PipelineUI</Title>
-            <Suspense>{props.children}</Suspense>
-          </MetaProvider>
-        )}
-      >
-        <FileRoutes />
-      </Router>
-    </StateProvider>
+    <Router
+      root={props => (
+        <MetaProvider>
+          <Title>PipelineUI</Title>
+          <Suspense>
+            <StateProvider>{props.children}</StateProvider>
+          </Suspense>
+        </MetaProvider>
+      )}
+    >
+      <FileRoutes />
+    </Router>
   );
 }

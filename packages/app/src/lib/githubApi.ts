@@ -23,6 +23,7 @@ export type FetchResponse<T, E = unknown> =
 export async function getGithubRepo(
   name: string,
 ): Promise<FetchResponse<GithubGetRepositoryResponse, Error>> {
+  'use server';
   const response = await fetch(`https://ungh.cc/repos/${name}`);
   if (!response.ok) {
     if (response.status === 404) {
@@ -61,6 +62,7 @@ export function getGithubRepoFiles(
   repo: string,
   branch: string,
 ): Promise<GithubRepositoryFileResponse> {
+  'use server';
   return fetch(`https://ungh.cc/repos/${repo}/files/${branch}`).then(response =>
     response.json(),
   );
@@ -80,6 +82,7 @@ export async function getGithubRepoFileContent(
   branch: string,
   path: string,
 ): Promise<FetchResponse<GithubRepositoryFileContent, Error>> {
+  'use server';
   const response = await fetch(
     `https://ungh.cc/repos/${repo}/files/${branch}/${path}`,
   );
@@ -102,6 +105,7 @@ export function getGithubRepoWorkflowFiles(
   repo: string,
   branch: string,
 ): Promise<GithubRepositoryFile[]> {
+  'use server';
   return getGithubRepoFiles(repo, branch).then(response => {
     return response.files.filter(file =>
       file.path.startsWith('.github/workflows'),

@@ -11,11 +11,12 @@ import {
   submitRepoSubmitButton,
   wrapper,
 } from './RepoSearch.css';
+import {provideState} from 'statebuilder';
+import {RepoStore} from '../store';
 
 export function RepoSearch() {
-  const [repoSearchValue, setRepoSearchValue] = createSignal('');
-  const [isSearching] = useTransition();
-  const [, setParams] = useSearchParams();
+  const repoStore = provideState(RepoStore);
+  const [hasPendingTask] = useTransition();
 
   return (
     <div class={wrapper}>
@@ -24,13 +25,11 @@ export function RepoSearch() {
         role={'search'}
         onSubmit={e => {
           e.preventDefault();
-          if (isSearching()) {
+          if (hasPendingTask()) {
             return;
           }
           const data = new FormData(e.target as HTMLFormElement);
-          setParams({
-            repo: (data.get('path') as string) ?? '',
-          });
+          repoStore.search((data.get('path') as string) ?? '');
         }}
         $ServerOnly
       >
@@ -44,12 +43,10 @@ export function RepoSearch() {
             size={'lg'}
             placeholder={'e.g. riccardoperra/codeimage'}
             theme={'filled'}
-            value={repoSearchValue()}
-            onChange={e => {
-              setRepoSearchValue(e);
-            }}
+            value={repoStore.searchTextValue()}
+            onChange={repoStore.setSearchTextValue}
           />
-          <Show when={repoSearchValue()}>
+          <Show when={repoStore.searchTextValue()}>
             <IconButton
               class={resetRepoSubmitButton}
               size={'sm'}
@@ -58,8 +55,8 @@ export function RepoSearch() {
               variant={'ghost'}
               theme={'secondary'}
               onClick={() => {
-                setRepoSearchValue('');
-                setParams({repo: ''}, {replace: true});
+                repoStore.setSearchTextValue('');
+                repoStore.search('');
               }}
             >
               <Icon name={'close'} />
@@ -71,8 +68,8 @@ export function RepoSearch() {
             size={'lg'}
             aria-label={'Enter'}
             type={'submit'}
+            disabled={hasPendingTask()}
             theme={'secondary'}
-            disabled={isSearching()}
           >
             <Icon name={'keyboard_return'} />
           </IconButton>

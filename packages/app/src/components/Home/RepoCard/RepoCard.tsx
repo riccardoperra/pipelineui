@@ -1,22 +1,16 @@
-import {
-  getGithubRepoWorkflowFiles,
-  type GithubRepository,
-} from '~/lib/githubApi';
-import * as styles from './RepoCard.css';
 import {Icon} from '#ui/components/Icon';
-import {createAsync, A} from '@solidjs/router';
-import {For, Suspense} from 'solid-js';
 import {Button} from '@codeui/kit';
+import {A} from '@solidjs/router';
+import {For} from 'solid-js';
+import {GithubRepositoryFile, type GithubRepository} from '~/lib/githubApi';
+import * as styles from './RepoCard.css';
 
 export interface RepoCardProps {
   repo: GithubRepository;
+  workflows: GithubRepositoryFile[];
 }
 
 export function RepoCard(props: RepoCardProps) {
-  const workflows = createAsync(() =>
-    getGithubRepoWorkflowFiles(props.repo.repo, props.repo.defaultBranch),
-  );
-
   return (
     <div class={styles.repoCard}>
       <div class={styles.repoCardInfoWrapper}>
@@ -32,7 +26,7 @@ export function RepoCard(props: RepoCardProps) {
       </div>
 
       <div class={styles.repoCardWorkflows}>
-        <For each={workflows()}>
+        <For each={props.workflows}>
           {workflow => (
             <Button
               class={styles.repoCardWorkflowItem}

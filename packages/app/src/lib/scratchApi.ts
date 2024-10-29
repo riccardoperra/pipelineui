@@ -1,4 +1,12 @@
-import {Client, Databases, ID, Permission, Query, Role} from 'node-appwrite';
+import {
+  Client,
+  Databases,
+  ID,
+  Models,
+  Permission,
+  Query,
+  Role,
+} from 'node-appwrite';
 import {action, cache, json, redirect} from '@solidjs/router';
 import {
   createAdminClient,
@@ -187,6 +195,8 @@ export const getScratch = cache(async (id: string) => {
     throw redirect('/not-found');
   }
 }, 'get-scratch-by-id');
+
+export type ScratchesListResponse = Models.DocumentList<Models.Document>;
 
 export const listUserScratches = cache(async () => {
   'use server';

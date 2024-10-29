@@ -1,6 +1,10 @@
-import {A, createAsync, useAction} from '@solidjs/router';
-import {deleteScratch, listUserScratches} from '../../../lib/scratchApi';
-import {For, Match, Show, Switch} from 'solid-js';
+import {A, createAsync, useAction, useSubmissions} from '@solidjs/router';
+import {
+  deleteScratch,
+  listUserScratches,
+  ScratchesListResponse,
+} from '../../../lib/scratchApi';
+import {createMemo, For, Match, Show, Switch} from 'solid-js';
 import {Icon} from '#ui/components/Icon';
 import {Button, buttonStyles, mergeClasses, PopoverTrigger} from '@codeui/kit';
 import {
@@ -73,10 +77,28 @@ function ScratchListItemDeleteAction(props: ScratchListItemDeleteActionProps) {
 }
 
 export function ScratchList() {
-  const scratches = createAsync(() => listUserScratches());
+  const scratches = createAsync(() => listUserScratches(), {
+    initialValue: {documents: [], total: 0},
+  });
+
+  const deleteSubmissions = useSubmissions(deleteScratch);
+
+  const optimisticScratches = createMemo<ScratchesListResponse>(() => {
+    const $scratches = scratches();
+    if (deleteSubmissions.pending) {
+      const deleteIds = deleteSubmissions.map(deletion => deletion.input[0]);
+      return {
+        total: $scratches.total - deleteSubmissions.length,
+        documents: $scratches.documents.filter(
+          scratch => !deleteIds.includes(scratch.$id),
+        ),
+      };
+    }
+    return $scratches;
+  });
 
   return (
-    <Show when={scratches()}>
+    <Show when={optimisticScratches()}>
       {scratches => (
         <ul class={scratchList}>
           <For each={scratches().documents}>

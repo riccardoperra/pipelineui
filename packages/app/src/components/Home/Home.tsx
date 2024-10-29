@@ -1,3 +1,11 @@
+import {Button} from '@codeui/kit';
+import {cache, createAsync, useSubmission} from '@solidjs/router';
+import {ErrorBoundary, Show, Suspense} from 'solid-js';
+import {provideState, StateProvider} from 'statebuilder';
+import {getGithubRepo, getGithubRepoWorkflowFiles} from '~/lib/githubApi';
+import {createScratch} from '../../lib/scratchApi';
+import {getLoggedInUser} from '../../lib/server/appwrite';
+import {CurrentUserBar} from './CurrentUser/CurrentUser';
 import {
   choiceSeparator,
   content,
@@ -7,38 +15,46 @@ import {
   homeLayoutWrapper,
   loggedInBar,
 } from './Home.css';
-import {Button} from '@codeui/kit';
-import {
-  cache,
-  createAsync,
-  useSearchParams,
-  useSubmission,
-} from '@solidjs/router';
-import {Show, Suspense} from 'solid-js';
-import {getGithubRepo} from '~/lib/githubApi';
+import {HomeTitle} from './HomeTitle/HomeTitle';
 import {RepoCard} from './RepoCard/RepoCard';
 import {RepoCardFallback} from './RepoCard/RepoCardFallback';
 import {RepoSearch} from './RepoSearch/RepoSearch';
-import {HomeTitle} from './HomeTitle/HomeTitle';
-import {createScratch} from '../../lib/scratchApi';
-import {CurrentUserBar} from './CurrentUser/CurrentUser';
 import {ScratchList} from './ScratchList/ScratchList';
-import {getLoggedInUser} from '../../lib/server/appwrite';
+import {RepoStore} from './store';
 
-export const searchRepo = cache((path: string) => {
-  return getGithubRepo(path);
+class SearchRepoError extends Error {
+  constructor(msg: string) {
+    super(msg);
+  }
+}
+
+export const searchRepo = cache(async (path: string) => {
+  'use server';
+  const result = await getGithubRepo(path);
+  if (result.error) {
+    throw new SearchRepoError(result.error.message);
+  }
+  const files = await getGithubRepoWorkflowFiles(
+    result.data.repo.repo,
+    result.data.repo.defaultBranch,
+  );
+  return {repo: result.data.repo, workflows: files};
 }, 'search-repo');
 
 export function Home() {
-  const [params] = useSearchParams();
+  return (
+    <StateProvider>
+      {/* Nesting state provider in order to trigger suspense from this context */}
+      {/* TODO: allow to provide state with current owner context */}
+      <$Home />
+    </StateProvider>
+  );
+}
 
-  const user = createAsync(() => getLoggedInUser(), {deferStream: true});
-
-  const repo = createAsync(() => {
-    return !params.repo ? Promise.resolve(null) : searchRepo(params.repo);
-  });
-
-  const isCreateScratch = useSubmission(createScratch);
+export function $Home() {
+  const user = createAsync(() => getLoggedInUser());
+  const isCreatingScratch = useSubmission(createScratch);
+  const repo = provideState(RepoStore);
 
   return (
     <div class={homeLayoutWrapper}>
@@ -51,25 +67,35 @@ export function Home() {
         <div class={content}>
           <RepoSearch />
 
-          <Suspense fallback={<RepoCardFallback />}>
-            <Show when={repo()}>
-              {response => (
-                <Show
-                  fallback={
-                    <div class={errorBanner}>{response().error?.message}</div>
-                  }
-                  when={!response().failed && response()}
-                >
-                  {response => <RepoCard repo={response().data!.repo} />}
-                </Show>
-              )}
-            </Show>
-          </Suspense>
+          <ErrorBoundary
+            fallback={<div class={errorBanner}>{repo.error?.message}</div>}
+          >
+            <Suspense fallback={<RepoCardFallback />}>
+              <Show when={repo.loading}>
+                <RepoCardFallback />
+              </Show>
+
+              <Show when={!repo.loading && repo.latest}>
+                {response => (
+                  <RepoCard
+                    repo={response().repo}
+                    workflows={response().workflows}
+                  />
+                )}
+              </Show>
+            </Suspense>
+          </ErrorBoundary>
 
           <div class={choiceSeparator}>Or</div>
 
           <form action={createScratch.with()} class={form} method={'post'}>
-            <Button block theme={'tertiary'} type={'submit'} size={'lg'}>
+            <Button
+              loading={isCreatingScratch.pending}
+              block
+              theme={'tertiary'}
+              type={'submit'}
+              size={'lg'}
+            >
               Create from scratch
             </Button>
           </form>

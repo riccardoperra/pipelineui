@@ -1,6 +1,6 @@
-import {createAsync, useAction} from '@solidjs/router';
+import {createAsync, useAction, useSubmission} from '@solidjs/router';
 import {getUser, logout} from '~/lib/server/session';
-import {Show} from 'solid-js';
+import {Show, useTransition} from 'solid-js';
 import {badge, currentUser} from './CurrentUser.css';
 import {Models} from 'appwrite';
 import {Icon} from '#ui/components/Icon';
@@ -23,6 +23,8 @@ export function CurrentUserBar() {
 
   const logoutAction = useAction(logout);
 
+  const isSignup = useSubmission(signupWithGithub);
+
   return (
     <Show
       fallback={
@@ -32,6 +34,7 @@ export function CurrentUserBar() {
             theme={'secondary'}
             size={'sm'}
             type={'submit'}
+            loading={isSignup.pending}
           >
             Signup with Github
           </Button>
