@@ -103,7 +103,6 @@ export const EditorStore = defineStore<EditorState>(() => ({
         on(
           () => context.source,
           source => {
-            console.log('context source', context.source);
             _.initEditSession(context.source).then();
           },
           // {defer: true},
