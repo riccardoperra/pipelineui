@@ -15,6 +15,7 @@ import type {YamlDocumentSessionPlugin} from './yamlSession';
 export const withEditorSessionState = () =>
   makePlugin.typed<Store<EditorState> & YamlDocumentSessionPlugin>()(
     _ => {
+      const [initialized, setInitialized] = createSignal(false);
       const [session, setSession] =
         createSignal<Document.Parsed<ParsedNode, true>>();
       const [editorView, setEditorView] = createSignal<EditorView | null>(null);
@@ -55,6 +56,7 @@ export const withEditorSessionState = () =>
         setSession,
         editorView,
         setEditorView,
+        initialized,
         utils: {
           createStepJobUpdater,
         },
@@ -88,6 +90,8 @@ export const withEditorSessionState = () =>
 
           _.set('template', reconcile(resolvedTemplate));
           _.set('structure', reconcile(parsedStructure));
+
+          setInitialized(true);
         },
       };
     },

@@ -36,3 +36,10 @@ export const resizablePanel = style({
   display: 'flex',
   overflow: 'hidden',
 });
+
+export const loader = style({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '18px',
+});

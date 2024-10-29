@@ -1,9 +1,9 @@
-import { type WorkflowTemplate } from '@pipelineui/workflow-parser';
-import { createEffect, on, untrack, useContext } from 'solid-js';
-import { defineStore } from 'statebuilder';
-import { withProxyCommands } from 'statebuilder/commands';
-import type { Diagnostic } from 'vscode-languageserver-protocol';
-import { EditorContext } from '../editor.context';
+import {type WorkflowTemplate} from '@pipelineui/workflow-parser';
+import {createEffect, on, untrack, useContext} from 'solid-js';
+import {defineStore} from 'statebuilder';
+import {withProxyCommands} from 'statebuilder/commands';
+import type {Diagnostic} from 'vscode-languageserver-protocol';
+import {EditorContext} from '../editor.context';
 import type {
   EditorWorkflowStructure,
   JobEnvironment,
@@ -15,9 +15,9 @@ import type {
   WorkflowStructureJobStep,
   WorkflowTypesTriggerEvent,
 } from './editor.types';
-import { withEditorSessionState } from './plugins/editorUpdater';
-import { withGithubYamlManager } from './plugins/githubYamlManager';
-import { withYamlDocumentSession } from './plugins/yamlSession';
+import {withEditorSessionState} from './plugins/editorUpdater';
+import {withGithubYamlManager} from './plugins/githubYamlManager';
+import {withYamlDocumentSession} from './plugins/yamlSession';
 
 export interface EditorState {
   selectedJobId: string | null;
@@ -96,7 +96,6 @@ export const EditorStore = defineStore<EditorState>(() => ({
     };
   })
   .extend((_, context) => {
-    context.hooks.onDestroy(() => console.log('destroy this'));
     context.hooks.onInit(() => {
       const context = useContext(EditorContext)!;
       _.initEditSession(context.source).then();
