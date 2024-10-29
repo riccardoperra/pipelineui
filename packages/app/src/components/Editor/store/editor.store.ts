@@ -98,16 +98,15 @@ export const EditorStore = defineStore<EditorState>(() => ({
   .extend((_, context) => {
     context.hooks.onInit(() => {
       const context = useContext(EditorContext)!;
-      _.initEditSession(context.source).then();
-
       // Support reactivity when using hybrid routing
       createEffect(
         on(
           () => context.source,
           source => {
+            console.log('context source', context.source);
             _.initEditSession(context.source).then();
           },
-          {defer: true},
+          // {defer: true},
         ),
       );
 

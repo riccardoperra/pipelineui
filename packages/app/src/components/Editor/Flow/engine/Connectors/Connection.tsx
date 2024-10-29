@@ -1,26 +1,20 @@
-import type {FlowConnection} from '../types';
-import {createMemo} from 'solid-js';
 import {getSmoothStepPath, Position} from '@xyflow/system';
-import {getNodeContext} from '../store';
+import {createMemo, Show} from 'solid-js';
 import {BaseEdge} from '../Edge/BaseEdge';
+import {getNodeContext} from '../store';
+import type {FlowConnection, FlowNode} from '../types';
 import {connection} from './Connection.css';
 
 export interface ConnectionProps {
   connection: FlowConnection;
 }
 
-export function Connection(props: ConnectionProps) {
-  const {nodes, sceneRef} = getNodeContext();
-
-  const sourceNode = () => nodes[props.connection.source.nodeId];
-
-  const targetNode = () => nodes[props.connection.target.nodeId];
-
+function ConnectionNode(props: {source: FlowNode; target: FlowNode}) {
   const path = createMemo(() => {
-    const startX = sourceNode().position.x + 250;
-    const startY = sourceNode().position.y + 25;
-    const endX = targetNode().position.x;
-    const endY = targetNode().position.y + 25;
+    const startX = props.source.position.x + 250;
+    const startY = props.source.position.y + 25;
+    const endX = props.target.position.x;
+    const endY = props.target.position.y + 25;
     const [path, labelX, labelY, offsetX, offsetY] = getSmoothStepPath({
       sourceX: startX,
       sourceY: startY,
@@ -28,8 +22,6 @@ export function Connection(props: ConnectionProps) {
       targetX: endX,
       targetY: endY,
       targetPosition: Position.Left,
-      // borderRadius: pathOptions?.borderRadius,
-      // offset: pathOptions?.offset,
     });
     return {
       path,
@@ -54,14 +46,29 @@ export function Connection(props: ConnectionProps) {
     >
       <svg class={connection}>
         <BaseEdge
-          id={`connection-${props.connection.source.connectorId}_${props.connection.target.connectorId}`}
+          id={`connection-${props.source.id}_${props.target.id}`}
           path={path()?.path}
           style={props.style}
-          markerEnd={props.markerEnd}
-          markerStart={props.markerStart}
-          interactionWidth={props.interactionWidth}
         />
       </svg>
     </div>
+  );
+}
+
+export function Connection(props: ConnectionProps) {
+  const {nodes, sceneRef} = getNodeContext();
+
+  const sourceNode = () => {
+    return nodes[props.connection.source.nodeId];
+  };
+
+  const targetNode = () => {
+    return nodes[props.connection.target.nodeId];
+  };
+
+  return (
+    <Show when={sourceNode() && targetNode()}>
+      <ConnectionNode source={sourceNode()} target={targetNode()} />
+    </Show>
   );
 }
