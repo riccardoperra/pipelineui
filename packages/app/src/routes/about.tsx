@@ -7,7 +7,7 @@ import {
 import * as styles from '~/components/About/about.css';
 import mdxComponents from '~/components/Mdx/mdx-components';
 
-import {createMemo, For, Show} from 'solid-js';
+import {createMemo, For, Show, Suspense} from 'solid-js';
 // @ts-expect-error No types
 import {MDXProvider} from 'solid-mdx';
 import {HomeTitle} from '~/components/Home/HomeTitle/HomeTitle';
@@ -48,13 +48,27 @@ export default function AboutLayout(props: RouteSectionProps) {
   );
 
   return (
-    <MDXProvider components={mdxComponents}>
-      <Title>{breadcrumbs().at(-1)?.config.title}</Title>
-      <main class={styles.aboutContainer}>
-        <HomeTitle />
+    <Suspense>
+      <MDXProvider components={mdxComponents}>
+        <Title>{breadcrumbs().at(-1)?.config.title}</Title>
+        <main class={styles.aboutContainer}>
+          <HomeTitle />
 
-        <Show
-          fallback={
+          <Show
+            fallback={
+              <nav>
+                <ol class={styles.aboutBreadcrumb}>
+                  <li class={styles.aboutBreadcrumbItem}>
+                    <A href={'/'} class={styles.aboutBreadcrumbItemLink}>
+                      <Icon name={'arrow_back'} />
+                      Home
+                    </A>
+                  </li>
+                </ol>
+              </nav>
+            }
+            when={breadcrumbs().length > 1}
+          >
             <nav>
               <ol class={styles.aboutBreadcrumb}>
                 <li class={styles.aboutBreadcrumbItem}>
@@ -63,37 +77,25 @@ export default function AboutLayout(props: RouteSectionProps) {
                     Home
                   </A>
                 </li>
+                <For each={breadcrumbs()}>
+                  {breadcrumb => (
+                    <li class={styles.aboutBreadcrumbItem}>
+                      <A
+                        href={breadcrumb.route.path}
+                        class={styles.aboutBreadcrumbItemLink}
+                      >
+                        {breadcrumb.config.title}
+                      </A>
+                    </li>
+                  )}
+                </For>
               </ol>
             </nav>
-          }
-          when={breadcrumbs().length > 1}
-        >
-          <nav>
-            <ol class={styles.aboutBreadcrumb}>
-              <li class={styles.aboutBreadcrumbItem}>
-                <A href={'/'} class={styles.aboutBreadcrumbItemLink}>
-                  <Icon name={'arrow_back'} />
-                  Home
-                </A>
-              </li>
-              <For each={breadcrumbs()}>
-                {breadcrumb => (
-                  <li class={styles.aboutBreadcrumbItem}>
-                    <A
-                      href={breadcrumb.route.path}
-                      class={styles.aboutBreadcrumbItemLink}
-                    >
-                      {breadcrumb.config.title}
-                    </A>
-                  </li>
-                )}
-              </For>
-            </ol>
-          </nav>
-        </Show>
+          </Show>
 
-        {props.children}
-      </main>
-    </MDXProvider>
+          {props.children}
+        </main>
+      </MDXProvider>
+    </Suspense>
   );
 }

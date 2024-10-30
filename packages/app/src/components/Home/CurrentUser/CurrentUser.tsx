@@ -17,8 +17,15 @@ export function CurrentUserBar() {
   const user = createAsync(() => getUser());
 
   const initials = (user: Models.User<any>) => {
-    const [firstName, lastName] = user.name.split(' ');
-    return [firstName, lastName].map(str => str.charAt(0)).join('');
+    if (user.name) {
+      const [firstName, lastName] = user.name.split(' ');
+      return [firstName, lastName]
+        .filter(Boolean)
+        .map(str => str.charAt(0))
+        .join('');
+    } else {
+      return '?';
+    }
   };
 
   const logoutAction = useAction(logout);
@@ -57,7 +64,7 @@ export function CurrentUserBar() {
             )}
           >
             <span class={badge}>{initials(user())}</span>
-            <span>{user().name}</span>
+            <span>{user().name || user().email}</span>
 
             <Icon name={'keyboard_arrow_down'} />
           </DropdownMenuTrigger>
