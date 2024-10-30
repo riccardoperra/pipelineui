@@ -1,5 +1,5 @@
-import {Button} from '@codeui/kit';
-import {cache, createAsync, useSubmission} from '@solidjs/router';
+import {Button, Link} from '@codeui/kit';
+import {A, cache, createAsync, useSubmission} from '@solidjs/router';
 import {ErrorBoundary, Show, Suspense} from 'solid-js';
 import {provideState, StateProvider} from 'statebuilder';
 import {getGithubRepo, getGithubRepoWorkflowFiles} from '~/lib/githubApi';
@@ -10,6 +10,10 @@ import {
   choiceSeparator,
   content,
   errorBanner,
+  footer,
+  footerContent,
+  footerLink,
+  footerLinks,
   form,
   homeContainer,
   homeLayoutWrapper,
@@ -21,6 +25,7 @@ import {RepoCardFallback} from './RepoCard/RepoCardFallback';
 import {RepoSearch} from './RepoSearch/RepoSearch';
 import {ScratchList} from './ScratchList/ScratchList';
 import {RepoStore} from './store';
+import {HomeFooter} from './Footer/Footer';
 
 class SearchRepoError extends Error {
   constructor(msg: string) {
@@ -106,6 +111,8 @@ export function $Home() {
             <ScratchList />
           </Show>
         </div>
+
+        <HomeFooter />
       </div>
     </div>
   );

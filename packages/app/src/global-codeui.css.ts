@@ -1,9 +1,14 @@
-import {createGlobalTheme, globalStyle} from '@vanilla-extract/css';
+import {globalStyle, globalFontFace} from '@vanilla-extract/css';
 import {themeVars} from '@codeui/kit';
+
+globalFontFace('Gabarito', {
+  src: 'url(/fonts/Gabarito-VariableFont_wght.ttf)',
+});
 
 globalStyle('[data-cui-theme=dark] html, body', {
   background: themeVars.accent1,
   color: themeVars.foreground,
+  fontFamily: 'Gabarito',
 });
 
 // globalStyle('::-webkit-scrollbar', {
