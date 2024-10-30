@@ -1,7 +1,7 @@
 import {themeVars} from '@codeui/kit';
 import {globalStyle, style} from '@vanilla-extract/css';
 import {appTheme} from '~/ui/theme.css';
-import * as mdxStyles from '~/components/mdx/mdx.css';
+import * as mdxStyles from '~/components/Mdx/mdx.css';
 
 export const aboutContainer = style({
   fontSize: '16px',
