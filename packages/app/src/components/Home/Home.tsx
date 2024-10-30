@@ -12,14 +12,9 @@ import {
   Show,
   Suspense,
 } from 'solid-js';
-import {StateProvider} from 'statebuilder';
-import {
-  getGithubData,
-  getGithubRepo,
-  getGithubRepoWorkflowFiles,
-} from '~/lib/githubApi';
+import {getGithubData} from '~/lib/githubApi';
+import {loggedInUser} from '~/lib/server/session';
 import {createScratch} from '../../lib/scratchApi';
-import {getLoggedInUser} from '../../lib/server/appwrite';
 import {CurrentUserBar} from './CurrentUser/CurrentUser';
 import {HomeFooter} from './Footer/Footer';
 import {
@@ -53,7 +48,7 @@ export const route = {
 };
 
 export function Home() {
-  const user = createAsync(() => getLoggedInUser(), {deferStream: true});
+  const user = createAsync(() => loggedInUser());
   const isCreatingScratch = useSubmission(createScratch);
   const [params] = useSearchParams();
 

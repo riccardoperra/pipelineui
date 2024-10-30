@@ -1,7 +1,7 @@
 import {Account, Client, Databases, OAuthProvider} from 'node-appwrite';
 import {getHeaders} from 'vinxi/http';
 import {getSession} from './session';
-import {action, redirect} from '@solidjs/router';
+import {action, cache, redirect} from '@solidjs/router';
 
 export async function createSessionClient() {
   'use server';

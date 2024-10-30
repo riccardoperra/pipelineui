@@ -1,7 +1,7 @@
-import {useSession} from 'vinxi/http';
+import {action, cache, redirect} from '@solidjs/router';
 import {Models as NodeModels} from 'node-appwrite';
+import {useSession} from 'vinxi/http';
 import {getLoggedInUser} from './appwrite';
-import {action, redirect} from '@solidjs/router';
 
 export function getSession() {
   'use server';
@@ -19,6 +19,8 @@ export async function getUser(): Promise<NodeModels.User<any> | null> {
   if (!userId) return null;
   return getLoggedInUser();
 }
+
+export const loggedInUser = cache(async () => getLoggedInUser(), 'logged-user');
 
 export async function logoutSession() {
   'use server';
