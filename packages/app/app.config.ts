@@ -110,9 +110,12 @@ function vanillaExtractServerPlugin() {
     'vinxi:config:app-server',
     'vinxi:build:router:config',
   ];
-  return vanillaExtractPlugin({
-    incompatiblePlugins: [...solidSsrBundlePlugins],
-  });
+  return {
+    ...vanillaExtractPlugin({
+      incompatiblePlugins: [...solidSsrBundlePlugins],
+    }),
+    enforce: 'pre',
+  };
 }
 
 function vanillaExtractServerFnsPlugin() {
@@ -132,9 +135,12 @@ function vanillaExtractServerFnsPlugin() {
     'vinxi:config:app-server',
     'vinxi:build:router:config',
   ];
-  return vanillaExtractPlugin({
-    incompatiblePlugins: [...solidServerFnsPlugin],
-  });
+  return {
+    ...vanillaExtractPlugin({
+      incompatiblePlugins: [...solidServerFnsPlugin],
+    }),
+    enforce: 'pre',
+  };
 }
 function vanillaExtractClientPlugin() {
   const solidClientBundlePlugin = [
@@ -152,7 +158,10 @@ function vanillaExtractClientPlugin() {
     'vinxi:config:app-client',
     'vinxi:build:router:config',
   ];
-  return vanillaExtractPlugin({
-    incompatiblePlugins: [...solidClientBundlePlugin],
-  });
+  return {
+    ...vanillaExtractPlugin({
+      incompatiblePlugins: [...solidClientBundlePlugin],
+    }),
+    enforce: 'pre',
+  };
 }
