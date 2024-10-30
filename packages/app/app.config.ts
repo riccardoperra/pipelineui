@@ -1,20 +1,17 @@
 import {defineConfig, ViteCustomizableConfig} from '@solidjs/start/config';
 import {vanillaExtractPlugin} from '@vanilla-extract/vite-plugin';
-import viteTsConfigPaths from 'vite-tsconfig-paths';
-import {mergeConfig} from 'vite';
 import remarkFrontmatter from 'remark-frontmatter';
+import {mergeConfig} from 'vite';
+import viteTsConfigPaths from 'vite-tsconfig-paths';
 // @ts-expect-error missing types
 import pkg from '@vinxi/plugin-mdx';
 const {default: vinxiMdx} = pkg;
 
-import rehypeRaw from 'rehype-raw';
 import {nodeTypes} from '@mdx-js/mdx';
-import remarkGfm from 'remark-gfm';
-import remarkExpressiveCode, {
-  ExpressiveCodeTheme,
-} from 'remark-expressive-code';
-import rehypeSlug from 'rehype-slug';
 import rehypeAutoLinkHeadings from 'rehype-autolink-headings';
+import rehypeRaw from 'rehype-raw';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
 
 import {rehypeBlockquote} from './rehype-custom/rehypeCustomBlockquote';
 

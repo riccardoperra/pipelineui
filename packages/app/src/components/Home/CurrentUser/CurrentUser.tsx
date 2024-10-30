@@ -1,7 +1,3 @@
-import {createAsync, useAction, useSubmission} from '@solidjs/router';
-import {loggedInUser, logout} from '~/lib/server/session';
-import {Show} from 'solid-js';
-import {badge, currentUser} from './CurrentUser.css';
 import {Icon} from '#ui/components/Icon';
 import {
   Button,
@@ -10,8 +6,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@codeui/kit';
-import {signupWithGithub} from '~/lib/server/appwrite';
+import {useAction, useSubmission} from '@solidjs/router';
 import type {Models} from 'appwrite';
+import {Show} from 'solid-js';
+import {logout, signupWithGithub} from '~/lib/session';
+import {badge, currentUser} from './CurrentUser.css';
 export interface CurrentUserBarProps {
   user: Models.User<any> | null;
 }

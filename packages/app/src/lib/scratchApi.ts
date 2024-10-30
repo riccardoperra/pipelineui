@@ -1,20 +1,9 @@
-import {
-  Client,
-  Databases,
-  ID,
-  Models,
-  Permission,
-  Query,
-  Role,
-} from 'node-appwrite';
 import {action, cache, json, redirect} from '@solidjs/router';
-import {
-  createAdminClient,
-  createSessionClient,
-  getLoggedInUser,
-} from './server/appwrite';
+import {Permission, Role, Query, ID, Models} from 'appwrite';
 import {adjectives, colors, uniqueNamesGenerator} from 'unique-names-generator';
 import type {EditorParsedRepository} from '../components/Editor/editor.context';
+import {createAdminClient, createSessionClient} from './server/appwrite';
+import {loggedInUser} from './session';
 
 function getScratchAppwriteVars() {
   'use server';
@@ -26,21 +15,12 @@ function getScratchAppwriteVars() {
 
 export const updateScratch = action(async (id: string, newCode: string) => {
   'use server';
-  const projectId = process.env.APPWRITE_CLOUD_PROJECT_ID!;
-  const endpoint = process.env.APPWRITE_CLOUD_URL!;
   const {databaseId, scratchCollectionId} = getScratchAppwriteVars();
-  const user = await getLoggedInUser();
+  const user = await loggedInUser();
   if (!user) {
     return;
   }
-
-  const client = new Client()
-    .setProject(projectId)
-    .setEndpoint(endpoint)
-    .setSelfSigned(true)
-    .setSession(user.$id);
-
-  const database = new Databases(client);
+  const {database} = await createSessionClient();
 
   return database.updateDocument(databaseId, scratchCollectionId, id, {
     code: newCode,
@@ -50,7 +30,7 @@ export const updateScratch = action(async (id: string, newCode: string) => {
 export const createScratch = action(async () => {
   'use server';
   const {databaseId, scratchCollectionId} = getScratchAppwriteVars();
-  const user = await getLoggedInUser();
+  const user = await loggedInUser();
 
   if (!user) {
     return;
@@ -121,7 +101,7 @@ export const createScratchFork = action(
   ) => {
     'use server';
     const {databaseId, scratchCollectionId} = getScratchAppwriteVars();
-    const user = await getLoggedInUser();
+    const user = await loggedInUser();
     if (!user) {
       return;
     }
@@ -169,7 +149,7 @@ export const createScratchFork = action(
 export const deleteScratch = action(async scratchId => {
   'use server';
 
-  const user = await getLoggedInUser();
+  const user = await loggedInUser();
   if (!user) {
     return;
   }
@@ -200,7 +180,7 @@ export type ScratchesListResponse = Models.DocumentList<Models.Document>;
 
 export const listUserScratches = cache(async () => {
   'use server';
-  const user = await getLoggedInUser();
+  const user = await loggedInUser();
   if (!user) {
     return {documents: [], total: 0};
   }

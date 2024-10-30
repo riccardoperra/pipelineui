@@ -5,15 +5,9 @@ import {
   useSearchParams,
   useSubmission,
 } from '@solidjs/router';
-import {
-  createMemo,
-  createResource,
-  ErrorBoundary,
-  Show,
-  Suspense,
-} from 'solid-js';
+import {ErrorBoundary, Show, Suspense, useTransition} from 'solid-js';
 import {getGithubData} from '~/lib/githubApi';
-import {loggedInUser} from '~/lib/server/session';
+import {loggedInUser} from '~/lib/session';
 import {createScratch} from '../../lib/scratchApi';
 import {CurrentUserBar} from './CurrentUser/CurrentUser';
 import {HomeFooter} from './Footer/Footer';
@@ -33,40 +27,15 @@ import {RepoSearch} from './RepoSearch/RepoSearch';
 import {ScratchList} from './ScratchList/ScratchList';
 
 export const searchRepo = cache(
-  async (path: string) => getGithubData(path),
+  async (path: string | null) => (path ? getGithubData(path) : null),
   'search-repo',
 );
-
-export const route = {
-  preload: () => {
-    const [params] = useSearchParams();
-    if (params.repo && typeof params.repo === 'string') {
-      return searchRepo(params.repo);
-    }
-    return null;
-  },
-};
 
 export function Home() {
   const user = createAsync(() => loggedInUser());
   const isCreatingScratch = useSubmission(createScratch);
   const [params] = useSearchParams();
-
-  const [repo] = createResource(
-    () => params.repo,
-    repo => {
-      if (!repo || !(typeof repo === 'string')) {
-        return null;
-      }
-      return searchRepo(repo);
-    },
-  );
-
-  const canViewList = createMemo(() => {
-    const loading = repo.loading;
-    const data = repo.latest;
-    return !loading && data;
-  });
+  const repo = createAsync(() => searchRepo(params.repo as string | null));
 
   return (
     <div class={homeLayoutWrapper}>
@@ -84,15 +53,22 @@ export function Home() {
           </Suspense>
 
           <ErrorBoundary
-            fallback={<div class={errorBanner}>{repo.error?.message}</div>}
+            fallback={(err, reset) => (
+              <div class={errorBanner}>{err.message}</div>
+            )}
           >
             <Suspense fallback={<RepoCardFallback />}>
-              <Show when={repo.loading}>
-                <RepoCardFallback />
-              </Show>
-
-              <Show when={canViewList()}>
-                <RepoCard repo={repo()!.repo} workflows={repo()!.workflows} />
+              <Show when={repo()}>
+                {repo => {
+                  const [pendingTask] = useTransition();
+                  pendingTask();
+                  return (
+                    <RepoCard
+                      repo={repo()!.repo}
+                      workflows={repo()!.workflows}
+                    />
+                  );
+                }}
               </Show>
             </Suspense>
           </ErrorBoundary>

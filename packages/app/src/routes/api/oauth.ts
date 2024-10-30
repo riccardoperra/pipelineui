@@ -1,7 +1,7 @@
-import type {APIEvent} from '@solidjs/start/server';
-import {createAdminClient} from '../../lib/server/appwrite';
-import {getSession} from '../../lib/server/session';
 import {redirect} from '@solidjs/router';
+import type {APIEvent} from '@solidjs/start/server';
+import {createAdminClient} from '~/lib/server/appwrite';
+import {getSession} from '~/lib/server/session';
 
 export async function GET({request}: APIEvent) {
   const req = new Request(request);

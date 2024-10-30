@@ -1,8 +1,7 @@
-'use server';
+import {action, redirect} from '@solidjs/router';
 import {Account, Client, Databases, OAuthProvider} from 'node-appwrite';
 import {getHeaders} from 'vinxi/http';
 import {getSession} from './session';
-import {action, cache, redirect} from '@solidjs/router';
 
 export async function createSessionClient() {
   'use server';
@@ -26,15 +25,6 @@ export async function createSessionClient() {
   };
 }
 
-export async function getLoggedInUser() {
-  try {
-    const {account} = await createSessionClient();
-    return await account.get();
-  } catch (error) {
-    return null;
-  }
-}
-
 export async function createAdminClient() {
   'use server';
   const apiKey = process.env.APPWRITE_CLOUD_FULL_ACCESS_API_KEY!;
@@ -55,24 +45,3 @@ export async function createAdminClient() {
     },
   };
 }
-
-export const signupWithGithub = action(async () => {
-  'use server';
-  const {account} = await createAdminClient();
-
-  const origin = getHeaders().origin;
-  const successUrl = `${origin}/api/oauth`;
-  const failureUrl = `${origin}/`;
-
-  try {
-    const redirectUrl = await account.createOAuth2Token(
-      OAuthProvider.Github,
-      successUrl,
-      failureUrl,
-    );
-    return redirect(redirectUrl);
-  } catch (e) {
-    console.error(e);
-    return redirect('error');
-  }
-}, 'signup-with-github');

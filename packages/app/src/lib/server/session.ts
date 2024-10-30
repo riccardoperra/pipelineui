@@ -1,8 +1,6 @@
-'use server';
-import {action, cache, redirect} from '@solidjs/router';
-import {Models as NodeModels} from 'node-appwrite';
+import type {Models as NodeModels} from 'node-appwrite';
 import {useSession} from 'vinxi/http';
-import {getLoggedInUser} from './appwrite';
+import {createSessionClient} from './appwrite';
 
 export function getSession() {
   return useSession<{
@@ -12,21 +10,16 @@ export function getSession() {
   });
 }
 
-async function getUser(): Promise<NodeModels.User<any> | null> {
-  const session = await getSession();
-  const userId = session.data.session?.userId;
-  if (!userId) return null;
-  return getLoggedInUser();
+export async function getLoggedInUser() {
+  try {
+    const {account} = await createSessionClient();
+    return await account.get();
+  } catch (error) {
+    return null;
+  }
 }
 
-export const loggedInUser = cache(async () => {
-  const session = await getSession();
-  const userId = session.data.session?.userId;
-  if (!userId) return null;
-  return getLoggedInUser();
-}, 'logged_user');
-
-async function logoutSession() {
+export async function logoutSession() {
   try {
     const session = await getSession();
     await session.update(d => {
@@ -37,9 +30,3 @@ async function logoutSession() {
     console.error('error removing session');
   }
 }
-
-export const logout = action(async () => {
-  'use server';
-  await logoutSession();
-  return redirect('/');
-}, 'logout');
