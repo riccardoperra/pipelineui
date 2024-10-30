@@ -4,7 +4,6 @@ import {useSession} from 'vinxi/http';
 import {getLoggedInUser} from './appwrite';
 
 export function getSession() {
-  'use server';
   return useSession<{
     session: NodeModels.Session | null;
   }>({
@@ -13,17 +12,21 @@ export function getSession() {
 }
 
 export async function getUser(): Promise<NodeModels.User<any> | null> {
-  'use server';
   const session = await getSession();
   const userId = session.data.session?.userId;
   if (!userId) return null;
   return getLoggedInUser();
 }
 
-export const loggedInUser = cache(async () => getLoggedInUser(), 'logged-user');
-
-export async function logoutSession() {
+export const loggedInUser = cache(async () => {
   'use server';
+  const session = await getSession();
+  const userId = session.data.session?.userId;
+  if (!userId) return null;
+  return getLoggedInUser();
+}, 'logged_user');
+
+async function logoutSession() {
   try {
     const session = await getSession();
     await session.update(d => {
