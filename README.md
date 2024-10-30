@@ -11,7 +11,36 @@ updates the YAML configuration files, ensuring seamless integration with GitHub.
 >
 > Since October is the hacktoberfest month, this project use `AppWrite Cloud (Free tier)` for their [Appwrite’s Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024).
 
-## 🤖 Tech stack
+## Features
+
+### ✅ Built-in editor
+
+Visualize and/or modify your workflow file through a simple UI.
+
+- View your steps dependency graph through the main interactive canvas
+- Check your workflow validity through the YAML Viewer and it's linter, which immediately tell you if your file respect the [GitHub Workflow Syntax](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions) thanks to the GitHub Language Service integration.
+- Modify your workflow file updating the Properties panel in the right side.
+
+[Read here all available editor features](./FEATURES.md)
+
+![Built-in editor](./docs/327shots_so.png)
+
+### ✅ Search for existing GitHub workflows
+
+What if you already have an existing workflow file pushed in your repository? You can use the built-in search to get all workflows
+of your repository.
+
+![Search for existing github workflows](./docs/262shots_so.png)
+
+### ✅ Create your own workflows files
+
+If you haven't an existing workflow file, you can create it from scratch if you're authenticated.
+
+Workflow files are persisted into [AppWrite Cloud](https://appwrite.io/) and **are publicly readable to everyone that has the link**.
+
+![Create scratches](./docs/577shots_so.png)
+
+## 🤖 Technical info
 
 PipelineUI is entirely built with [Solid](https://github.com/solidjs/solid) and [SolidStart](https://github.com/solidjs/solid-start).
 
@@ -99,33 +128,6 @@ This application is hosted on Railway. Deploy are made via github action CI/CD
 
 - [Workflow file](./.github/workflows/deploy.yml)
 - [See the workflow file on PipelineUI](https://pipelineui.dev/editor/riccardoperra/pipelineui/main/.github/workflows/deploy.yml)
-
-## Features
-
-### ✅ Search for existing GitHub workflows
-
-What if you already have an existing workflow file pushed in your repository? You can use the built-in search to get all workflows
-of your repository.
-
-![Search for existing github workflows](./docs/262shots_so.png)
-
-### ✅ Create your own workflows files
-
-If you haven't an existing workflow file, you can create it from scratch if you're authenticated.
-
-Workflow files are persisted into [AppWrite Cloud](https://appwrite.io/) and **are publicly readable to everyone that has the link**.
-
-![Create scratches](./docs/577shots_so.png)
-
-### ✅ Built-in editor
-
-Visualize and/or modify your workflow file through a simple UI.
-
-- View your steps dependency graph through the main interactive canvas
-- Check your workflow validity through the YAML Viewer and it's linter, which immediately tell you if your file respect the [GitHub Workflow Syntax](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions) thanks to the GitHub Language Service integration.
-- Modify your workflow file updating the Properties panel in the right side.
-
-![Built-in editor](./docs/327shots_so.png)
 
 ## Supported GitHub Workflow features
 
