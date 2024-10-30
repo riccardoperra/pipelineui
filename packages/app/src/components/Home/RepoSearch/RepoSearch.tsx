@@ -1,7 +1,7 @@
-import {IconButton, TextField} from '@codeui/kit';
-import {createSignal, Show, useTransition} from 'solid-js';
 import {Icon} from '#ui/components/Icon';
+import {IconButton, TextField} from '@codeui/kit';
 import {useSearchParams} from '@solidjs/router';
+import {createSignal, Show, useTransition} from 'solid-js';
 import {
   contentTitle,
   resetRepoSubmitButton,
@@ -11,8 +11,6 @@ import {
   submitRepoSubmitButton,
   wrapper,
 } from './RepoSearch.css';
-import {provideState} from 'statebuilder';
-import {RepoStore} from '../store';
 
 export function RepoSearch() {
   const [searchTextValue, setSearchTextValue] = createSignal<string>('');

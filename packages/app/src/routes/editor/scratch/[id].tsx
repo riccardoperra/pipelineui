@@ -3,10 +3,11 @@ import {
   type RouteDefinition,
   type RouteSectionProps,
 } from '@solidjs/router';
-import {EditorContext} from '~/components/Editor/editor.context';
-import {Editor} from '~/components/Editor/Editor';
+import {Suspense} from 'solid-js';
 import {StateProvider} from 'statebuilder';
-import {Show, Suspense} from 'solid-js';
+import {Editor} from '~/components/Editor/Editor';
+import {EditorContext} from '~/components/Editor/editor.context';
+import {OverlayLoader} from '~/ui/components/Loader/Loader';
 import {getScratch} from '../../../lib/scratchApi';
 
 export const route = {
@@ -19,24 +20,20 @@ export default function EditorPage(props: RouteSectionProps) {
   const workflowContent = createAsync(() => getScratch(props.params.id));
 
   return (
-    <Suspense fallback={<>Loading...</>}>
-      <Show when={workflowContent()}>
-        {workflowContent => (
-          <EditorContext.Provider
-            value={{
-              get source() {
-                return workflowContent().code ?? '';
-              },
-              repository: null,
-              remoteId: props.params.id,
-            }}
-          >
-            <StateProvider>
-              <Editor type={'scratch'} />
-            </StateProvider>
-          </EditorContext.Provider>
-        )}
-      </Show>
+    <Suspense fallback={<OverlayLoader />}>
+      <EditorContext.Provider
+        value={{
+          get source() {
+            return workflowContent()?.code ?? '';
+          },
+          repository: null,
+          remoteId: props.params.id,
+        }}
+      >
+        <StateProvider>
+          <Editor type={'scratch'} />
+        </StateProvider>
+      </EditorContext.Provider>
     </Suspense>
   );
 }

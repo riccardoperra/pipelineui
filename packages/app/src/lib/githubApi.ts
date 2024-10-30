@@ -112,3 +112,22 @@ export function getGithubRepoWorkflowFiles(
     );
   });
 }
+
+class SearchRepoError extends Error {
+  constructor(msg: string) {
+    super(msg);
+  }
+}
+
+export async function getGithubData(path: string) {
+  'use server';
+  const result = await getGithubRepo(path);
+  if (result.error) {
+    throw new SearchRepoError(result.error.message);
+  }
+  const files = await getGithubRepoWorkflowFiles(
+    result.data.repo.repo,
+    result.data.repo.defaultBranch,
+  );
+  return {repo: result.data.repo, workflows: files};
+}

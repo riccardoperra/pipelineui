@@ -13,7 +13,11 @@ import {
   Suspense,
 } from 'solid-js';
 import {StateProvider} from 'statebuilder';
-import {getGithubRepo, getGithubRepoWorkflowFiles} from '~/lib/githubApi';
+import {
+  getGithubData,
+  getGithubRepo,
+  getGithubRepoWorkflowFiles,
+} from '~/lib/githubApi';
 import {createScratch} from '../../lib/scratchApi';
 import {getLoggedInUser} from '../../lib/server/appwrite';
 import {CurrentUserBar} from './CurrentUser/CurrentUser';
@@ -33,24 +37,20 @@ import {RepoCardFallback} from './RepoCard/RepoCardFallback';
 import {RepoSearch} from './RepoSearch/RepoSearch';
 import {ScratchList} from './ScratchList/ScratchList';
 
-class SearchRepoError extends Error {
-  constructor(msg: string) {
-    super(msg);
-  }
-}
+export const searchRepo = cache(
+  async (path: string) => getGithubData(path),
+  'search-repo',
+);
 
-export const searchRepo = cache(async (path: string) => {
-  'use server';
-  const result = await getGithubRepo(path);
-  if (result.error) {
-    throw new SearchRepoError(result.error.message);
-  }
-  const files = await getGithubRepoWorkflowFiles(
-    result.data.repo.repo,
-    result.data.repo.defaultBranch,
-  );
-  return {repo: result.data.repo, workflows: files};
-}, 'search-repo');
+export const route = {
+  preload: () => {
+    const [params] = useSearchParams();
+    if (params.repo && typeof params.repo === 'string') {
+      return searchRepo(params.repo);
+    }
+    return null;
+  },
+};
 
 export function Home() {
   const user = createAsync(() => getLoggedInUser(), {deferStream: true});
@@ -65,7 +65,6 @@ export function Home() {
       }
       return searchRepo(repo);
     },
-    {deferStream: true},
   );
 
   const canViewList = createMemo(() => {
@@ -77,13 +76,17 @@ export function Home() {
   return (
     <div class={homeLayoutWrapper}>
       <div class={loggedInBar}>
-        <CurrentUserBar />
+        <Suspense>
+          <CurrentUserBar />
+        </Suspense>
       </div>
 
       <div class={homeContainer}>
         <HomeTitle />
         <div class={content}>
-          <RepoSearch />
+          <Suspense>
+            <RepoSearch />
+          </Suspense>
 
           <ErrorBoundary
             fallback={<div class={errorBanner}>{repo.error?.message}</div>}
