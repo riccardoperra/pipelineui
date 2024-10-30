@@ -5,7 +5,6 @@ import {EditorHeader} from './Header/Header';
 import {provideState} from 'statebuilder';
 import {EditorUiStore} from './store/ui.store';
 import {For, lazy, Match, Show, Suspense, Switch, useContext} from 'solid-js';
-import {YamlEditor} from './YamlEditor/YamlEditor';
 import {EditorStatusBar} from './StatusBar/StatusBar';
 import Resizable from '@corvu/resizable';
 import {EditorResizableHandler} from './Layout/Resizable/Resizable';
@@ -17,6 +16,10 @@ import {DiagnosticPanel} from './DiagnosticPanel/DiagnosticPanel';
 import {EditorRepositoryHeaderName} from './Header/RepositoryHeaderName';
 import {EditorContext} from './editor.context';
 import {OverlayLoader} from '~/ui/components/Loader/Loader';
+
+const YamlEditor = lazy(() =>
+  import('./YamlEditor/YamlEditor').then(m => ({default: m.YamlEditor})),
+);
 
 const Canvas = lazy(() =>
   Promise.all([import('elkjs'), import('./Canvas/Canvas')]).then(([, m]) => m),
@@ -85,19 +88,23 @@ export function Editor(props: EditorProps) {
                                   <EditorSidebar position={'left'}>
                                     <Switch>
                                       <Match when={leftPanel() === 'code'}>
-                                        <Show
+                                        <Suspense
                                           fallback={<YamlEditorFallback />}
-                                          when={editor.initialized()}
                                         >
-                                          <YamlEditor
-                                            code={editor.yamlSession.source()}
-                                            setCode={() => {}}
-                                            onMount={editor.setEditorView}
-                                            onDiagnosticsChange={
-                                              editor.actions.setDiagnostics
-                                            }
-                                          />
-                                        </Show>
+                                          <Show
+                                            fallback={<YamlEditorFallback />}
+                                            when={editor.initialized()}
+                                          >
+                                            <YamlEditor
+                                              code={editor.yamlSession.source()}
+                                              setCode={() => {}}
+                                              onMount={editor.setEditorView}
+                                              onDiagnosticsChange={
+                                                editor.actions.setDiagnostics
+                                              }
+                                            />
+                                          </Show>
+                                        </Suspense>
                                       </Match>
                                       <Match when={leftPanel() === 'merge'}>
                                         <YamlMergeView
