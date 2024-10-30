@@ -189,4 +189,4 @@ export const listUserScratches = cache(async () => {
   return database.listDocuments(databaseId, scratchCollectionId, [
     Query.equal('userId', user.$id),
   ]);
-}, 'list-scratches');
+}, 'list_scratches');

@@ -25,79 +25,85 @@ import {RepoCard} from './RepoCard/RepoCard';
 import {RepoCardFallback} from './RepoCard/RepoCardFallback';
 import {RepoSearch} from './RepoSearch/RepoSearch';
 import {ScratchList} from './ScratchList/ScratchList';
+import {OverlayLoader} from '~/ui/components/Loader/Loader';
 
-export const searchRepo = cache(
-  async (path: string | null) => (path ? getGithubData(path) : null),
-  'search-repo',
-);
+export const searchRepo = cache(async (path: string | null) => {
+  'use server';
+  if (!path) {
+    return null;
+  }
+  try {
+    const result = await getGithubData(path);
+    return {...result, error: null};
+  } catch (e) {
+    return {error: e as Error};
+  }
+}, 'repository');
 
 export function Home() {
-  const user = createAsync(() => loggedInUser());
+  const user = createAsync(() => loggedInUser(), {deferStream: true});
   const isCreatingScratch = useSubmission(createScratch);
   const [params] = useSearchParams();
   const repo = createAsync(() => searchRepo(params.repo as string | null));
 
   return (
-    <div class={homeLayoutWrapper}>
-      <div class={loggedInBar}>
-        <Suspense>
+    <Suspense fallback={<OverlayLoader />}>
+      <div class={homeLayoutWrapper}>
+        <div class={loggedInBar}>
           <CurrentUserBar user={user() || null} />
-        </Suspense>
-      </div>
+        </div>
 
-      <div class={homeContainer}>
-        <HomeTitle />
-        <div class={content}>
-          <Suspense>
+        <div class={homeContainer}>
+          <HomeTitle />
+          <div class={content}>
             <RepoSearch />
-          </Suspense>
 
-          <ErrorBoundary
-            fallback={(err, reset) => (
-              <div class={errorBanner}>{err.message}</div>
-            )}
-          >
             <Suspense fallback={<RepoCardFallback />}>
-              <Show when={repo()}>
+              <Show when={repo()} keyed>
                 {repo => {
-                  const [pendingTask] = useTransition();
-                  pendingTask();
                   return (
-                    <RepoCard
-                      repo={repo()!.repo}
-                      workflows={repo()!.workflows}
-                    />
+                    <Show
+                      fallback={
+                        <div class={errorBanner}>{repo.error?.message}</div>
+                      }
+                      when={repo.error === null && repo}
+                    >
+                      {repo => (
+                        <RepoCard
+                          repo={repo().repo}
+                          workflows={repo()!.workflows}
+                        />
+                      )}
+                    </Show>
                   );
                 }}
               </Show>
             </Suspense>
-          </ErrorBoundary>
 
-          <div class={choiceSeparator}>Or</div>
+            <div class={choiceSeparator}>Or</div>
 
-          <form action={createScratch.with()} class={form} method={'post'}>
-            <Button
-              loading={isCreatingScratch.pending}
-              block
-              theme={'tertiary'}
-              type={'submit'}
-              size={'lg'}
-            >
-              Create from scratch
-            </Button>
-          </form>
+            <form action={createScratch.with()} class={form} method={'post'}>
+              <Button
+                loading={isCreatingScratch.pending}
+                block
+                theme={'tertiary'}
+                type={'submit'}
+                size={'lg'}
+              >
+                Create from scratch
+              </Button>
+            </form>
 
-          <Suspense>
             <Show when={user()}>
               <div class={choiceSeparator}>Your scratches & forks</div>
 
               <ScratchList />
             </Show>
-          </Suspense>
-        </div>
+          </div>
 
-        <HomeFooter />
+          <HomeFooter />
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 }
