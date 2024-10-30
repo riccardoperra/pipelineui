@@ -1,19 +1,27 @@
-import {Button, Link} from '@codeui/kit';
-import {A, cache, createAsync, useSubmission} from '@solidjs/router';
-import {ErrorBoundary, Show, Suspense} from 'solid-js';
-import {provideState, StateProvider} from 'statebuilder';
+import {Button} from '@codeui/kit';
+import {
+  cache,
+  createAsync,
+  useSearchParams,
+  useSubmission,
+} from '@solidjs/router';
+import {
+  createMemo,
+  createResource,
+  ErrorBoundary,
+  Show,
+  Suspense,
+} from 'solid-js';
+import {StateProvider} from 'statebuilder';
 import {getGithubRepo, getGithubRepoWorkflowFiles} from '~/lib/githubApi';
 import {createScratch} from '../../lib/scratchApi';
 import {getLoggedInUser} from '../../lib/server/appwrite';
 import {CurrentUserBar} from './CurrentUser/CurrentUser';
+import {HomeFooter} from './Footer/Footer';
 import {
   choiceSeparator,
   content,
   errorBanner,
-  footer,
-  footerContent,
-  footerLink,
-  footerLinks,
   form,
   homeContainer,
   homeLayoutWrapper,
@@ -24,8 +32,6 @@ import {RepoCard} from './RepoCard/RepoCard';
 import {RepoCardFallback} from './RepoCard/RepoCardFallback';
 import {RepoSearch} from './RepoSearch/RepoSearch';
 import {ScratchList} from './ScratchList/ScratchList';
-import {RepoStore} from './store';
-import {HomeFooter} from './Footer/Footer';
 
 class SearchRepoError extends Error {
   constructor(msg: string) {
@@ -47,19 +53,25 @@ export const searchRepo = cache(async (path: string) => {
 }, 'search-repo');
 
 export function Home() {
-  return (
-    <StateProvider>
-      {/* Nesting state provider in order to trigger suspense from this context */}
-      {/* TODO: allow to provide state with current owner context */}
-      <$Home />
-    </StateProvider>
-  );
-}
-
-export function $Home() {
   const user = createAsync(() => getLoggedInUser());
   const isCreatingScratch = useSubmission(createScratch);
-  const repo = provideState(RepoStore);
+  const [params] = useSearchParams();
+
+  const [repo] = createResource(
+    () => params.repo,
+    repo => {
+      if (!repo || !(typeof repo === 'string')) {
+        return null;
+      }
+      return searchRepo(repo);
+    },
+  );
+
+  const canViewList = createMemo(() => {
+    const loading = repo.loading;
+    const data = repo();
+    return !loading && data;
+  });
 
   return (
     <div class={homeLayoutWrapper}>
@@ -80,13 +92,8 @@ export function $Home() {
                 <RepoCardFallback />
               </Show>
 
-              <Show when={!repo.loading && repo.latest}>
-                {response => (
-                  <RepoCard
-                    repo={response().repo}
-                    workflows={response().workflows}
-                  />
-                )}
+              <Show when={canViewList()}>
+                <RepoCard repo={repo()!.repo} workflows={repo()!.workflows} />
               </Show>
             </Suspense>
           </ErrorBoundary>

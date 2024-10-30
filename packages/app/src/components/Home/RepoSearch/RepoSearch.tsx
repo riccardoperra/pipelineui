@@ -15,7 +15,8 @@ import {provideState} from 'statebuilder';
 import {RepoStore} from '../store';
 
 export function RepoSearch() {
-  const repoStore = provideState(RepoStore);
+  const [searchTextValue, setSearchTextValue] = createSignal<string>('');
+  const [, setParams] = useSearchParams();
   const [hasPendingTask] = useTransition();
 
   return (
@@ -29,7 +30,7 @@ export function RepoSearch() {
             return;
           }
           const data = new FormData(e.target as HTMLFormElement);
-          repoStore.search((data.get('path') as string) ?? '');
+          setParams({repo: (data.get('path') as string) ?? ''});
         }}
         $ServerOnly
       >
@@ -43,10 +44,10 @@ export function RepoSearch() {
             size={'lg'}
             placeholder={'e.g. riccardoperra/codeimage'}
             theme={'filled'}
-            value={repoStore.searchTextValue()}
-            onChange={repoStore.setSearchTextValue}
+            value={searchTextValue()}
+            onChange={setSearchTextValue}
           />
-          <Show when={repoStore.searchTextValue()}>
+          <Show when={searchTextValue()}>
             <IconButton
               class={resetRepoSubmitButton}
               size={'sm'}
@@ -55,8 +56,8 @@ export function RepoSearch() {
               variant={'ghost'}
               theme={'secondary'}
               onClick={() => {
-                repoStore.setSearchTextValue('');
-                repoStore.search('');
+                setSearchTextValue('');
+                setParams({repo: ''}, {replace: true});
               }}
             >
               <Icon name={'close'} />
