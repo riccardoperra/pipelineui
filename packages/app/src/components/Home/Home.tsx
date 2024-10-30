@@ -87,11 +87,13 @@ export function Home() {
             </Button>
           </form>
 
-          <Show when={user()}>
-            <div class={choiceSeparator}>Your scratches & forks</div>
+          <Suspense>
+            <Show when={user()}>
+              <div class={choiceSeparator}>Your scratches & forks</div>
 
-            <ScratchList />
-          </Show>
+              <ScratchList />
+            </Show>
+          </Suspense>
         </div>
 
         <HomeFooter />

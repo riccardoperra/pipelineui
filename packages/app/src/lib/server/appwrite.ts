@@ -1,10 +1,7 @@
-import {action, redirect} from '@solidjs/router';
-import {Account, Client, Databases, OAuthProvider} from 'node-appwrite';
-import {getHeaders} from 'vinxi/http';
+import {Account, Client, Databases} from 'node-appwrite';
 import {getSession} from './session';
 
 export async function createSessionClient() {
-  'use server';
   const projectId = process.env.APPWRITE_CLOUD_PROJECT_ID!;
   const endpoint = process.env.APPWRITE_CLOUD_URL!;
   const client = new Client().setProject(projectId).setEndpoint(endpoint);
@@ -26,7 +23,6 @@ export async function createSessionClient() {
 }
 
 export async function createAdminClient() {
-  'use server';
   const apiKey = process.env.APPWRITE_CLOUD_FULL_ACCESS_API_KEY!;
   const projectId = process.env.APPWRITE_CLOUD_PROJECT_ID!;
   const endpoint = process.env.APPWRITE_CLOUD_URL!;
