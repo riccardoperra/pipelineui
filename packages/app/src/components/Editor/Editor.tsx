@@ -4,16 +4,7 @@ import * as fallbackStyles from '~/ui/components/Fallback.css';
 import {EditorHeader} from './Header/Header';
 import {provideState} from 'statebuilder';
 import {EditorUiStore} from './store/ui.store';
-import {
-  createEffect,
-  For,
-  lazy,
-  Match,
-  Show,
-  Suspense,
-  Switch,
-  useContext,
-} from 'solid-js';
+import {For, lazy, Match, Show, Suspense, Switch, useContext} from 'solid-js';
 import {YamlEditor} from './YamlEditor/YamlEditor';
 import {EditorStatusBar} from './StatusBar/StatusBar';
 import Resizable from '@corvu/resizable';
@@ -25,11 +16,10 @@ import {YamlMergeView} from './YamlEditor/MergeView';
 import {DiagnosticPanel} from './DiagnosticPanel/DiagnosticPanel';
 import {EditorRepositoryHeaderName} from './Header/RepositoryHeaderName';
 import {EditorContext} from './editor.context';
+import {OverlayLoader} from '~/ui/components/Loader/Loader';
 
 const Canvas = lazy(() =>
-  Promise.all([import('elkjs'), import('./Canvas/Canvas')]).then(([, m]) => ({
-    default: m.Canvas,
-  })),
+  Promise.all([import('elkjs'), import('./Canvas/Canvas')]).then(([, m]) => m),
 );
 
 export interface EditorProps {
@@ -127,8 +117,11 @@ export function Editor(props: EditorProps) {
                             position={'left'}
                           />
 
-                          <Resizable.Panel initialSize={0.58}>
-                            <Suspense>
+                          <Resizable.Panel
+                            initialSize={0.58}
+                            style={{position: 'relative'}}
+                          >
+                            <Suspense fallback={<OverlayLoader />}>
                               <Canvas />
                             </Suspense>
                           </Resizable.Panel>
@@ -153,18 +146,20 @@ export function Editor(props: EditorProps) {
                               {rightPanel => (
                                 <>
                                   <EditorSidebar position={'right'}>
-                                    <Switch>
-                                      <Match
-                                        when={rightPanel() === 'properties'}
-                                      >
-                                        <Show
-                                          fallback={<PropertiesPanelEditor />}
-                                          when={editor.selectedJob()}
+                                    <Suspense>
+                                      <Switch>
+                                        <Match
+                                          when={rightPanel() === 'properties'}
                                         >
-                                          <JobPanelEditor />
-                                        </Show>
-                                      </Match>
-                                    </Switch>
+                                          <Show
+                                            fallback={<PropertiesPanelEditor />}
+                                            when={editor.selectedJob()}
+                                          >
+                                            <JobPanelEditor />
+                                          </Show>
+                                        </Match>
+                                      </Switch>
+                                    </Suspense>
                                   </EditorSidebar>
                                 </>
                               )}
@@ -187,22 +182,24 @@ export function Editor(props: EditorProps) {
                   collapsible
                   class={styles.resizablePanel}
                 >
-                  <DiagnosticPanel />
+                  <Suspense>
+                    <DiagnosticPanel />
+                  </Suspense>
                 </Resizable.Panel>
               </>
             );
           }}
         </Resizable>
       </div>
-      <EditorStatusBar />
+      <Suspense>
+        <EditorStatusBar />
+      </Suspense>
     </div>
   );
 }
 
 function YamlEditorFallback() {
   const editor = useContext(EditorContext);
-
-  createEffect(() => console.log(editor?.source.split('\n')));
   return (
     <div
       style={{

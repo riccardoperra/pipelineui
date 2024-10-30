@@ -1,7 +1,7 @@
 import {EditorStore} from '#editor-store/editor.store';
 import type {WorkflowStructureJob} from '#editor-store/editor.types';
 import type {ElkExtendedEdge, ElkNode} from 'elkjs';
-import {batch, createEffect, createSignal, onCleanup, onMount} from 'solid-js';
+import {createResource, onCleanup, onMount, Suspense, untrack} from 'solid-js';
 import {provideState} from 'statebuilder';
 import {FlowRenderer} from '../Flow/engine/FlowRenderer';
 import type {FlowConnection, FlowNodeMap} from '../Flow/engine/types';
@@ -23,6 +23,8 @@ function createNodes(jobs: WorkflowStructureJob[]) {
     };
     return acc;
   }, {} as FlowNodeMap);
+
+  console.log('my jobs', jobs);
 
   return import('elkjs').then(({default: ELK}) => {
     const graph: ElkNode = {
@@ -77,84 +79,89 @@ function createNodes(jobs: WorkflowStructureJob[]) {
         return acc;
       }, [] as ElkExtendedEdge[]),
     };
-    return new ELK().layout(graph).then(layout => {
-      layout.children?.forEach(child => {
-        const node = mappedNodes[child.id];
-        if (node) {
-          node.position.x = child.x ?? 0;
-          node.position.y = child.y ?? 0;
-        }
-      });
+    return new ELK()
+      .layout(graph)
+      .then(layout => {
+        layout.children?.forEach(child => {
+          const node = mappedNodes[child.id];
+          if (node) {
+            node.position.x = child.x ?? 0;
+            node.position.y = child.y ?? 0;
+          }
+        });
 
-      const edges = jobs.reduce((acc, job) => {
-        const jobEdge: FlowConnection[] = (job.needs ?? []).reduce(
-          (acc, need) => {
-            const cJob = jobs.find(n => n.id.toString() === need.toString());
-            if (!cJob) {
-              return acc;
-            }
-            return [
-              ...acc,
-              {
-                target: {
-                  nodeId: job.id,
-                  connectorId: `${job.id}-output`,
-                  connectorType: 'output',
-                },
-                source: {
-                  nodeId: need,
-                  connectorId: `${need}-input`,
-                  connectorType: 'input',
-                },
-              } satisfies FlowConnection,
-            ];
+        const edges = jobs.reduce((acc, job) => {
+          const jobEdge: FlowConnection[] = (job.needs ?? []).reduce(
+            (acc, need) => {
+              const cJob = jobs.find(n => n.id.toString() === need.toString());
+              if (!cJob) {
+                return acc;
+              }
+              return [
+                ...acc,
+                {
+                  target: {
+                    nodeId: job.id,
+                    connectorId: `${job.id}-output`,
+                    connectorType: 'output',
+                  },
+                  source: {
+                    nodeId: need,
+                    connectorId: `${need}-input`,
+                    connectorType: 'input',
+                  },
+                } satisfies FlowConnection,
+              ];
+            },
+            [] as FlowConnection[],
+          );
+
+          return [...acc, ...jobEdge];
+        }, [] as FlowConnection[]);
+
+        console.log(mappedNodes);
+
+        return {
+          size: {
+            width: layout.width!,
+            height: layout.height!,
           },
-          [] as FlowConnection[],
-        );
-
-        return [...acc, ...jobEdge];
-      }, [] as FlowConnection[]);
-
-      return {
-        size: {
-          width: layout.width!,
-          height: layout.height!,
-        },
-        mappedNodes,
-        edges,
-      };
-    });
+          mappedNodes,
+          edges,
+        };
+      })
+      .catch(console.error);
   });
 }
 
-export function Canvas() {
+export default function Canvas() {
   const editor = provideState(EditorStore);
 
-  const [mappedNodes, setMappedNodes] = createSignal<FlowNodeMap>({});
-  const [connections, setConnections] = createSignal<FlowConnection[]>([]);
-  const [size, setSize] = createSignal({width: 0, height: 0});
+  const [data, {refetch}] = createResource(
+    () => editor.initialized(),
+    async () => {
+      const result = await createNodes(
+        untrack(() => editor().structure.jobs ?? []),
+      );
+      return result;
+    },
+  );
 
-  function updateNodes() {
-    createNodes(editor().structure.jobs).then(({size, edges, mappedNodes}) => {
-      batch(() => {
-        setSize(size);
-        setMappedNodes(mappedNodes);
-        setConnections(edges);
-      });
-    });
-  }
+  const mappedNodes = () => data.latest?.mappedNodes ?? {};
+  const connections = () => data.latest?.edges ?? [];
+  const size = () => data.latest?.size ?? {width: 0, height: 0};
 
   onMount(() => {
     const {unsubscribe} = editor
-      .watchCommand([editor.commands.updateJobNeeds])
+      .watchCommand([
+        editor.commands.updateJobNeeds,
+        editor.commands.addNewJob,
+        editor.commands.deleteJob,
+      ])
       .subscribe(() => {
-        updateNodes();
+        refetch();
       });
     onCleanup(() => unsubscribe());
-  });
-
-  createEffect(() => {
-    updateNodes();
   });
 
   return (

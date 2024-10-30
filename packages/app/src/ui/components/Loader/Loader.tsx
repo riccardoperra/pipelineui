@@ -4,9 +4,12 @@ export function Loader() {
   return <span class={styles.loader}></span>;
 }
 
-export function OverlayLoader() {
+export interface OverlayLoaderProps {
+  relative?: boolean;
+}
+export function OverlayLoader(props: OverlayLoaderProps) {
   return (
-    <div class={styles.overlay}>
+    <div class={styles.overlay} data-relative={props.relative}>
       <Loader />
     </div>
   );
