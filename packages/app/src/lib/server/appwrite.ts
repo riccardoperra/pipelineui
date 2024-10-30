@@ -1,3 +1,4 @@
+'use server';
 import {Account, Client, Databases, OAuthProvider} from 'node-appwrite';
 import {getHeaders} from 'vinxi/http';
 import {getSession} from './session';
@@ -26,7 +27,6 @@ export async function createSessionClient() {
 }
 
 export async function getLoggedInUser() {
-  'use server';
   try {
     const {account} = await createSessionClient();
     return await account.get();

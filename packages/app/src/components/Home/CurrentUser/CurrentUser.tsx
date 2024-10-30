@@ -2,7 +2,6 @@ import {createAsync, useAction, useSubmission} from '@solidjs/router';
 import {loggedInUser, logout} from '~/lib/server/session';
 import {Show} from 'solid-js';
 import {badge, currentUser} from './CurrentUser.css';
-import {Models} from 'appwrite';
 import {Icon} from '#ui/components/Icon';
 import {
   Button,
@@ -12,10 +11,12 @@ import {
   DropdownMenuTrigger,
 } from '@codeui/kit';
 import {signupWithGithub} from '~/lib/server/appwrite';
+import type {Models} from 'appwrite';
+export interface CurrentUserBarProps {
+  user: Models.User<any> | null;
+}
 
-export function CurrentUserBar() {
-  const user = createAsync(() => loggedInUser());
-
+export function CurrentUserBar(props: CurrentUserBarProps) {
   const initials = (user: Models.User<any>) => {
     if (user.name) {
       const [firstName, lastName] = user.name.split(' ');
@@ -47,7 +48,7 @@ export function CurrentUserBar() {
           </Button>
         </form>
       }
-      when={user()}
+      when={props.user}
     >
       {user => (
         <DropdownMenu>

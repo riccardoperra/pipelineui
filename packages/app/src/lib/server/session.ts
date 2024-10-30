@@ -1,3 +1,4 @@
+'use server';
 import {action, cache, redirect} from '@solidjs/router';
 import {Models as NodeModels} from 'node-appwrite';
 import {useSession} from 'vinxi/http';
@@ -11,7 +12,7 @@ export function getSession() {
   });
 }
 
-export async function getUser(): Promise<NodeModels.User<any> | null> {
+async function getUser(): Promise<NodeModels.User<any> | null> {
   const session = await getSession();
   const userId = session.data.session?.userId;
   if (!userId) return null;
@@ -19,7 +20,6 @@ export async function getUser(): Promise<NodeModels.User<any> | null> {
 }
 
 export const loggedInUser = cache(async () => {
-  'use server';
   const session = await getSession();
   const userId = session.data.session?.userId;
   if (!userId) return null;

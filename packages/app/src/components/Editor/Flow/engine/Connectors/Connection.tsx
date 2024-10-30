@@ -48,7 +48,6 @@ function ConnectionNode(props: {source: FlowNode; target: FlowNode}) {
         <BaseEdge
           id={`connection-${props.source.id}_${props.target.id}`}
           path={path()?.path}
-          style={props.style}
         />
       </svg>
     </div>

@@ -64,7 +64,7 @@ export function Home() {
 
   const canViewList = createMemo(() => {
     const loading = repo.loading;
-    const data = repo();
+    const data = repo.latest;
     return !loading && data;
   });
 
@@ -72,7 +72,7 @@ export function Home() {
     <div class={homeLayoutWrapper}>
       <div class={loggedInBar}>
         <Suspense>
-          <CurrentUserBar />
+          <CurrentUserBar user={user() || null} />
         </Suspense>
       </div>
 
