@@ -53,7 +53,7 @@ export const searchRepo = cache(async (path: string) => {
 }, 'search-repo');
 
 export function Home() {
-  const user = createAsync(() => getLoggedInUser());
+  const user = createAsync(() => getLoggedInUser(), {deferStream: true});
   const isCreatingScratch = useSubmission(createScratch);
   const [params] = useSearchParams();
 
@@ -65,6 +65,7 @@ export function Home() {
       }
       return searchRepo(repo);
     },
+    {deferStream: true},
   );
 
   const canViewList = createMemo(() => {
