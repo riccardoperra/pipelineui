@@ -41,7 +41,8 @@ Visualize and/or modify your workflow file through a simple UI.
 - Check your workflow validity through the YAML Viewer and it's linter, which immediately tell you if your file respect the [GitHub Workflow Syntax](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions) thanks to the GitHub Language Service integration.
 - Modify your workflow file updating the Properties panel in the right side.
 
-[Read here all available editor features](./FEATURES.md)
+> ![NOTE]
+> Y[Read here all available editor features](./packages/app/routes/about/supported-workflow-features.mdx)
 
 ![Built-in editor](./docs/327shots_so.png)
 
