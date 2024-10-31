@@ -5,11 +5,12 @@ on:
       - main
       - appwrite
 
+env:
+  RAILWAY_ENV: ${{(github.ref == 'refs/heads/main' && 'production') || (github.ref == 'refs/heads/appwrite' && 'appwrite' || null)}}
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      RAILWAY_ENV: ${{(github.ref == 'refs/heads/main' && 'production') || (github.ref == 'refs/heads/appwrite' && 'appwrite' || null)}}
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
