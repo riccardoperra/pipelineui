@@ -3,8 +3,6 @@
   <img alt="PipelineUI logo" src="./docs/logo_for_github_dark.svg" width="250">
 </picture>
 
----
-
 Pipeline UI is a visual editor for creating and managing GitHub Actions workflows.
 Built with SolidStart, this tool simplifies the process of defining GitHub pipelines
 by allowing users to visually editing and update workflows. It automatically generates and
@@ -12,13 +10,14 @@ updates the YAML configuration files, ensuring seamless integration with GitHub.
 
 > [!NOTE]
 >
-> This project has been made for [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement) entry. Although there may be alternative solutions that can help writing workflow files
-> directly from IDE, a core principle to this work was discovering new technologies and apply them for a POC.
+> This project has been built to partecipate in [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement)
+> and [Appwrite’s Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024).
 >
-> The amount of time dedicated is very limited (around ~3 weekends, starting from 1st of October), and the features needed for a complete project are numerous.
+> Although there are some alternative solutions that can help a lot writing workflow files
+> directly from IDE, a core principle to this work was discovering new technologies and apply them for an MVP.
+>
+> The amount of time dedicated is very limited (around ~4 weekends, starting from 1st of October), and the features needed for a complete project are numerous.
 > Therefore, some features will **undoubtedly be missing** and may be implemented in the future.
->
-> Since October is the hacktoberfest month, this project use AppWrite Cloud (Free tier) to partecipate also in [Appwrite’s Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024).
 
 ## Table of contents
 
@@ -63,25 +62,28 @@ Workflow files are persisted into [AppWrite Cloud](https://appwrite.io/) and **a
 
 ## 🤖 Technical info
 
-PipelineUI is entirely built with [Solid](https://github.com/solidjs/solid) and [SolidStart](https://github.com/solidjs/solid-start).
+PipelineUI is entirely built with [Solid](https://github.com/solidjs/solid) and [SolidStart](https://github.com/solidjs/solid-start)
+with enabled SSR.
 
-There are a few core external dependencies that should be listed here for the awesome work.
+A bref introduction with a list of some core external dependencies that should be listed here for the awesome work.
 
-### UI
+### User interface
 
-The UI has been built with:
+The user interface has been built with:
 
-- [@kobalte/core](https://github.com/kobaltedev/kobalte): used to build accessible components in the UI
+- [@kobalte/core](https://github.com/kobaltedev/kobalte): Accessible components for SolidJS
 - [@solid-primitives/\*](https://github.com/solidjs-community/solid-primitives): SolidJS primitives library
-- [vanilla-extract](https://vanilla-extract.style/): Zero-runtime CSS in typescript
 - [corvu](https://corvu.dev/): UI primitives for SolidJS
+- [vanilla-extract](https://vanilla-extract.style/): Zero-runtime CSS in typescript
 
 > [!WARNING]
 >
-> The source code of [@vanilla-extract/vite-plugin](https://github.com/vanilla-extract-css/vanilla-extract/tree/master/packages/vite-plugin) has been altered
-> in order to support solid start w/ vinxi for ssr/csr build.
+> The source code of [@vanilla-extract/vite-plugin](https://github.com/vanilla-extract-css/vanilla-extract/tree/master/packages/vite-plugin) has been patched
+> in order to support solid start w/ vinxi for multi-environment ssr/csr build.
 >
-> [Patch file](./patches/@vanilla-extract__vite-plugin@4.0.17.patch) > [Custom app config](./packages/app/app.config.ts)
+> [Patch file](./patches/@vanilla-extract__vite-plugin@4.0.17.patch)
+>
+> [Custom app config](./packages/app/app.config.ts)
 
 ---
 
@@ -89,18 +91,17 @@ The UI has been built with:
 
 - [CodeMirror6](https://codemirror.net/): used to display the YAML editor and merge view. The LSP integration is an
   adapted fork of [codemirror-languageserver](https://github.com/FurqanSoftware/codemirror-languageserver), which was a
-  good starting point to integrate the GitHub workflow language server.
-  - [LSP Integration](./packages/app/src/components/Editor/YamlEditor/lsp)
+  good starting point to integrate the GitHub workflow language server. Portion of CodeMirror implementation is present in the [@pipelineui/yaml-editor](./packages/yaml-editor)
 - [actions/languageservices](https://github.com/actions/languageservices): The language service repo for GitHub
   workflows and expressions. This was used to parse the workflow files and validate them, and enhance the editor code
   through linting and hover-in code documentation.
 
 > [!WARNING]
 >
-> The source code of @actions/workflow-parser has been altered in order to be built into node/browser without getting errors and to
-> extend some functionalities that were not available before (e.g. expression parsing).
+> The source code of @actions/workflow-parser has been patched and rebuilt in order to work on vite in node/browser environment without getting errors and to
+> extend some functionalities needed to the workflow yaml parser and lsp that were not available before.
 >
-> Currently @actions/languageserver has been wrapped to ship only browser compatible packages and the patche workflow-parser in order to skip all the used node dependencies.
+> Currently @actions/languageserver has been wrapped to ship only browser compatible packages with the built-in workflow-parser patch.
 >
 > Read more about this in the package [README](./packages/workflow-parser/README.md).
 >
@@ -112,9 +113,9 @@ The UI has been built with:
 
 ### Flow diagram
 
-Flow diagram has been built from scratch taking advantage of some other dependencies:
+The implemented Flow diagram is very limited and it has been built with solid taking advantage of some other dependencies:
 
-- [elkjs](https://github.com/kieler/elkjs): Elk layout algorithm, used to calculate the flow item positions
+- [elkjs](https://github.com/kieler/elkjs): ELK layout algorithm, used to calculate the flow item positions
 - [panzoom](https://github.com/anvaka/panzoom): Cross-browser compatible pan and zoom library
 - [@xyflow/system](https://github.com/xyflow/xyflow): Core of xyflow, currently used to build the smooth edge curve
   svg
@@ -126,6 +127,11 @@ Flow diagram has been built from scratch taking advantage of some other dependen
 
 Backend has been built with [appwrite](https://appwrite.io/), which has been wrapped via solid server functions
 to provide authentication and the database persistence.
+
+Used Appwrite features:
+
+- Auth
+- Database
 
 Most of the code is available into [packages/app/lib/server](packages/app/src/lib/server).
 
