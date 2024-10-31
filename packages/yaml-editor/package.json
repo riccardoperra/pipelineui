@@ -1,0 +1,39 @@
+{
+  "name": "@pipelineui/yaml-editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup"
+  },
+  "exports": {
+    "./language-server": {
+      "types": "./dist/lsp/index.d.mts",
+      "import": "./dist/lsp/index.mjs"
+    }
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@codemirror/autocomplete": "^6.18.2",
+    "@codemirror/commands": "^6.7.1",
+    "@codemirror/lang-yaml": "^6.1.1",
+    "@codemirror/language": "^6.10.3",
+    "@codemirror/legacy-modes": "^6.4.1",
+    "@codemirror/lint": "^6.8.2",
+    "@codemirror/merge": "^6.7.2",
+    "@codemirror/search": "^6.5.6",
+    "@codemirror/state": "^6.4.1",
+    "@codemirror/view": "^6.34.1",
+    "@mdx-js/mdx": "^3.1.0",
+    "@open-rpc/client-js": "^1.8.1",
+    "solid-js": "^1.9.3",
+    "vscode-languageserver-protocol": "^3.17.5"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "tsup": "^8.3.5"
+  }
+}

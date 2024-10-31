@@ -82,6 +82,9 @@ importers:
       '@pipelineui/workflow-parser':
         specifier: workspace:*
         version: link:../workflow-parser
+      '@pipelineui/yaml-editor':
+        specifier: workspace:*
+        version: link:../yaml-editor
       '@qualified/codemirror-workspace':
         specifier: ^0.5.0
         version: 0.5.0(codemirror@5.65.18)
@@ -309,6 +312,58 @@ importers:
       typescript:
         specifier: ^4.9.5
         version: 4.9.5
+
+  packages/yaml-editor:
+    dependencies:
+      '@codemirror/autocomplete':
+        specifier: ^6.18.2
+        version: 6.18.2(@codemirror/language@6.10.3)(@codemirror/state@6.4.1)(@codemirror/view@6.34.1)(@lezer/common@1.2.2)
+      '@codemirror/commands':
+        specifier: ^6.7.1
+        version: 6.7.1
+      '@codemirror/lang-yaml':
+        specifier: ^6.1.1
+        version: 6.1.1(@codemirror/view@6.34.1)
+      '@codemirror/language':
+        specifier: ^6.10.3
+        version: 6.10.3
+      '@codemirror/legacy-modes':
+        specifier: ^6.4.1
+        version: 6.4.1
+      '@codemirror/lint':
+        specifier: ^6.8.2
+        version: 6.8.2
+      '@codemirror/merge':
+        specifier: ^6.7.2
+        version: 6.7.2
+      '@codemirror/search':
+        specifier: ^6.5.6
+        version: 6.5.6
+      '@codemirror/state':
+        specifier: ^6.4.1
+        version: 6.4.1
+      '@codemirror/view':
+        specifier: ^6.34.1
+        version: 6.34.1
+      '@mdx-js/mdx':
+        specifier: ^3.1.0
+        version: 3.1.0(acorn@8.12.1)
+      '@open-rpc/client-js':
+        specifier: ^1.8.1
+        version: 1.8.1
+      solid-js:
+        specifier: ^1.9.3
+        version: 1.9.3
+      vscode-languageserver-protocol:
+        specifier: ^3.17.5
+        version: 3.17.5
+    devDependencies:
+      prettier:
+        specifier: ^3.3.3
+        version: 3.3.3
+      tsup:
+        specifier: ^8.3.5
+        version: 8.3.5(jiti@2.0.0)(postcss@8.4.47)(tsx@4.19.2)(typescript@5.6.3)(yaml@2.6.0)
 
 packages:
 
