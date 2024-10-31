@@ -64,8 +64,9 @@ Visualize and/or modify your workflow file through a simple UI.
 - Check your workflow validity through the YAML Viewer and it's linter, which immediately tell you if your file respect the [GitHub Workflow Syntax](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions) thanks to the GitHub Language Service integration.
 - Modify your workflow file updating the Properties panel in the right side.
 
-> ![NOTE]
-> Y[Read here all available editor features](./packages/app/routes/about/supported-workflow-features.mdx)
+> [!NOTE]
+>
+> [Read here all available editor features](./packages/app/src/routes/about/supported-workflow-features.mdx)
 
 ![Built-in editor](./docs/327shots_so.png)
 
@@ -89,7 +90,16 @@ Workflow files are persisted into [AppWrite Cloud](https://appwrite.io/) and **a
 PipelineUI is entirely built with [Solid](https://github.com/solidjs/solid) and [SolidStart](https://github.com/solidjs/solid-start)
 with enabled SSR.
 
-A bref introduction with a list of some core external dependencies that should be listed here for the awesome work.
+The core features of this project can be summarized in a few points:
+
+- SolidStart server fns calls for session, workflow retrieval and scratches crud
+- SolidStart mutations and server actions
+- Appwrite OAuth integration with SolidStart api routes
+- Appwrite Database integration with SolidStart server function
+- CodeMirror with LSP via web-worker and linter integration
+- MDX routes for /about pages
+
+A brief introduction with a list of some core external dependencies that should be listed here for the awesome work.
 
 ### User interface
 
@@ -178,8 +188,4 @@ These have also been updated to fix the bugs encountered.
 This application is hosted on Railway. Deploy are made via github action CI/CD
 
 - [Workflow file](./.github/workflows/deploy.yml)
-- [See the workflow file on PipelineUI](https://pipelineui.dev/editor/riccardoperra/pipelineui/main/.github/workflows/deploy.yml)
-
-## Supported GitHub Workflow features
-
-[Check all supported workflow features](./packages/app/src/routes/about/supported-workflow-features.mdx)
+- [See the workflow file inside PipelineUI](https://pipelineui.dev/editor/riccardoperra/pipelineui/main/.github/workflows/deploy.yml)
