@@ -1,3 +1,4 @@
+'use server';
 import type {Models as NodeModels} from 'node-appwrite';
 import {useSession} from 'vinxi/http';
 import {createSessionClient} from './appwrite';
