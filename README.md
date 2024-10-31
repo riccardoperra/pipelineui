@@ -1,5 +1,3 @@
-# PipelineUI
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="./docs/logo_for_github_white.svg">
   <img alt="PipelineUI logo" src="./docs/logo_for_github_dark.svg" width="250">
@@ -12,9 +10,13 @@ updates the YAML configuration files, ensuring seamless integration with GitHub.
 
 > [!NOTE]
 >
-> This project has been made for [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement).
+> This project has been made for [SolidHack 2024](https://www.solidjs.com/blog/solidhack-2024-announcement) entry. Although there may be alternative solutions that can help writing workflow files
+> directly from IDE, a core principle to this work was discovering new technologies and apply them for a POC.
 >
-> Since October is the hacktoberfest month, this project use `AppWrite Cloud (Free tier)` for their [Appwrite’s Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024).
+> The amount of time dedicated is very limited (around ~3 weekends, starting from 1st of October), and the features needed for a complete project are numerous.
+> Therefore, some features will **undoubtedly be missing** and may be implemented in the future.
+>
+> Since October is the hacktoberfest month, this project use AppWrite Cloud (Free tier) to partecipate also in [Appwrite’s Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024).
 
 ## Table of contents
 
