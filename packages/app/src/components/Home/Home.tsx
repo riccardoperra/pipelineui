@@ -5,7 +5,16 @@ import {
   useSearchParams,
   useSubmission,
 } from '@solidjs/router';
-import {ErrorBoundary, Show, Suspense, useTransition} from 'solid-js';
+import {
+  createMemo,
+  createResource,
+  ErrorBoundary,
+  Match,
+  Show,
+  Suspense,
+  Switch,
+  useTransition,
+} from 'solid-js';
 import {getGithubData} from '~/lib/githubApi';
 import {loggedInUser} from '~/lib/session';
 import {createScratch} from '../../lib/scratchApi';
@@ -46,7 +55,13 @@ export function Home() {
   const user = provideState(UserStore);
   const isCreatingScratch = useSubmission(createScratch);
   const [params] = useSearchParams();
-  const repo = createAsync(() => searchRepo(params.repo as string | null));
+  const [repo] = createResource(
+    () => params.repo as string | null,
+    searchRepo,
+    {
+      deferStream: true,
+    },
+  );
 
   return (
     <Suspense fallback={<OverlayLoader />}>
@@ -61,25 +76,30 @@ export function Home() {
             <RepoSearch />
 
             <Suspense fallback={<RepoCardFallback />}>
-              <Show when={repo()} keyed>
-                {repo => {
-                  return (
-                    <Show
-                      fallback={
-                        <div class={errorBanner}>{repo.error?.message}</div>
-                      }
-                      when={repo.error === null && repo}
-                    >
-                      {repo => (
-                        <RepoCard
-                          repo={repo().repo}
-                          workflows={repo()!.workflows}
-                        />
-                      )}
-                    </Show>
-                  );
-                }}
-              </Show>
+              <Switch>
+                <Match
+                  when={repo.state === 'refreshing' || repo.state === 'pending'}
+                >
+                  <RepoCardFallback />
+                </Match>
+                <Match when={repo.state === 'ready'}>
+                  <Show
+                    fallback={
+                      <div class={errorBanner}>
+                        {repo.latest!.error?.message}
+                      </div>
+                    }
+                    when={repo.latest!.error === null && repo.latest}
+                  >
+                    {repo => (
+                      <RepoCard
+                        repo={repo().repo}
+                        workflows={repo()!.workflows}
+                      />
+                    )}
+                  </Show>
+                </Match>
+              </Switch>
             </Suspense>
 
             <Show when={user()}>

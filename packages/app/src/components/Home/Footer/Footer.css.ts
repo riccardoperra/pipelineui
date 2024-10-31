@@ -8,6 +8,9 @@ export const footer = style({
   justifyContent: 'center',
   paddingRight: appTheme.spacing['4'],
   paddingBottom: appTheme.spacing['1'],
+  marginTop: appTheme.spacing['1'],
+  position: 'relative',
+  paddingTop: appTheme.spacing['1'],
 });
 
 export const footerContent = style({
@@ -21,14 +24,14 @@ export const footerContent = style({
 
 export const footerLinks = style({
   display: 'flex',
-  gap: appTheme.spacing['5'],
+  gap: appTheme.spacing['8'],
 });
 
 export const footerLink = style({
   color: 'white',
   textDecoration: 'unset',
   paddingBottom: '1px',
-  borderBottom: '1px solid white',
+  borderBottom: '1px solid transparent',
   ':hover': {
     color: themeVars.brand,
     borderColor: themeVars.brand,

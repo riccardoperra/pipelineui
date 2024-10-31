@@ -13,8 +13,10 @@ import {
 } from './RepoSearch.css';
 
 export function RepoSearch() {
-  const [searchTextValue, setSearchTextValue] = createSignal<string>('');
-  const [, setParams] = useSearchParams();
+  const [params, setParams] = useSearchParams();
+  const [searchTextValue, setSearchTextValue] = createSignal<string>(
+    (params.repo as string) ?? '',
+  );
   const [hasPendingTask] = useTransition();
 
   return (

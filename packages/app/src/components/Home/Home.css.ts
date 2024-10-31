@@ -4,6 +4,9 @@ import {appTheme} from '#ui/theme.css';
 
 const canvasPatternColor = createVar();
 
+const size = 6;
+const scale = 8;
+
 export const homeLayoutWrapper = style({
   vars: {
     [canvasPatternColor]: themeVars.accent1,
@@ -11,8 +14,8 @@ export const homeLayoutWrapper = style({
   width: '100%',
   height: '100vh',
   background: `linear-gradient(90deg,#8882 1px,transparent 0),linear-gradient(180deg,#8882 1px,transparent 0)`,
-  backgroundColor: '#000',
-  backgroundSize: '24px 24px',
+  backgroundColor: '#0c0c0cba',
+  backgroundSize: `${size * scale}px ${size * scale}px`,
 });
 
 export const homeContainer = style({
