@@ -23,23 +23,33 @@ updates the YAML configuration files, ensuring seamless integration with GitHub.
 
 ## 🤖 Technical info
 
-PipelineUI is entirely built with [Solid](https://github.com/solidjs/solid) and [SolidStart](https://github.com/solidjs/solid-start).
+PipelineUI is entirely built with [Solid](https://github.com/solidjs/solid) and [SolidStart](https://github.com/solidjs/solid-start)
+with enabled SSR.
 
-There are a few core external dependencies that should be listed here for the awesome work.
+The core features of this project can be summarized in a few points:
 
-### UI
+- SolidStart server fns calls for session, workflow retrieval and scratches crud
+- SolidStart mutations and server actions
+- Appwrite OAuth integration with SolidStart api routes
+- Appwrite Database integration with SolidStart server function
+- CodeMirror with LSP via web-worker and linter integration
+- MDX routes for /about pages
 
-The UI has been built with:
+A brief introduction with a list of some core external dependencies that should be listed here for the awesome work.
 
-- [@kobalte/core](https://github.com/kobaltedev/kobalte): used to build accessible components in the UI
+### User interface
+
+The user interface has been built with:
+
+- [@kobalte/core](https://github.com/kobaltedev/kobalte): Accessible components for SolidJS
 - [@solid-primitives/\*](https://github.com/solidjs-community/solid-primitives): SolidJS primitives library
-- [vanilla-extract](https://vanilla-extract.style/): Zero-runtime CSS in typescript
 - [corvu](https://corvu.dev/): UI primitives for SolidJS
+- [vanilla-extract](https://vanilla-extract.style/): Zero-runtime CSS in typescript
 
 > [!WARNING]
 >
-> The source code of [@vanilla-extract/vite-plugin](https://github.com/vanilla-extract-css/vanilla-extract/tree/master/packages/vite-plugin) has been altered
-> in order to support solid start w/ vinxi for ssr/csr build.
+> The source code of [@vanilla-extract/vite-plugin](https://github.com/vanilla-extract-css/vanilla-extract/tree/master/packages/vite-plugin) has been patched
+> in order to support solid start w/ vinxi for multi-environment ssr/csr build.
 >
 > [Patch file](https://github.com/riccardoperra/pipelineui/blob/main/patches/%40vanilla-extract__vite-plugin%404.0.17.patch)
 >
@@ -51,20 +61,19 @@ The UI has been built with:
 
 - [CodeMirror6](https://codemirror.net/): used to display the YAML editor and merge view. The LSP integration is an
   adapted fork of [codemirror-languageserver](https://github.com/FurqanSoftware/codemirror-languageserver), which was a
-  good starting point to integrate the GitHub workflow language server.
-  - [LSP Integration](./packages/app/src/components/Editor/YamlEditor/lsp)
+  good starting point to integrate the GitHub workflow language server. Portion of CodeMirror implementation is present in the [@pipelineui/yaml-editor](./packages/yaml-editor)
 - [actions/languageservices](https://github.com/actions/languageservices): The language service repo for GitHub
   workflows and expressions. This was used to parse the workflow files and validate them, and enhance the editor code
   through linting and hover-in code documentation.
 
 > [!WARNING]
 >
-> The source code of @actions/workflow-parser has been altered in order to be built into node/browser without getting errors and to
-> extend some functionalities that were not available before (e.g. expression parsing).
+> The source code of @actions/workflow-parser has been patched and rebuilt in order to work on vite in node/browser environment without getting errors and to
+> extend some functionalities needed to the workflow yaml parser and lsp that were not available before.
 >
-> Currently @actions/languageserver has been wrapped to ship only browser compatible packages and the patche workflow-parser in order to skip all the used node dependencies.
+> Currently @actions/languageserver has been wrapped to ship only browser compatible packages with the built-in workflow-parser patch.
 >
-> Read more about this in the package [README](./packages/workflow-parser/README.md).
+> Read more about this in the package [README](https://github.com/riccardoperra/pipelineui/tree/main/packages/workflow-parser).
 >
 > [MIT License](https://github.com/actions/languageservices/blob/main/LICENSE)
 >
@@ -74,9 +83,9 @@ The UI has been built with:
 
 ### Flow diagram
 
-Flow diagram has been built from scratch taking advantage of some other dependencies:
+The implemented Flow diagram is very limited and it has been built with solid taking advantage of some other dependencies:
 
-- [elkjs](https://github.com/kieler/elkjs): Elk layout algorithm, used to calculate the flow item positions
+- [elkjs](https://github.com/kieler/elkjs): ELK layout algorithm, used to calculate the flow item positions
 - [panzoom](https://github.com/anvaka/panzoom): Cross-browser compatible pan and zoom library
 - [@xyflow/system](https://github.com/xyflow/xyflow): Core of xyflow, currently used to build the smooth edge curve
   svg
@@ -89,7 +98,12 @@ Flow diagram has been built from scratch taking advantage of some other dependen
 Backend has been built with [appwrite](https://appwrite.io/), which has been wrapped via solid server functions
 to provide authentication and the database persistence.
 
-Most of the code is available into [packages/app/lib/server](packages/app/src/lib/server).
+Used Appwrite features:
+
+- Auth
+- Database
+
+Most of the code is available into [packages/app/lib](https://github.com/riccardoperra/pipelineui/tree/main/packages/app/src/lib).
 
 ---
 
@@ -109,9 +123,4 @@ These have also been updated to fix the bugs encountered.
 
 This application is hosted on Railway. Deploy are made via github action CI/CD
 
-- [Workflow file](./.github/workflows/deploy.yml)
-- [See the workflow file on PipelineUI](https://pipelineui.dev/editor/riccardoperra/pipelineui/main/.github/workflows/deploy.yml)
-
-## Supported GitHub Workflow features
-
-[Read all the supported GitHub Workflow features](/about/supported-workflow-features)
+- [See the workflow file inside PipelineUI](https://pipelineui.dev/editor/riccardoperra/pipelineui/main/.github/workflows/deploy.yml)

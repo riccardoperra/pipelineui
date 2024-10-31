@@ -52,7 +52,6 @@ Github environment deployments:
   - [Backend](#backend)
   - [Other dependencies](#other)
   - [Hosting](#hosting)
-- [Supported GitHub Workflow Features](#supported-github-workflow-features)
 
 ## Features
 
