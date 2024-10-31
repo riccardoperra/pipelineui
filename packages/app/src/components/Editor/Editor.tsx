@@ -16,6 +16,7 @@ import {DiagnosticPanel} from './DiagnosticPanel/DiagnosticPanel';
 import {EditorRepositoryHeaderName} from './Header/RepositoryHeaderName';
 import {EditorContext} from './editor.context';
 import {OverlayLoader} from '~/ui/components/Loader/Loader';
+import {EditorRepositoryHeaderScratch} from './Header/RepositoryHeaderScratch';
 
 const YamlEditor = lazy(() =>
   import('./YamlEditor/YamlEditor').then(m => ({default: m.YamlEditor})),
@@ -39,7 +40,7 @@ export function Editor(props: EditorProps) {
         showBack
         name={
           <Show
-            fallback={<div>Scratch file</div>}
+            fallback={<EditorRepositoryHeaderScratch />}
             when={props.type === 'repository'}
           >
             <EditorRepositoryHeaderName />

@@ -27,6 +27,27 @@ export const updateScratch = action(async (id: string, newCode: string) => {
   });
 });
 
+export const updateScratchName = action(async (id: string, newName: string) => {
+  'use server';
+  const {databaseId, scratchCollectionId} = getScratchAppwriteVars();
+  const user = await loggedInUser();
+  if (!user) {
+    return;
+  }
+  const {database} = await createSessionClient();
+
+  const document = await database.updateDocument(
+    databaseId,
+    scratchCollectionId,
+    id,
+    {
+      name: newName,
+    },
+  );
+
+  return json(document, {revalidate: getScratch.keyFor(id)});
+}, 'update-scratch-name');
+
 export const createScratch = action(async () => {
   'use server';
   const {databaseId, scratchCollectionId} = getScratchAppwriteVars();

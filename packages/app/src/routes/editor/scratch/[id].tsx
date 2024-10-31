@@ -30,6 +30,9 @@ export default function EditorPage(props: RouteSectionProps) {
           },
           repository: null,
           remoteId: props.params.id,
+          get scratch() {
+            return workflowContent();
+          },
           user,
         }}
       >
