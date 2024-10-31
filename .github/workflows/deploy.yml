@@ -4,10 +4,17 @@ on:
     branches:
       - main
       - appwrite
+  workflow_dispatch:
+    inputs:
+      env:
+        type: choice
+        options:
+          - main
+          - appwrite
 
 jobs:
   build:
-    environment: ${{github.ref_name == 'main' && 'production' || (github.ref_name == 'appwrite' && 'appwrite' || 0)}}
+    environment: ${{((inputs.env == 'main' || github.ref_name == 'main') && 'production') || ((inputs.env == 'appwrite' || github.ref_name == 'appwrite') && 'appwrite' || 0)}}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout PR
