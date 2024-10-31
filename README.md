@@ -1,5 +1,7 @@
 # PipelineUI
 
+[Logo](./docs/logo.svg)
+
 Pipeline UI is a visual editor for creating and managing GitHub Actions workflows.
 Built with SolidStart, this tool simplifies the process of defining GitHub pipelines
 by allowing users to visually editing and update workflows. It automatically generates and
