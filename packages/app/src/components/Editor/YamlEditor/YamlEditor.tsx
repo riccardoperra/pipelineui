@@ -1,34 +1,40 @@
-import {
-  createCodeMirror,
-  createEditorControlledValue,
-  createLazyCompartmentExtension,
-} from 'solid-codemirror';
-import {fleetDark} from './fleetTheme';
+import {defaultKeymap} from '@codemirror/commands';
 import {yaml} from '@codemirror/lang-yaml';
+import {lintGutter, lintKeymap} from '@codemirror/lint';
+import {search, searchKeymap} from '@codemirror/search';
 import {
   EditorView,
-  keymap,
-  lineNumbers,
   highlightActiveLine,
   highlightActiveLineGutter,
+  keymap,
+  lineNumbers,
 } from '@codemirror/view';
-import {search, searchKeymap} from '@codemirror/search';
-import {lintGutter, lintKeymap} from '@codemirror/lint';
-import {defaultKeymap} from '@codemirror/commands';
-import {languageServerPlugin} from './lsp/plugin';
-import {githubLanguageServerTransport} from './lsp/plugins/githubLanguageServerTransport';
-import {diagnosticState} from './lsp/plugins/diagnostics';
-import type {Diagnostic} from 'vscode-languageserver-protocol';
-import {createEffect, onCleanup, onMount} from 'solid-js';
-import {editor} from '../Editor.css';
-import {SelectionRange} from '@codemirror/state';
+import {
+  createWorkerProtocol,
+  diagnosticState,
+  languageServerPlugin,
+  VscodeLspDiagnostic,
+} from '@pipelineui/yaml-editor/language-server';
+import {
+  createCodeMirror,
+  createLazyCompartmentExtension,
+} from 'solid-codemirror';
+import {createEffect, onMount} from 'solid-js';
+import {fleetDark} from './fleetTheme';
+
+const githubLanguageServerTransport = () =>
+  createWorkerProtocol(() =>
+    import('./serviceWorker?worker').then(
+      ({default: LanguageServer}) => new LanguageServer(),
+    ),
+  );
 
 interface YamlEditorProps {
   code: string;
   setCode: (code: string) => void;
 
   onMount: (editorView: EditorView) => void;
-  onDiagnosticsChange?: (diagnostic: Diagnostic[]) => void;
+  onDiagnosticsChange?: (diagnostic: VscodeLspDiagnostic[]) => void;
 }
 
 export function YamlEditor(props: YamlEditorProps) {
@@ -44,19 +50,16 @@ export function YamlEditor(props: YamlEditorProps) {
     props.onMount(editorView());
   });
 
-  createExtension(() => fleetDark);
-  createExtension(() => yaml());
-  createExtension(() =>
+  createExtension(() => [
+    fleetDark,
+    yaml(),
     EditorView.theme({
       '&': {
         fontSize: '13px',
         height: '100%',
       },
     }),
-  );
-  createExtension(() => lintGutter());
-
-  createExtension(() => [
+    lintGutter(),
     keymap.of([...defaultKeymap, ...searchKeymap, ...lintKeymap]),
     search(),
     lineNumbers(),
