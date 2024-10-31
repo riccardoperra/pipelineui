@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      RAILWAY_ENV: ${{(github.ref == 'refs/heads/main' && 'production') || (github.ref == 'refs/heads/appwrite' && 'appwrite' || null)}}
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
@@ -32,5 +34,3 @@ jobs:
           cd .output
           RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} pnpm railway environment ${{env.RAILWAY_ENV}}
           RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} pnpm railway up -s pipelineui-server
-        env:
-          RAILWAY_ENV: ${{(github.ref == 'refs/heads/main' && 'production') || (github.ref == 'refs/heads/appwrite' && 'appwrite' || null)}}
