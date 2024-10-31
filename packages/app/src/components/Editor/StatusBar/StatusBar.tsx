@@ -12,6 +12,7 @@ import {Button, IconButton, Tooltip} from '@codeui/kit';
 import {Icon} from '#ui/components/Icon';
 import {EditorStore} from '~/store/editor/editor.store';
 import {EditorUiStore} from '~/store/editor/ui.store';
+import {createEffect} from 'solid-js';
 
 export function EditorStatusBar() {
   const canvasState = provideState(CanvasStore);
@@ -21,8 +22,10 @@ export function EditorStatusBar() {
   const size = () => Math.floor(canvasState.get.scale * 100);
 
   const errors = () =>
-    editorStore.get.diagnostics.filter(diagnostic => diagnostic.severity === 1)
-      .length;
+    editorStore.get.diagnostics.filter(
+      diagnostic =>
+        diagnostic.severity === 1 || diagnostic.severity === undefined,
+    ).length;
 
   const warnings = () =>
     editorStore.get.diagnostics.filter(diagnostic => diagnostic.severity === 2)

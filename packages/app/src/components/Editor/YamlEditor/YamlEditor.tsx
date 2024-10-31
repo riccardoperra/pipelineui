@@ -19,7 +19,7 @@ import {
   createCodeMirror,
   createLazyCompartmentExtension,
 } from 'solid-codemirror';
-import {createEffect, onMount} from 'solid-js';
+import {createEffect} from 'solid-js';
 import {fleetDark} from './fleetTheme';
 
 const githubLanguageServerTransport = () =>
@@ -72,7 +72,7 @@ export function YamlEditor(props: YamlEditorProps) {
         languageId: 'yaml',
       }),
       EditorView.updateListener.from(diagnosticState, value => {
-        props.onDiagnosticsChange?.(value);
+        props.onDiagnosticsChange?.([...value]);
         return () => {};
       }),
     ];
