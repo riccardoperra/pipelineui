@@ -1,4 +1,5 @@
-import * as styles from './EditorHeader.css';
+import {EditorStore} from '#editor-store/editor.store';
+import {Icon} from '#ui/components/Icon';
 import {
   Button,
   IconButton,
@@ -6,14 +7,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@codeui/kit';
-import {provideState} from 'statebuilder';
-import {EditorUiStore} from '../store/ui.store';
-import {createSignal, JSX, type ParentProps, Show, useContext} from 'solid-js';
-import {Icon} from '#ui/components/Icon';
 import {A, useSubmission} from '@solidjs/router';
+import {createSignal, JSX, type ParentProps, Show, useContext} from 'solid-js';
+import {provideState} from 'statebuilder';
+import {UserStore} from '~/store/user.store';
 import {createScratchFork, updateScratch} from '../../../lib/scratchApi';
-import {EditorStore} from '#editor-store/editor.store';
 import {EditorContext} from '../editor.context';
+import {EditorUiStore} from '../store/ui.store';
+import * as styles from './EditorHeader.css';
 
 export interface EditorHeaderProps {
   showBack: boolean;
@@ -81,6 +82,7 @@ function EditorHeaderForkButton() {
 export function EditorHeader(props: EditorHeaderProps) {
   const editorUi = provideState(EditorUiStore);
   const editorStore = provideState(EditorStore);
+  const user = provideState(UserStore);
 
   const isUpdating = useSubmission(updateScratch);
 
@@ -103,35 +105,37 @@ export function EditorHeader(props: EditorHeaderProps) {
 
         {props.name}
 
-        <div class={styles.headerRightSide}>
-          <Show
-            fallback={
-              <>
-                <EditorHeaderForkButton />
-              </>
-            }
-            when={editorStore.get.remoteId}
-          >
-            {remoteId => (
-              <form
-                action={updateScratch.with(
-                  remoteId(),
-                  editorStore.yamlSession.source(),
-                )}
-                method={'post'}
-              >
-                <Button
-                  type={'submit'}
-                  theme={'primary'}
-                  size={'sm'}
-                  loading={isUpdating.pending}
+        <Show when={user()}>
+          <div class={styles.headerRightSide}>
+            <Show
+              fallback={
+                <>
+                  <EditorHeaderForkButton />
+                </>
+              }
+              when={editorStore.get.remoteId}
+            >
+              {remoteId => (
+                <form
+                  action={updateScratch.with(
+                    remoteId(),
+                    editorStore.yamlSession.source(),
+                  )}
+                  method={'post'}
                 >
-                  Save
-                </Button>
-              </form>
-            )}
-          </Show>
-        </div>
+                  <Button
+                    type={'submit'}
+                    theme={'primary'}
+                    size={'sm'}
+                    loading={isUpdating.pending}
+                  >
+                    Save
+                  </Button>
+                </form>
+              )}
+            </Show>
+          </div>
+        </Show>
       </header>
       <div class={styles.subHeader}>
         <EditorHeaderActionButton

@@ -1,6 +1,6 @@
 import {Button} from '@codeui/kit';
 import {
-  cache,
+  query,
   createAsync,
   useSearchParams,
   useSubmission,
@@ -26,8 +26,10 @@ import {RepoCardFallback} from './RepoCard/RepoCardFallback';
 import {RepoSearch} from './RepoSearch/RepoSearch';
 import {ScratchList} from './ScratchList/ScratchList';
 import {OverlayLoader} from '~/ui/components/Loader/Loader';
+import {provideState} from 'statebuilder';
+import {UserStore} from '~/store/user.store';
 
-export const searchRepo = cache(async (path: string | null) => {
+export const searchRepo = query(async (path: string | null) => {
   'use server';
   if (!path) {
     return null;
@@ -41,7 +43,7 @@ export const searchRepo = cache(async (path: string | null) => {
 }, 'repository');
 
 export function Home() {
-  const user = createAsync(() => loggedInUser(), {deferStream: true});
+  const user = provideState(UserStore);
   const isCreatingScratch = useSubmission(createScratch);
   const [params] = useSearchParams();
   const repo = createAsync(() => searchRepo(params.repo as string | null));
@@ -80,19 +82,21 @@ export function Home() {
               </Show>
             </Suspense>
 
-            <div class={choiceSeparator}>Or</div>
+            <Show when={user()}>
+              <div class={choiceSeparator}>Or</div>
 
-            <form action={createScratch.with()} class={form} method={'post'}>
-              <Button
-                loading={isCreatingScratch.pending}
-                block
-                theme={'tertiary'}
-                type={'submit'}
-                size={'lg'}
-              >
-                Create from scratch
-              </Button>
-            </form>
+              <form action={createScratch.with()} class={form} method={'post'}>
+                <Button
+                  loading={isCreatingScratch.pending}
+                  block
+                  theme={'tertiary'}
+                  type={'submit'}
+                  size={'lg'}
+                >
+                  Create from scratch
+                </Button>
+              </form>
+            </Show>
 
             <Show when={user()}>
               <div class={choiceSeparator}>Your scratches & forks</div>

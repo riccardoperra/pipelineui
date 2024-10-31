@@ -1,10 +1,10 @@
-import {action, cache, redirect} from '@solidjs/router';
+import {action, query, redirect} from '@solidjs/router';
 import {OAuthProvider} from 'node-appwrite';
 import {getHeaders} from 'vinxi/http';
 import {createAdminClient} from './server/appwrite';
 import {getLoggedInUser, getSession, logoutSession} from './server/session';
 
-export const loggedInUser = cache(async () => {
+export const loggedInUser = query(async () => {
   'use server';
   const session = await getSession();
   const userId = session.data.session?.userId;

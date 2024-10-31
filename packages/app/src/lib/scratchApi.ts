@@ -1,5 +1,5 @@
-import {action, cache, json, redirect} from '@solidjs/router';
-import {Permission, Role, Query, ID, Models} from 'appwrite';
+import {action, cache, json, query, redirect} from '@solidjs/router';
+import {ID, Models, Permission, Query, Role} from 'appwrite';
 import {adjectives, colors, uniqueNamesGenerator} from 'unique-names-generator';
 import type {EditorParsedRepository} from '../components/Editor/editor.context';
 import {createAdminClient, createSessionClient} from './server/appwrite';
@@ -163,7 +163,7 @@ export const deleteScratch = action(async scratchId => {
   );
 }, 'create-scratch');
 
-export const getScratch = cache(async (id: string) => {
+export const getScratch = query(async (id: string) => {
   'use server';
 
   const {database} = await createAdminClient();

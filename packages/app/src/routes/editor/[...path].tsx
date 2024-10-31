@@ -1,22 +1,25 @@
 import {
-  cache,
   createAsync,
+  query,
   redirect,
   type RouteDefinition,
   type RouteSectionProps,
 } from '@solidjs/router';
+import {createEffect} from 'solid-js';
+import {provideState, StateProvider} from 'statebuilder';
+import {Editor} from '~/components/Editor/Editor';
 import {
   EditorContext,
   type EditorParsedRepository,
 } from '~/components/Editor/editor.context';
-import {Editor} from '~/components/Editor/Editor';
 import {getGithubRepoFileContent} from '~/lib/githubApi';
-import {StateProvider} from 'statebuilder';
+import {loggedInUser} from '~/lib/session';
+import {UserStore} from '~/store/user.store';
 
-const getWorkflowFromUrl = cache(async (path: string) => {
+const getWorkflowFromUrl = query(async (path: string) => {
   'use server';
-
   const [owner, repoName, branchName, ...filePath] = path.split('/');
+
   return getGithubRepoFileContent(
     `${owner}/${repoName}`,
     branchName,
@@ -52,6 +55,8 @@ export default function EditorPage(props: RouteSectionProps) {
     getWorkflowFromUrl(props.params.path),
   );
 
+  const user = provideState(UserStore);
+
   return (
     <EditorContext.Provider
       value={{
@@ -62,6 +67,7 @@ export default function EditorPage(props: RouteSectionProps) {
         get repository() {
           return workflowContent()?.repository ?? null;
         },
+        user,
       }}
     >
       <StateProvider>
