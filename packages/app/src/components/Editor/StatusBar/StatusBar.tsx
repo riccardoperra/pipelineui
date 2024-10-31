@@ -7,11 +7,11 @@ import {
   statusBarAction,
 } from './EditorStatusBar.css';
 import {provideState} from 'statebuilder';
-import {CanvasStore} from '../store/canvas.store';
+import {CanvasStore} from '../../../store/editor/canvas.store';
 import {Button, IconButton, Tooltip} from '@codeui/kit';
 import {Icon} from '#ui/components/Icon';
-import {EditorStore} from '#editor-store/editor.store';
-import {EditorUiStore} from '#editor-store/ui.store';
+import {EditorStore} from '~/store/editor/editor.store';
+import {EditorUiStore} from '~/store/editor/ui.store';
 
 export function EditorStatusBar() {
   const canvasState = provideState(CanvasStore);

@@ -1,6 +1,6 @@
 import {defineStore} from 'statebuilder';
 import {withProxyCommands} from 'statebuilder/commands';
-import {createEffect, createSignal} from 'solid-js';
+import {createEffect, createMemo, createSignal, on} from 'solid-js';
 import Resizable from '@corvu/resizable';
 import {cookieStorage, makePersisted} from '@solid-primitives/storage';
 
@@ -47,9 +47,26 @@ export const EditorUiStore = defineStore<EditorUiState>(() => ({
       },
     );
 
-    if (horizontalSizes()[1] !== 0) {
-      _.set('bottomPanel', 'diagnostic');
-    }
+    const rightPanelSizeExpanded = createMemo(() => horizontalSizes()[2] > 0);
+    createEffect(
+      on(rightPanelSizeExpanded, expanded => {
+        _.set('rightPanel', expanded ? 'properties' : 'none');
+      }),
+    );
+
+    const leftPanelSizeExpanded = createMemo(() => horizontalSizes()[0] > 0);
+    createEffect(
+      on(leftPanelSizeExpanded, expanded => {
+        _.set('leftPanel', expanded ? 'code' : 'none');
+      }),
+    );
+
+    const bottomPanelSizeExpanded = createMemo(() => verticalSizes()[1] > 0);
+    createEffect(
+      on(bottomPanelSizeExpanded, expanded => {
+        _.set('bottomPanel', expanded ? 'diagnostic' : 'none');
+      }),
+    );
 
     return {
       verticalResizableContext,

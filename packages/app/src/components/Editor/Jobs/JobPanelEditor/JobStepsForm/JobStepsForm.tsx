@@ -1,7 +1,7 @@
-import {container, listItem} from './JobStepsForm.css';
-import {createEffect, createSignal, For} from 'solid-js';
-import {provideState} from 'statebuilder';
-import {PanelEditorStore} from '../panel-editor.store';
+import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
+import {PanelPlusButton} from '#editor-layout/Panel/Form/PanelPlusButton';
+import {EditorStore} from '~/store/editor/editor.store';
+import {Icon} from '#ui/components/Icon';
 import {
   Button,
   IconButton,
@@ -9,10 +9,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@codeui/kit';
-import {Icon} from '#ui/components/Icon';
-import {EditorStore} from '#editor-store/editor.store';
-import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
-import {PanelPlusButton} from '#editor-layout/Panel/Form/PanelPlusButton';
+import {createSignal, For} from 'solid-js';
+import {provideState} from 'statebuilder';
+import {PanelEditorStore} from '../panel-editor.store';
+import {
+  container,
+  listItem,
+  listItemActions,
+  listItemName,
+} from './JobStepsForm.css';
 
 export function JobStepsForm() {
   const panelStore = provideState(PanelEditorStore);
@@ -41,9 +46,9 @@ export function JobStepsForm() {
             const [deleting, setDeleting] = createSignal(false);
             return (
               <li class={listItem}>
-                {step.name || step.id}
+                <span class={listItemName}>{step.name || step.id}</span>
 
-                <div>
+                <div class={listItemActions}>
                   <IconButton
                     size={'xs'}
                     theme={'secondary'}

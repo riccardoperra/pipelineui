@@ -1,5 +1,5 @@
 import {YAMLSeq, YAMLMap, Pair} from 'yaml';
-import {WorkflowStructureJobStep} from '../editor.types';
+import {WorkflowStructureJobStep} from '../../../components/Editor/store/editor.types';
 import {YAMLSession} from '../plugins/yamlSession';
 import {findJob} from './helper';
 

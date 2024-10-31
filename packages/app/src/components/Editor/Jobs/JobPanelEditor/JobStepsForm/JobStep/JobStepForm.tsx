@@ -8,13 +8,13 @@ import {
 import * as formStyles from '#editor-layout/Panel/Form/Form.css';
 import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
 import {provideState} from 'statebuilder';
-import {EditorStore} from '#editor-store/editor.store';
+import {EditorStore} from '~/store/editor/editor.store';
 import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
 import {Show} from 'solid-js';
 import type {
   WorkflowStructureJobActionStep,
   WorkflowStructureJobRunStep,
-} from '#editor-store/editor.types';
+} from '~/store/editor/editor.types';
 import {PanelEditorStore} from '../../panel-editor.store';
 import {PanelDivider} from '#editor-layout/Panel/Form/PanelDivider';
 import {EnvironmentVariablesForm} from '../../../../common/EnvironmentVariables/EnvironmentVariablesForm';

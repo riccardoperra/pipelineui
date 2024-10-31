@@ -32,7 +32,15 @@ export const panelForm = recipe({
   },
 });
 
+export const selectTextValueMultiple = style({
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+});
+
 export const formStyles = {
   inlineInputLabel,
   inlineInputRoot,
+
+  selectTextValueMultiple,
 };

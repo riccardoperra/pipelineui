@@ -19,4 +19,17 @@ export const listItem = style({
   color: themeVars.accent10,
   justifyContent: 'space-between',
   paddingLeft: appTheme.spacing['2'],
+  background: themeVars.accent4,
+  borderRadius: '6px',
+});
+
+export const listItemName = style({
+  minWidth: 0,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+});
+
+export const listItemActions = style({
+  flexShrink: 0,
 });

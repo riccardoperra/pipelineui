@@ -5,7 +5,7 @@ import {
   panel,
 } from './DiagnosticPanel.css';
 import {provideState} from 'statebuilder';
-import {EditorStore} from '#editor-store/editor.store';
+import {EditorStore} from '~/store/editor/editor.store';
 import {For} from 'solid-js';
 import {Icon} from '#ui/components/Icon';
 import type {Diagnostic} from 'vscode-languageserver-protocol';

@@ -1,4 +1,4 @@
-import {style} from '@vanilla-extract/css';
+import {globalStyle, style} from '@vanilla-extract/css';
 import {appTheme} from '#ui/theme.css';
 import {themeVars} from '@codeui/kit';
 
@@ -12,4 +12,14 @@ export const nav = style({
   paddingLeft: appTheme.spacing['3'],
   paddingRight: appTheme.spacing['3'],
   borderBottom: themeVars.separator,
+});
+
+globalStyle(`${nav} > button`, {
+  flexShrink: 0,
+});
+
+globalStyle(`${nav} > span`, {
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
 });

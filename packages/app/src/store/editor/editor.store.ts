@@ -1,9 +1,9 @@
 import {type WorkflowTemplate} from '@pipelineui/workflow-parser';
-import {createEffect, on, untrack, useContext} from 'solid-js';
+import {batch, createEffect, on, untrack, useContext} from 'solid-js';
 import {defineStore} from 'statebuilder';
 import {withProxyCommands} from 'statebuilder/commands';
 import type {Diagnostic} from 'vscode-languageserver-protocol';
-import {EditorContext} from '../editor.context';
+import {EditorContext} from '../../components/Editor/editor.context';
 import type {
   EditorWorkflowStructure,
   JobEnvironment,
@@ -141,7 +141,7 @@ export const EditorStore = defineStore<EditorState>(() => ({
       // TODO: should add $nodeId
       deleteEnvironmentVariableByIndex: {index: number};
 
-      addNewJob: void;
+      addNewJob: {autoSelect: boolean};
       deleteJob: {jobId: string};
       updateJobName: {jobId: string; name: string | null};
       updateJobId: {jobId: string; id: string};
@@ -230,20 +230,26 @@ export const EditorStore = defineStore<EditorState>(() => ({
       _.yamlSession.deleteEnvironmentVariable(index);
     });
 
-    _.hold(_.commands.addNewJob, () => {
+    _.hold(_.commands.addNewJob, ({autoSelect}) => {
+      const length = _.get.structure.jobs.length;
       const job: WorkflowStructureJob = {
         $nodeId: crypto.randomUUID().toString(),
         needs: [],
-        name: 'New job',
+        name: `New job ${length}`,
         steps: [],
-        id: 'new-job',
+        id: `new_job_${length}`,
         env: {array: []},
         runsOn: '',
         environment: null,
         $index: _.get.structure.jobs.length,
       };
 
-      _.set('structure', 'jobs', jobs => [...jobs, job]);
+      batch(() => {
+        _.set('structure', 'jobs', jobs => [...jobs, job]);
+        if (autoSelect) {
+          _.actions.setSelectedJobId(job.$nodeId);
+        }
+      });
       _.yamlSession.addNewJob();
     });
 

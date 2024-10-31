@@ -1,13 +1,21 @@
 import {Pair, Scalar} from 'yaml';
-import {WorkflowStructureEnvItem} from '../editor.types';
+import {WorkflowStructureEnvItem} from '../../../components/Editor/store/editor.types';
 import {YAMLSession} from '../plugins/yamlSession';
-import {convertEnvItemFieldToYaml, modifyEnvField} from './helper';
+import {findJob, modifyEnvField, convertEnvItemFieldToYaml} from './helper';
 
-export const setEnvironmentVariable =
+export const setJobEnv =
   (yamlSession: YAMLSession) =>
-  (index: number, envItem: WorkflowStructureEnvItem) => {
+  (
+    jobIdOrIndex: string | number,
+    index: number,
+    envItem: WorkflowStructureEnvItem,
+  ) => {
     yamlSession.updater(yaml => {
-      modifyEnvField(yaml, true, env => {
+      const job = findJob(yaml, jobIdOrIndex)!;
+      if (!job) {
+        return false;
+      }
+      modifyEnvField(job, true, env => {
         const envAtIndex = env.items.at(index);
         if (!envItem.name) {
           console.warn('Missing `name` for env variable. Skipping update', {
@@ -27,14 +35,19 @@ export const setEnvironmentVariable =
     });
   };
 
-export const deleteEnvironmentVariable =
-  (yamlSession: YAMLSession) => (index: number) => {
+export const deleteJobEnv =
+  (yamlSession: YAMLSession) =>
+  (jobIdOrIndex: string | number, index: number) => {
     yamlSession.updater(yaml => {
-      modifyEnvField(yaml, true, env => {
+      const job = findJob(yaml, jobIdOrIndex)!;
+      if (!job) {
+        return false;
+      }
+      modifyEnvField(job, true, env => {
         const updatedItems = env.items.toSpliced(index, 1);
         env.items = updatedItems;
         if (updatedItems.length === 0) {
-          yaml.delete('env');
+          job.delete('env');
         }
       });
     });

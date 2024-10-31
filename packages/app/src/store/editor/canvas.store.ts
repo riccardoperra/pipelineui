@@ -5,7 +5,7 @@ import {
   autocenter,
   fitToCenter,
   getScaleByRatio,
-} from '../utils/getScaleByRatio';
+} from '../../components/Editor/utils/getScaleByRatio';
 
 interface CanvasState {
   scale: number;

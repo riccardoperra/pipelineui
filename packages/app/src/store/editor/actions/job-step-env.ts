@@ -1,5 +1,5 @@
 import {Pair, Scalar} from 'yaml';
-import {WorkflowStructureEnvItem} from '../editor.types';
+import {WorkflowStructureEnvItem} from '../../../components/Editor/store/editor.types';
 import {YAMLSession} from '../plugins/yamlSession';
 import {
   convertEnvItemFieldToYaml,

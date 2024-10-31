@@ -15,11 +15,11 @@ export interface RegisterNodeOptions {
 export interface NodeStoreContextValue {
   selectedNodeId: Accessor<string | null>;
   registerNode: (data: RegisterNodeOptions) => () => void;
-  nodes: FlowNodeMap;
+  nodes: Accessor<FlowNodeMap>;
   renderNode: (node: FlowNode) => JSX.Element;
   sceneRef: Accessor<HTMLDivElement | null>;
   setSceneRef: Setter<HTMLDivElement | null>;
-  connections: FlowConnection[];
+  connections: Accessor<FlowConnection[]>;
 }
 
 export const NodeStoreContext = createContext<NodeStoreContextValue>();

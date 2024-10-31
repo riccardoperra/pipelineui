@@ -57,13 +57,13 @@ function ConnectionNode(props: {source: FlowNode; target: FlowNode}) {
 export function Connection(props: ConnectionProps) {
   const {nodes, sceneRef} = getNodeContext();
 
-  const sourceNode = () => {
-    return nodes[props.connection.source.nodeId];
-  };
+  const sourceNode = createMemo(() => {
+    return nodes()[props.connection.source.nodeId];
+  });
 
-  const targetNode = () => {
-    return nodes[props.connection.target.nodeId];
-  };
+  const targetNode = createMemo(() => {
+    return nodes()[props.connection.target.nodeId];
+  });
 
   return (
     <Show when={sourceNode() && targetNode()}>

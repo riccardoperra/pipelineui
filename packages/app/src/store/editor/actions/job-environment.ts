@@ -1,5 +1,5 @@
 import {Scalar, YAMLMap} from 'yaml';
-import {JobEnvironment} from '../editor.types';
+import {JobEnvironment} from '../../../components/Editor/store/editor.types';
 import {YAMLSession} from '../plugins/yamlSession';
 import {findJob} from './helper';
 

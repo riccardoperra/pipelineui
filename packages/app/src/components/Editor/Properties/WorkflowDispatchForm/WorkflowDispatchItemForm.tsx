@@ -3,7 +3,7 @@ import {Checkbox, NumberField, Select, TextArea, TextField} from '@codeui/kit';
 import * as styles from '#editor-layout/Panel/Form/Form.css';
 import {Match, Switch} from 'solid-js';
 import {createControllableSignal} from '@kobalte/core';
-import type {WorkflowDispatchInput} from '#editor-store/editor.types';
+import type {WorkflowDispatchInput} from '~/store/editor/editor.types';
 import {PanelAccordionItem} from '#editor-layout/Panel/Form/PanelAccordion/PanelAccordion';
 
 export interface WorkflowDispatchItemFormProps {

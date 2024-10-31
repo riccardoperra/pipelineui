@@ -25,7 +25,7 @@ export const withYamlDocumentSession = () => {
 
       const source = () => {
         notifier();
-        return yaml()?.toString() ?? '';
+        return yaml()?.toString({nullStr: ''}) ?? '';
       };
 
       const setYaml = (yaml: YAMLDocument) => {

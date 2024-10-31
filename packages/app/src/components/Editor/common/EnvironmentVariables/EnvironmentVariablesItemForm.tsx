@@ -3,7 +3,7 @@ import {createControllableSignal} from '@kobalte/core';
 import type {
   StringExpression,
   WorkflowStructureEnvItem,
-} from '#editor-store/editor.types';
+} from '~/store/editor/editor.types';
 import {FullWidthPanelRow} from '#editor-layout/Panel/Form/PanelRow';
 import {Match, Switch} from 'solid-js';
 import {unwrap} from 'solid-js/store';

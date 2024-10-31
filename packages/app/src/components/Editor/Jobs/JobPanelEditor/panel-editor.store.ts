@@ -1,5 +1,5 @@
 import {defineStore} from 'statebuilder';
-import {EditorStore} from '#editor-store/editor.store';
+import {EditorStore} from '~/store/editor/editor.store';
 import {createMemo} from 'solid-js';
 import {withProxyCommands} from 'statebuilder/commands';
 
@@ -39,7 +39,17 @@ export const PanelEditorStore = defineStore<PanelEditorState>(() => ({
     });
 
     return {
+      back() {
+        if (_.get.activeStep) {
+          _.actions.setActiveStepId(null);
+        } else {
+          editorStore.actions.setSelectedJobId(null);
+        }
+      },
       selectedJob: editorStore.selectedJob,
+      deselectJob() {
+        editorStore.actions.setSelectedJobId(null);
+      },
       selectedStep,
       headerPanelLabel: () => {
         const selectedJob = editorStore.selectedJob()!;

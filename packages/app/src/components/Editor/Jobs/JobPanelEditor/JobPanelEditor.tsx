@@ -7,6 +7,8 @@ import {JobForm} from './JobForm/JobForm';
 import {IconButton} from '@codeui/kit';
 import {Icon} from '#ui/components/Icon';
 import * as styles from './JobPanelEditor.css';
+import {EditorState} from '@codemirror/state';
+import {EditorStore} from '../../../../store/editor/editor.store';
 
 export function JobPanelEditor() {
   const panelStore = provideState(PanelEditorStore);
@@ -14,17 +16,15 @@ export function JobPanelEditor() {
   return (
     <>
       <div class={styles.nav}>
-        <Show when={panelStore.get.activeStep}>
-          <IconButton
-            aria-label={'Back'}
-            size={'sm'}
-            theme={'secondary'}
-            variant={'ghost'}
-            onClick={() => panelStore.actions.setActiveStepId(null)}
-          >
-            <Icon name={'arrow_left_alt'} />
-          </IconButton>
-        </Show>
+        <IconButton
+          aria-label={'Back'}
+          size={'sm'}
+          theme={'secondary'}
+          variant={'ghost'}
+          onClick={() => panelStore.back()}
+        >
+          <Icon name={'arrow_left_alt'} />
+        </IconButton>
         <span>{panelStore.headerPanelLabel()}</span>
       </div>
       <PanelGroup>

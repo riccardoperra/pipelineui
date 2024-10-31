@@ -14,7 +14,7 @@ import {
   PopoverTrigger,
 } from '@codeui/kit';
 import {Icon} from '#ui/components/Icon';
-import {EditorStore} from '#editor-store/editor.store';
+import {EditorStore} from '~/store/editor/editor.store';
 import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
 import {PanelPlusButton} from '#editor-layout/Panel/Form/PanelPlusButton';
 
@@ -31,7 +31,7 @@ export function JobsListForm() {
           <PanelPlusButton
             aria-label={'Add job step'}
             onClick={() => {
-              editorStore.actions.addNewJob();
+              editorStore.actions.addNewJob({autoSelect: true});
             }}
           />
         )}

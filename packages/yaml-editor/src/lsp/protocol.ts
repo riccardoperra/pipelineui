@@ -16,7 +16,6 @@ export class PostMessageWorkerTransport extends Transport {
   }
 
   private messageHandler = (ev: MessageEvent) => {
-    console.log('LSP <<-', ev.data);
     this.transportRequestManager.resolveResponse(JSON.stringify(ev.data));
   };
 
@@ -31,7 +30,6 @@ export class PostMessageWorkerTransport extends Transport {
     data: JSONRPCRequestData,
     timeout: number | null = 5000,
   ): Promise<any> {
-    console.log('LSP ->>', data);
     const prom = this.transportRequestManager.addRequest(data, null);
     const notifications = getNotifications(data);
     if (this.worker) {

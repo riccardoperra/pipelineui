@@ -3,12 +3,12 @@ import * as styles from './Editor.css';
 import * as fallbackStyles from '~/ui/components/Fallback.css';
 import {EditorHeader} from './Header/Header';
 import {provideState} from 'statebuilder';
-import {EditorUiStore} from './store/ui.store';
+import {EditorUiStore} from '../../store/editor/ui.store';
 import {For, lazy, Match, Show, Suspense, Switch, useContext} from 'solid-js';
 import {EditorStatusBar} from './StatusBar/StatusBar';
 import Resizable from '@corvu/resizable';
 import {EditorResizableHandler} from './Layout/Resizable/Resizable';
-import {EditorStore} from './store/editor.store';
+import {EditorStore} from '../../store/editor/editor.store';
 import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';
 import {JobPanelEditor} from './Jobs/JobPanelEditor/JobPanelEditor';
 import {YamlMergeView} from './YamlEditor/MergeView';
@@ -140,7 +140,7 @@ export function Editor(props: EditorProps) {
 
                           <Resizable.Panel
                             initialSize={0.17}
-                            minSize={0.1}
+                            minSize={0.15}
                             collapsible
                             class={styles.resizablePanel}
                           >

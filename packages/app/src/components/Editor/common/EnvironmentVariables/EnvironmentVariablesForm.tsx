@@ -1,6 +1,6 @@
 import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
 import {For, Show} from 'solid-js';
-import type {WorkflowStructureEnvItem} from '../../store/editor.types';
+import type {WorkflowStructureEnvItem} from '../../../../store/editor/editor.types';
 import {PanelPlusButton} from '#editor-layout/Panel/Form/PanelPlusButton';
 import {EnvironmentVariablesItemForm} from './EnvironmentVariablesItemForm';
 import {PanelAccordion} from '#editor-layout/Panel/Form/PanelAccordion/PanelAccordion';

@@ -3,7 +3,7 @@ import {FullWidthPanelRow} from '#editor-layout/Panel/Form/PanelRow';
 import {
   WORKFLOW_TRIGGER_TYPES_CONFIG,
   type WorkflowTypesTriggerEvent,
-} from '#editor-store/editor.types';
+} from '~/store/editor/editor.types';
 import {Select} from '@codeui/kit';
 import {createControllableSignal} from '@kobalte/core';
 import {createMemo} from 'solid-js';
@@ -47,6 +47,7 @@ export function TriggerItemForm(props: TriggerEventItemFormProps) {
         <Select<string>
           label={'Types'}
           options={items()}
+          valueComponentMultiple={options => options().join(', ')}
           aria-label={'Type'}
           multiple={true}
           value={form()?.types}

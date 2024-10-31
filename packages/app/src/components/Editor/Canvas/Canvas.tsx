@@ -1,5 +1,5 @@
-import {EditorStore} from '#editor-store/editor.store';
-import type {WorkflowStructureJob} from '#editor-store/editor.types';
+import {EditorStore} from '~/store/editor/editor.store';
+import type {WorkflowStructureJob} from '~/store/editor/editor.types';
 import type {ElkExtendedEdge, ElkNode} from 'elkjs';
 import {createResource, onCleanup, onMount, Suspense, untrack} from 'solid-js';
 import {provideState} from 'statebuilder';
@@ -23,8 +23,6 @@ function createNodes(jobs: WorkflowStructureJob[]) {
     };
     return acc;
   }, {} as FlowNodeMap);
-
-  console.log('my jobs', jobs);
 
   return import('elkjs').then(({default: ELK}) => {
     const graph: ElkNode = {
@@ -118,8 +116,6 @@ function createNodes(jobs: WorkflowStructureJob[]) {
 
           return [...acc, ...jobEdge];
         }, [] as FlowConnection[]);
-
-        console.log(mappedNodes);
 
         return {
           size: {

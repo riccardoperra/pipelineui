@@ -1,4 +1,4 @@
-import {Pair, YAMLMap} from 'yaml';
+import {Pair, YAMLMap, YAMLSeq} from 'yaml';
 import {YAMLSession} from '../plugins/yamlSession';
 
 export const addNewJob = (yamlSession: YAMLSession) => () => {
@@ -8,11 +8,11 @@ export const addNewJob = (yamlSession: YAMLSession) => () => {
       jobs = new YAMLMap<string, YAMLMap<unknown, unknown>>();
       yaml.set('jobs', jobs);
     }
-
     const job = new YAMLMap();
-    job.set('steps', new YAMLMap());
-    job.set('runs-on', '');
-    jobs.add(new Pair('new-job', job));
+    job.set('steps', new YAMLSeq());
+    job.set('runs-on', null);
+    const length = jobs.items.length;
+    jobs.add(new Pair(`new_job_${length}`, job));
   });
 };
 

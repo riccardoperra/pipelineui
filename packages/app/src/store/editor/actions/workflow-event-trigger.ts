@@ -1,5 +1,5 @@
 import {YAMLMap, Scalar} from 'yaml';
-import {WorkflowTypesTriggerEvent} from '../editor.types';
+import {WorkflowTypesTriggerEvent} from '../../../components/Editor/store/editor.types';
 import {YAMLSession} from '../plugins/yamlSession';
 import {modifyOnField} from './helper';
 

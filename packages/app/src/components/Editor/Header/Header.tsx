@@ -1,4 +1,4 @@
-import {EditorStore} from '#editor-store/editor.store';
+import {EditorStore} from '~/store/editor/editor.store';
 import {Icon} from '#ui/components/Icon';
 import {
   Button,
@@ -13,7 +13,7 @@ import {provideState} from 'statebuilder';
 import {UserStore} from '~/store/user.store';
 import {createScratchFork, updateScratch} from '../../../lib/scratchApi';
 import {EditorContext} from '../editor.context';
-import {EditorUiStore} from '../store/ui.store';
+import {EditorUiStore} from '../../../store/editor/ui.store';
 import * as styles from './EditorHeader.css';
 
 export interface EditorHeaderProps {

@@ -13,9 +13,9 @@ export interface FlowRendererProps {
 }
 
 export function FlowRenderer(props: FlowRendererProps) {
-  const [nodes, setNodes] = createStore<FlowNodeMap>({...props.nodes});
+  const [nodes, setNodes] = createSignal<FlowNodeMap>({...props.nodes});
 
-  const [connections, setConnections] = createStore<FlowConnection[]>(
+  const [connections, setConnections] = createSignal<FlowConnection[]>(
     props.connections,
   );
 

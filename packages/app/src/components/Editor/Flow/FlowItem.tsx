@@ -1,8 +1,8 @@
 import * as styles from './FlowItem.css';
 import {provideState} from 'statebuilder';
-import {EditorStore} from '../store/editor.store';
+import {EditorStore} from '../../../store/editor/editor.store';
 import {Show} from 'solid-js';
-import type {WorkflowStructureJob} from '#editor-store/editor.types';
+import type {WorkflowStructureJob} from '~/store/editor/editor.types';
 
 interface FlowItemProps {
   job: WorkflowStructureJob;

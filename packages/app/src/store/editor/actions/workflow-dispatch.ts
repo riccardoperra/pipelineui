@@ -1,5 +1,5 @@
 import {Pair, Scalar, YAMLMap} from 'yaml';
-import {WorkflowDispatchInput} from '../editor.types';
+import {WorkflowDispatchInput} from '../../../components/Editor/store/editor.types';
 import {YAMLSession} from '../plugins/yamlSession';
 import {modifyOnField} from './helper';
 

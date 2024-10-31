@@ -8,7 +8,7 @@ import {JobStepsForm} from '../JobStepsForm/JobStepsForm';
 import {formStyles} from '#editor-layout/Panel/Form/Form.css';
 import {provideState} from 'statebuilder';
 import {PanelEditorStore} from '../panel-editor.store';
-import {EditorStore} from '#editor-store/editor.store';
+import {EditorStore} from '~/store/editor/editor.store';
 import {EnvironmentVariablesForm} from '../../../common/EnvironmentVariables/EnvironmentVariablesForm';
 
 export function JobForm() {
@@ -90,16 +90,16 @@ export function JobForm() {
         </FullWidthPanelRow>
 
         <FullWidthPanelRow>
-          <Select<string[]>
+          <Select<string>
             aria-label={'Needs input'}
             multiple={true}
             options={needsOptions()}
+            valueComponentMultiple={options => options().join(', ')}
             value={job().needs}
             onChange={options => {
               editorStore.actions.updateJobNeeds({
                 jobId: job().$nodeId,
-                // TODO: Fix select types
-                needs: options as unknown as string[],
+                needs: options,
               });
             }}
             size={'sm'}
@@ -108,6 +108,7 @@ export function JobForm() {
             slotClasses={{
               root: formStyles.inlineInputRoot,
               label: formStyles.inlineInputLabel,
+              itemValue: formStyles.selectTextValueMultiple,
             }}
           />
         </FullWidthPanelRow>
