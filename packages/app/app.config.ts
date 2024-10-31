@@ -56,6 +56,13 @@ const defaultConfig: ViteCustomizableConfig = {
       'web-worker',
     ],
   },
+  ssr: {
+    noExternal: [
+      'vscode-languageserver-protocol',
+      'web-worker',
+      '@open-rpc/client-js',
+    ],
+  },
   esbuild: {
     exclude: ['solid-js', 'solid-js/web', '@codeui/kit'],
   },
