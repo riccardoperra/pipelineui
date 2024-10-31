@@ -18,7 +18,7 @@ jobs:
 
       - name: Build core libraries
         run: |
-          pnpm --filter @pipelineui/workflow-parser @pipelineui/workflow-languageserver @pipelineui/yaml-editor build
+          pnpm --filter @pipelineui/workflow-parser --filter @pipelineui/workflow-languageserver --filter @pipelineui/yaml-editor build
 
       - name: Build app
         run: |
