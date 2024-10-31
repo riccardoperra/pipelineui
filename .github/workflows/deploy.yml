@@ -16,17 +16,9 @@ jobs:
       - name: 📥 Monorepo install
         uses: ./.github/actions/pnpm-install
 
-      - name: Build workflow parser
+      - name: Build core libraries
         run: |
-          pnpm --filter @pipelineui/workflow-parser build
-
-      - name: Build language-server
-        run: |
-          pnpm --filter @pipelineui/workflow-languageserver build
-
-      - name: Build yaml editor
-        run: |
-          pnpm --filter @pipelineui/yaml-editor build
+          pnpm --filter @pipelineui/workflow-parser @pipelineui/workflow-languageserver @pipelineui/yaml-editor build
 
       - name: Build app
         run: |
@@ -38,7 +30,7 @@ jobs:
           cp nixpacks.toml .output
           cp .output/server/package.json .output
           cd .output
-          pmpm railway environment ${{env.RAILWAY_ENV}}
+          pnpm railway environment ${{env.RAILWAY_ENV}}
           RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} pnpm railway up -s pipelineui-server
         env:
           RAILWAY_ENV: ${{(github.ref == 'refs/heads/main' && 'production') || (github.ref == 'refs/heads/appwrite' && 'appwrite' || null)}}
