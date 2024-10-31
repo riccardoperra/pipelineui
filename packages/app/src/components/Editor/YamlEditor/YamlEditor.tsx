@@ -46,10 +46,6 @@ export function YamlEditor(props: YamlEditorProps) {
     onValueChange: props.setCode,
   });
 
-  onMount(() => {
-    props.onMount(editorView());
-  });
-
   createExtension(() => [
     fleetDark,
     yaml(),
@@ -81,6 +77,10 @@ export function YamlEditor(props: YamlEditorProps) {
       }),
     ];
   }, editorView);
+
+  createEffect(() => {
+    props.onMount(editorView());
+  });
 
   createEffect(() => {
     const code = props.code;
