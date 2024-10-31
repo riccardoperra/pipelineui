@@ -1,8 +1,8 @@
 # PipelineUI
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./logo_for_github_dark.svg">
-  <img alt="Text changing depending on mode. Light: 'So light!' Dark: 'So dark!'" src="./docs/logo_for_github_white.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/logo_for_github_dark.svg">
+  <img alt="PipelineUI logo" src="./docs/logo_for_github_white.svg">
 </picture>
 
 Pipeline UI is a visual editor for creating and managing GitHub Actions workflows.
