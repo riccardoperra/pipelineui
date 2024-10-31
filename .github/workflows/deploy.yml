@@ -7,9 +7,8 @@ on:
 
 jobs:
   build:
+    environment: ${{github.ref_name == 'main' && 'production' || (github.ref_name == 'appwrite' && 'appwrite' || 0)}}
     runs-on: ubuntu-latest
-    env:
-      RAILWAY_ENV: ${{(github.ref == 'refs/heads/main' && 'production') || (github.ref == 'refs/heads/appwrite' && 'appwrite' || null)}}
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
@@ -26,10 +25,10 @@ jobs:
         run: |
           pnpm --filter @pipelineui/app build
 
-      - name: Deploy to Railway (${{env.RAILWAY_ENV}})
+      - name: Deploy to Railway
         run: |
           cd packages/app
           cp nixpacks.toml .output
           cp .output/server/package.json .output
           cd .output
-          RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} pnpm railway up -s pipelineui-server -e ${{env.RAILWAY_ENV}}
+          RAILWAY_TOKEN=${{ secrets.RAILWAY_DEPLOY_TOKEN }} pnpm railway up -s pipelineui-server -e ${{vars.RAILWAY_ENVIRONMENT}}
