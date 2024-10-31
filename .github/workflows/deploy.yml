@@ -23,6 +23,10 @@ jobs:
         run: |
           pnpm --filter @pipelineui/workflow-languageserver build
 
+      - name: Build yaml editor
+        run: |
+          pnpm --filter @pipelineui/yaml-editor build
+
       - name: Build app
         run: |
           pnpm --filter @pipelineui/app build
