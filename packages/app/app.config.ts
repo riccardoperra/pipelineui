@@ -37,7 +37,6 @@ export default defineConfig({
   server: {
     prerender: {
       routes: ['/about', '/about/supported-workflow-features'],
-      crawlLinks: true,
     },
   },
   extensions: ['mdx', 'md', 'tsx'],
