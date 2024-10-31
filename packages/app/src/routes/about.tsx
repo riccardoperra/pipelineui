@@ -8,7 +8,6 @@ import * as styles from '~/components/About/about.css';
 import mdxComponents from '~/components/Mdx/mdx-components';
 
 import {createMemo, For, Show, Suspense} from 'solid-js';
-// @ts-expect-error No types
 import {MDXProvider} from 'solid-mdx';
 import {HomeTitle} from '~/components/Home/HomeTitle/HomeTitle';
 import {Icon} from '~/ui/components/Icon';

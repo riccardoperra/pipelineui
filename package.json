@@ -17,7 +17,8 @@
   "pnpm": {
     "patchedDependencies": {
       "@actions/workflow-parser@0.3.13": "patches/@actions__workflow-parser@0.3.13.patch",
-      "@vanilla-extract/vite-plugin@4.0.17": "patches/@vanilla-extract__vite-plugin@4.0.17.patch"
+      "@vanilla-extract/vite-plugin@4.0.17": "patches/@vanilla-extract__vite-plugin@4.0.17.patch",
+      "solid-mdx": "patches/solid-mdx.patch"
     }
   }
 }

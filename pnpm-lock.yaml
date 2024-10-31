@@ -11,6 +11,9 @@ patchedDependencies:
   '@vanilla-extract/vite-plugin@4.0.17':
     hash: i44zwkor6nbxyrubqgkogc6t64
     path: patches/@vanilla-extract__vite-plugin@4.0.17.patch
+  solid-mdx:
+    hash: wongdwyww6mzxros5anf6ruhb4
+    path: patches/solid-mdx.patch
 
 importers:
 
@@ -156,7 +159,7 @@ importers:
         version: 1.1.4(solid-js@1.9.3)
       solid-mdx:
         specifier: ^0.0.7
-        version: 0.0.7(solid-js@1.9.3)(vite@5.4.10(@types/node@22.8.5)(terser@5.34.1))
+        version: 0.0.7(patch_hash=wongdwyww6mzxros5anf6ruhb4)(solid-js@1.9.3)(vite@5.4.10(@types/node@22.8.5)(terser@5.34.1))
       statebuilder:
         specifier: ^0.6.2
         version: 0.6.2
@@ -12293,7 +12296,7 @@ snapshots:
     dependencies:
       solid-js: 1.9.3
 
-  solid-mdx@0.0.7(solid-js@1.9.3)(vite@5.4.10(@types/node@22.8.5)(terser@5.34.1)):
+  solid-mdx@0.0.7(patch_hash=wongdwyww6mzxros5anf6ruhb4)(solid-js@1.9.3)(vite@5.4.10(@types/node@22.8.5)(terser@5.34.1)):
     dependencies:
       solid-js: 1.9.3
       vite: 5.4.10(@types/node@22.8.5)(terser@5.34.1)
