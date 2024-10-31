@@ -117,6 +117,8 @@ function createNodes(jobs: WorkflowStructureJob[]) {
           return [...acc, ...jobEdge];
         }, [] as FlowConnection[]);
 
+        console.log(mappedNodes);
+
         return {
           size: {
             width: layout.width!,

@@ -9,8 +9,8 @@ export const resizablePanel = style({
 
 export const resizableHandlerContainer = recipe({
   base: {
-    backgroundColor: 'transparent',
-    width: '4px',
+    backgroundColor: themeVars.accent4,
+    width: '6px',
     padding: 0,
     flexBasis: '4px',
     border: 0,

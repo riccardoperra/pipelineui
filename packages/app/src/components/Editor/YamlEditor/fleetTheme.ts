@@ -223,15 +223,20 @@ export const colors = EditorView.theme(
       width: '12px',
       backgroundColor: 'transparent',
     },
-    '::-webkit-scrollbar-track': {
-      backgroundColor: 'transparent',
-    },
     '::-webkit-scrollbar-thumb': {
       backgroundColor: '#505050',
       borderRadius: '1000px',
       border: '4px solid transparent',
       backgroundClip: 'content-box',
-      transition: 'background-color .2s',
+    },
+    '::webkit-scrollbar-corner': {
+      backgroundColor: '#505050',
+      borderRadius: '16px',
+      backgroundClip: 'content-box',
+      border: '4px solid transparent',
+    },
+    '&::-webkit-scrollbar-track-piece': {
+      background: 'transparent',
     },
   },
   {

@@ -7,7 +7,7 @@ export const badge = style({
   alignItems: 'center',
   justifyContent: 'center',
   textAlign: 'center',
-  fontSize: '14px',
+  fontSize: '14px !important',
   background: '#076a6e',
   color: 'white',
   borderRadius: '9999px',

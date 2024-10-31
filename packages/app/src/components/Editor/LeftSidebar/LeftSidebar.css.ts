@@ -29,10 +29,10 @@ export const sidebar = recipe({
       overflowX: 'hidden',
       paddingRight: appTheme.spacing['2'],
       '@supports': {
-        '(scrollbar-gutter: stable)': {
-          paddingRight: 0,
-          scrollbarGutter: 'stable',
-        },
+        // '(scrollbar-gutter: stable)': {
+        // paddingRight: 0,
+        // scrollbarGutter: 'stable',
+        // },
       },
       flexShrink: 0,
     },
@@ -42,9 +42,11 @@ export const sidebar = recipe({
       none: {},
       right: {
         borderLeft: `1px solid ${themeVars.separator}`,
+        paddingRight: 0,
       },
       left: {
         borderRight: `1px solid ${themeVars.separator}`,
+        paddingRight: 0,
       },
     },
   },
