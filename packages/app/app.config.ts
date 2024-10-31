@@ -16,45 +16,9 @@ import remarkGfm from 'remark-gfm';
 import {rehypeBlockquote} from './rehype-custom/rehypeCustomBlockquote';
 
 const defaultConfig: ViteCustomizableConfig = {
-  plugins: [
-    viteTsConfigPaths(),
-    vinxiMdx.withImports({})({
-      define: {
-        'import.meta.env': "'import.meta.env'",
-      },
-      jsx: true,
-      jsxImportSource: 'solid-js',
-      providerImportSource: 'solid-mdx',
-      rehypePlugins: [
-        [
-          rehypeRaw,
-          {
-            passThrough: nodeTypes,
-          },
-        ],
-        [rehypeBlockquote],
-        [rehypeSlug],
-        [
-          rehypeAutoLinkHeadings,
-          {
-            behavior: 'wrap',
-            properties: {
-              className: 'heading',
-            },
-          },
-        ],
-      ],
-      remarkPlugins: [remarkFrontmatter, remarkGfm],
-    }),
-  ],
+  plugins: [viteTsConfigPaths(), customMdxConfig()],
   optimizeDeps: {
-    exclude: [
-      '@codemirror/state',
-      '@codemirror/view',
-      '@pipelineui/workflow-parser',
-      'yaml',
-      'web-worker',
-    ],
+    exclude: ['@codemirror/state', '@codemirror/view'],
   },
   ssr: {
     noExternal: [
@@ -72,7 +36,8 @@ export default defineConfig({
   middleware: './src/middleware.ts',
   server: {
     prerender: {
-      routes: ['/about'],
+      routes: ['/about', '/about/supported-workflow-features'],
+      crawlLinks: true,
     },
   },
   extensions: ['mdx', 'md', 'tsx'],
@@ -96,6 +61,37 @@ export default defineConfig({
     }
   },
 });
+
+function customMdxConfig() {
+  return vinxiMdx.withImports({})({
+    define: {
+      'import.meta.env': "'import.meta.env'",
+    },
+    jsx: true,
+    jsxImportSource: 'solid-js',
+    providerImportSource: 'solid-mdx',
+    rehypePlugins: [
+      [
+        rehypeRaw,
+        {
+          passThrough: nodeTypes,
+        },
+      ],
+      [rehypeBlockquote],
+      [rehypeSlug],
+      [
+        rehypeAutoLinkHeadings,
+        {
+          behavior: 'wrap',
+          properties: {
+            className: 'heading',
+          },
+        },
+      ],
+    ],
+    remarkPlugins: [remarkFrontmatter, remarkGfm],
+  });
+}
 
 function vanillaExtractServerPlugin() {
   // Solid SSR Bundle plugins
