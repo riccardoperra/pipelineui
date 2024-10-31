@@ -32,5 +32,4 @@ jobs:
           cp nixpacks.toml .output
           cp .output/server/package.json .output
           cd .output
-          RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} pnpm railway environment ${{env.RAILWAY_ENV}}
-          RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} pnpm railway up -s pipelineui-server
+          RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }} pnpm railway up -s pipelineui-server -e ${{env.RAILWAY_ENV}}
