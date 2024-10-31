@@ -36,12 +36,16 @@ export const updateScratchName = action(async (id: string, newName: string) => {
   }
   const {database} = await createSessionClient();
 
+  if (!newName) {
+    return;
+  }
+
   const document = await database.updateDocument(
     databaseId,
     scratchCollectionId,
     id,
     {
-      name: newName,
+      name: newName.replace(' ', '_'),
     },
   );
 
@@ -143,7 +147,10 @@ export const createScratchFork = action(
       scratchCollectionId,
       ID.unique(),
       {
-        name: repository.filePath.at(repository.filePath.length - 1),
+        name: repository.filePath
+          .at(repository.filePath.length - 1)
+          ?.replace('.yml', '')
+          .replace('.yaml', ''),
         initialCode,
         code,
         type: 'fork',
