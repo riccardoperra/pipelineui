@@ -1,7 +1,7 @@
 import {Scalar, YAMLMap} from 'yaml';
-import {JobEnvironment} from '../../../components/Editor/store/editor.types';
 import {YAMLSession} from '../plugins/yamlSession';
 import {findJob} from './helper';
+import {JobEnvironment} from '../editor.types';
 
 export const setJobEnvironment =
   (yamlSession: YAMLSession) =>
