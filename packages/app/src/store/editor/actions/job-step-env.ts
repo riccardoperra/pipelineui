@@ -1,5 +1,4 @@
 import {Pair, Scalar} from 'yaml';
-import {WorkflowStructureEnvItem} from '../../../components/Editor/store/editor.types';
 import {YAMLSession} from '../plugins/yamlSession';
 import {
   convertEnvItemFieldToYaml,
@@ -7,6 +6,7 @@ import {
   findJobStep,
   modifyEnvField,
 } from './helper';
+import {WorkflowStructureEnvItem} from '../editor.types';
 
 export const setJobStepEnv =
   (yamlSession: YAMLSession) =>

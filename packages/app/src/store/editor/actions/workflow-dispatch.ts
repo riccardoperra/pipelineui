@@ -1,7 +1,7 @@
 import {Pair, Scalar, YAMLMap} from 'yaml';
-import {WorkflowDispatchInput} from '../../../components/Editor/store/editor.types';
 import {YAMLSession} from '../plugins/yamlSession';
-import {modifyOnField} from './helper';
+import {modifyOnField, removeObjectYamlPrivateProperties} from './helper';
+import {WorkflowDispatchInput} from '../editor.types';
 
 export const setWorkflowDispatch =
   (yamlSession: YAMLSession) =>
@@ -30,7 +30,7 @@ export const setWorkflowDispatch =
           workflowDispatch.add(new Pair(new Scalar('inputs'), inputs));
         }
 
-        let {name, ...others} = data;
+        let {name, ...others} = removeObjectYamlPrivateProperties(data);
         const inputAtIndex = inputs.items.at(index);
         const input = new YAMLMap<Scalar<string>, unknown>();
         if (!name && fallbackMissingName) {
