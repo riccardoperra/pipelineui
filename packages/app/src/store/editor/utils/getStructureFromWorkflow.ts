@@ -1,3 +1,4 @@
+import type {WorkflowJob} from '@actions/workflow-parser/model/workflow-template';
 import {
   environmentConverters,
   handleTemplateTokenErrors,
@@ -16,8 +17,9 @@ import type {
   WorkflowStructureEnv,
   WorkflowStructureEnvItem,
   WorkflowTypesTriggerEvent,
+  WorkflowTypesTriggerPullRequest,
+  WorkflowTypesTriggerPush,
 } from '../editor.types';
-import type {WorkflowJob} from '@actions/workflow-parser/model/workflow-template';
 
 export function mapEventToWorkflowTriggerEventTypes(
   eventConfig: WorkflowTemplate['events'] | null | undefined,
@@ -26,21 +28,53 @@ export function mapEventToWorkflowTriggerEventTypes(
     return [];
   }
 
-  return Object.entries(eventConfig).reduce((acc, [event, value]) => {
-    const unsafeValue = value as any;
-    if (Array.isArray(unsafeValue)) {
-      // TODO: schedule not supported;
+  return Object.entries(eventConfig).reduce(
+    (acc, [event, value]) => {
+      const unsafeValue = value as any;
+      if (Array.isArray(unsafeValue)) {
+        // TODO: schedule not supported;
+        return acc;
+      }
+
+      if (event === 'push') {
+        const typedValue = unsafeValue as Required<
+          WorkflowTemplate['events']
+        >['push'];
+        acc.push({
+          $nodeId: crypto.randomUUID().toString(),
+          type: event,
+          branches: typedValue.branches,
+          branchesIgnore: typedValue['branches-ignore'] ?? [],
+          types: unsafeValue.types ?? [],
+          tags: typedValue.tags ?? [],
+          tagsIgnore: typedValue['tags-ignore'] ?? [],
+        } satisfies WorkflowTypesTriggerPush);
+      } else if (event === 'pull_request' || event === 'pull_request_target') {
+        const typedValue = unsafeValue as Required<
+          WorkflowTemplate['events']
+        >['pull_request'];
+        acc.push({
+          $nodeId: crypto.randomUUID().toString(),
+          type: event,
+          branches: typedValue.branches,
+          branchesIgnore: typedValue['branches-ignore'],
+          types: unsafeValue.types ?? [],
+        } satisfies WorkflowTypesTriggerPullRequest);
+      } else if ('types' in unsafeValue) {
+        acc.push({
+          $nodeId: crypto.randomUUID().toString(),
+          type: event,
+          types: unsafeValue.types,
+        } satisfies WorkflowTypesTriggerEvent);
+      }
       return acc;
-    }
-    if ('types' in unsafeValue) {
-      acc.push({
-        $nodeId: crypto.randomUUID().toString(),
-        type: event,
-        types: unsafeValue.types,
-      } satisfies WorkflowTypesTriggerEvent);
-    }
-    return acc;
-  }, [] as WorkflowTypesTriggerEvent[]);
+    },
+    [] as (
+      | WorkflowTypesTriggerEvent
+      | WorkflowTypesTriggerPullRequest
+      | WorkflowTypesTriggerPush
+    )[],
+  );
 }
 
 export function getStructureFromWorkflow(

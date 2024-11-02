@@ -1,17 +1,6 @@
-import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
-import {createMemo, createSelector, For, Show} from 'solid-js';
-import {TriggerItemForm} from './TriggerItemForm';
-import {provideState} from 'statebuilder';
-import {EditorStore} from '../../../../store/editor/editor.store';
-import {
-  AVAILABLE_WORKFLOW_TRIGGER_TYPES,
-  WorkflowTriggerEvent,
-  WorkflowTypesTriggerEvent,
-  type WorkflowDispatchInput,
-} from '../../../../store/editor/editor.types';
-import {PanelPlusButton} from '#editor-layout/Panel/Form/PanelPlusButton';
 import {PanelAccordion} from '#editor-layout/Panel/Form/PanelAccordion/PanelAccordion';
 import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
+import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +9,15 @@ import {
   DropdownMenuTrigger,
   IconButton,
 } from '@codeui/kit';
+import {createMemo, createSelector, For, Show} from 'solid-js';
+import {provideState} from 'statebuilder';
 import {Icon} from '~/ui/components/Icon';
+import {EditorStore} from '../../../../store/editor/editor.store';
+import {
+  AVAILABLE_WORKFLOW_TRIGGER_TYPES,
+  WorkflowTypesTriggerEvent,
+} from '../../../../store/editor/editor.types';
+import {TriggerItemForm} from './TriggerItemForm';
 
 import * as styles from './TriggerForm.css';
 

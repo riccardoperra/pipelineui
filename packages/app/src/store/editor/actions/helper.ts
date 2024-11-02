@@ -22,7 +22,7 @@ export const modifyEnvField = (
 export const modifyOnField = (
   yaml: YAMLDocument,
   createIfNotExists: boolean = true,
-  updater: (on: YAML.YAMLMap<YAML.Scalar<string>, YAML.YAMLMap>) => void,
+  updater: (on: YAML.YAMLMap<YAML.Scalar<string>, YAML.YAMLMap | null>) => void,
 ) => {
   let onField = yaml.get('on') as YAML.YAMLMap<
     YAML.Scalar<string>,
@@ -72,3 +72,13 @@ export const convertEnvItemFieldToYaml = (
   }
   return value;
 };
+
+export function removeObjectYamlPrivateProperties(object: Record<string, any>) {
+  const clone = structuredClone(object);
+  for (const key in clone) {
+    if (key[0] === '$') {
+      delete clone[key];
+    }
+  }
+  return clone;
+}

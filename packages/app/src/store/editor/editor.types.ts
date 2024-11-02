@@ -1,4 +1,4 @@
-import { Tokens, WorkflowTemplate } from '@pipelineui/workflow-parser';
+import {Tokens, WorkflowTemplate} from '@pipelineui/workflow-parser';
 
 export interface WorkflowDispatchInput {
   readonly $index: number;
@@ -38,6 +38,9 @@ export const AVAILABLE_WORKFLOW_TRIGGER_TYPES = [
   'repository_dispatch',
   'release',
   'watch',
+
+  // custom
+  'push',
 ] as const satisfies (keyof EventsConfig & string)[];
 
 type AvailableWorkflowTriggerTypesKey =
@@ -48,6 +51,7 @@ export const WORKFLOW_TRIGGER_TYPES_CONFIG: Record<
   {
     availableTypes: string[];
     type: 'multiple' | 'single' | 'custom';
+    supportsBranchProperty?: boolean;
   }
 > = {
   branch_protection_rule: {
@@ -167,6 +171,7 @@ export const WORKFLOW_TRIGGER_TYPES_CONFIG: Record<
       'auto_merge_disabled',
     ],
     type: 'multiple',
+    supportsBranchProperty: true,
   },
   pull_request_review_comment: {
     availableTypes: ['created', 'edited', 'deleted'],
@@ -193,6 +198,7 @@ export const WORKFLOW_TRIGGER_TYPES_CONFIG: Record<
       'auto_merge_disabled',
     ],
     type: 'multiple',
+    supportsBranchProperty: true,
   },
   registry_package: {
     availableTypes: ['published', 'updated'],
@@ -218,20 +224,43 @@ export const WORKFLOW_TRIGGER_TYPES_CONFIG: Record<
     availableTypes: [],
     type: 'custom',
   },
+  push: {
+    availableTypes: [],
+    type: 'custom',
+    supportsBranchProperty: true,
+  },
 };
 
 export interface WorkflowTypesTriggerEvent extends WorkflowTriggerEvent {
-  type: keyof EventsConfig | (string & {});
+  type: Exclude<keyof EventsConfig, 'pull_request' | 'pull_request_target'>;
   types: string[];
+}
+
+export interface WorkflowTypesTriggerPullRequest extends WorkflowTriggerEvent {
+  type: 'pull_request' | 'pull_request_target';
+  branches?: string[];
+  branchesIgnore?: string[];
+}
+
+export interface WorkflowTypesTriggerPush extends WorkflowTriggerEvent {
+  type: 'push';
+  branches?: string[];
+  branchesIgnore?: string[];
+  tags?: string[];
+  tagsIgnore?: string[];
 }
 
 export interface WorkflowTriggerEvent {
   readonly $nodeId: string;
+  types: string[];
 }
 
 export interface WorkflowStructureEvents {
   workflowDispatch: WorkflowDispatchInput[];
-  triggerEvents: WorkflowTypesTriggerEvent[];
+  triggerEvents: (
+    | WorkflowTypesTriggerEvent
+    | WorkflowTypesTriggerPullRequest
+  )[];
 }
 
 export type JobEnvironment = {
