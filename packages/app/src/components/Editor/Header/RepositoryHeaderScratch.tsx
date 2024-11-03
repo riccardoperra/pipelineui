@@ -21,7 +21,7 @@ export function EditorRepositoryHeaderScratch() {
   const renamingScratchSubsmission = useSubmission(updateScratchName);
 
   return (
-    <Show when={editor.scratch}>
+    <Show when={editor.scratch?.()}>
       {scratch => (
         <span>
           {scratch().name}.yml

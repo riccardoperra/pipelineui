@@ -52,7 +52,7 @@
     "solid-js": "^1.9.3",
     "solid-jsx": "^1.1.4",
     "solid-mdx": "^0.0.7",
-    "statebuilder": "^0.6.2",
+    "statebuilder": "^0.7.1",
     "unique-names-generator": "^4.7.1",
     "vinxi": "^0.4.3",
     "vscode-languageserver-protocol": "^3.17.5",

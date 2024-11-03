@@ -1,22 +1,22 @@
-import {EditorSidebar} from './LeftSidebar/EditorSidebar';
-import * as styles from './Editor.css';
-import * as fallbackStyles from '~/ui/components/Fallback.css';
-import {EditorHeader} from './Header/Header';
-import {provideState} from 'statebuilder';
-import {EditorUiStore} from '../../store/editor/ui.store';
-import {For, lazy, Match, Show, Suspense, Switch, useContext} from 'solid-js';
-import {EditorStatusBar} from './StatusBar/StatusBar';
 import Resizable from '@corvu/resizable';
-import {EditorResizableHandler} from './Layout/Resizable/Resizable';
-import {EditorStore} from '../../store/editor/editor.store';
-import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';
-import {JobPanelEditor} from './Jobs/JobPanelEditor/JobPanelEditor';
-import {YamlMergeView} from './YamlEditor/MergeView';
-import {DiagnosticPanel} from './DiagnosticPanel/DiagnosticPanel';
-import {EditorRepositoryHeaderName} from './Header/RepositoryHeaderName';
-import {EditorContext} from './editor.context';
+import {For, lazy, Match, Show, Suspense, Switch, useContext} from 'solid-js';
+import {provideState} from 'statebuilder';
+import * as fallbackStyles from '~/ui/components/Fallback.css';
 import {OverlayLoader} from '~/ui/components/Loader/Loader';
+import {EditorStore} from '../../store/editor/editor.store';
+import {EditorUiStore} from '../../store/editor/ui.store';
+import {DiagnosticPanel} from './DiagnosticPanel/DiagnosticPanel';
+import * as styles from './Editor.css';
+import {EditorHeader} from './Header/Header';
+import {EditorRepositoryHeaderName} from './Header/RepositoryHeaderName';
 import {EditorRepositoryHeaderScratch} from './Header/RepositoryHeaderScratch';
+import {JobPanelEditor} from './Jobs/JobPanelEditor/JobPanelEditor';
+import {EditorResizableHandler} from './Layout/Resizable/Resizable';
+import {EditorSidebar} from './LeftSidebar/EditorSidebar';
+import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';
+import {EditorStatusBar} from './StatusBar/StatusBar';
+import {YamlMergeView} from './YamlEditor/MergeView';
+import {EditorContext} from './editor.context';
 
 const YamlEditor = lazy(() =>
   import('./YamlEditor/YamlEditor').then(m => ({default: m.YamlEditor})),

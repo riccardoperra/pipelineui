@@ -3,7 +3,7 @@ import {
   type RouteDefinition,
   type RouteSectionProps,
 } from '@solidjs/router';
-import {Suspense} from 'solid-js';
+import {Show, Suspense} from 'solid-js';
 import {provideState, StateProvider} from 'statebuilder';
 import {Editor} from '~/components/Editor/Editor';
 import {EditorContext} from '~/components/Editor/editor.context';
@@ -18,28 +18,30 @@ export const route = {
 } satisfies RouteDefinition;
 
 export default function EditorPage(props: RouteSectionProps) {
-  const workflowContent = createAsync(() => getScratch(props.params.id));
+  const scratch = createAsync(() => getScratch(props.params.id));
   const user = provideState(UserStore);
 
   return (
     <Suspense fallback={<OverlayLoader />}>
-      <EditorContext.Provider
-        value={{
-          get source() {
-            return workflowContent()?.code ?? '';
-          },
-          repository: null,
-          remoteId: props.params.id,
-          get scratch() {
-            return workflowContent();
-          },
-          user,
-        }}
-      >
-        <StateProvider>
-          <Editor type={'scratch'} />
-        </StateProvider>
-      </EditorContext.Provider>
+      <Show when={scratch()}>
+        {scratch => (
+          <EditorContext.Provider
+            value={{
+              get source() {
+                return scratch()?.code ?? '';
+              },
+              repository: null,
+              remoteId: props.params.id,
+              scratch: scratch,
+              user,
+            }}
+          >
+            <StateProvider>
+              <Editor type={'scratch'} />
+            </StateProvider>
+          </EditorContext.Provider>
+        )}
+      </Show>
     </Suspense>
   );
 }

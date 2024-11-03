@@ -57,7 +57,9 @@ export const content = style({
   flexDirection: 'column',
   justifyContent: 'center',
   gap: appTheme.spacing['3'],
-  width: '600px',
+  maxWidth: '600px',
+  paddingLeft: appTheme.spacing['2'],
+  paddingRight: appTheme.spacing['2'],
 });
 
 export const errorBanner = style({

@@ -5,7 +5,6 @@ import {
   type RouteDefinition,
   type RouteSectionProps,
 } from '@solidjs/router';
-import {createEffect} from 'solid-js';
 import {provideState, StateProvider} from 'statebuilder';
 import {Editor} from '~/components/Editor/Editor';
 import {
@@ -13,7 +12,6 @@ import {
   type EditorParsedRepository,
 } from '~/components/Editor/editor.context';
 import {getGithubRepoFileContent} from '~/lib/githubApi';
-import {loggedInUser} from '~/lib/session';
 import {UserStore} from '~/store/user.store';
 
 const getWorkflowFromUrl = query(async (path: string) => {

@@ -13,7 +13,7 @@ export interface EditorPageContext {
   remoteId: string | null;
   repository: EditorParsedRepository | null;
   user: Accessor<Models.User<any> | undefined | null>;
-  scratch?: Models.Document;
+  scratch?: Accessor<Models.Document>;
 }
 
 export const EditorContext = createContext<EditorPageContext>();

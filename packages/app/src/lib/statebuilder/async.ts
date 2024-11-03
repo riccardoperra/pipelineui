@@ -1,6 +1,5 @@
-import {createLatest} from '@solid-primitives/memo';
 import {AccessorWithLatest, createAsync} from '@solidjs/router';
-import {createComputed, createSignal, Setter} from 'solid-js';
+import {createEffect, createSignal, on, Setter} from 'solid-js';
 import {create} from 'statebuilder';
 
 export interface AsyncSignalState<T> {
@@ -33,14 +32,14 @@ function makeAsyncSignal<T>(
     options?.initialValue,
   );
 
-  createComputed(() => {
-    // Sync latest signal retrieved by asyncState in order to be available globally after navigation
-    const latest = asyncState.latest;
-    setSignal(() => latest);
-  });
+  createEffect(
+    on(asyncState, latest => {
+      // Sync latest signal retrieved by asyncState in order to be available globally after navigation
+      setSignal(() => latest);
+    }),
+  );
 
-  const latestValue = createLatest([signal, asyncState]);
-  const state: AsyncSignalState<T | undefined> = Object.assign(latestValue, {
+  const state: AsyncSignalState<T | undefined> = Object.assign(signal, {
     raw: asyncState,
     set: setSignal,
   });

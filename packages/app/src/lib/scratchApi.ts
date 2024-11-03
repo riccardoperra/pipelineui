@@ -4,6 +4,7 @@ import {adjectives, colors, uniqueNamesGenerator} from 'unique-names-generator';
 import type {EditorParsedRepository} from '../components/Editor/editor.context';
 import {createAdminClient, createSessionClient} from './server/appwrite';
 import {loggedInUser} from './session';
+import {getLoggedInUser} from './server/session';
 
 function getScratchAppwriteVars() {
   'use server';
@@ -198,7 +199,15 @@ export const getScratch = query(async (id: string) => {
   const {databaseId, scratchCollectionId} = getScratchAppwriteVars();
 
   try {
-    return await database.getDocument(databaseId, scratchCollectionId, id);
+    const document = await database.getDocument(
+      databaseId,
+      scratchCollectionId,
+      id,
+    );
+    const user = await getLoggedInUser();
+    document.canEdit =
+      user && document.$permissions.includes(`update("user:${user?.$id}")`);
+    return document;
   } catch (e) {
     throw redirect('/not-found');
   }

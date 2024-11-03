@@ -15,8 +15,17 @@ import remarkGfm from 'remark-gfm';
 
 import {rehypeBlockquote} from './rehype-custom/rehypeCustomBlockquote';
 
+import {statebuilder} from 'statebuilder/vite';
+
 const defaultConfig: ViteCustomizableConfig = {
-  plugins: [viteTsConfigPaths(), customMdxConfig()],
+  plugins: [
+    viteTsConfigPaths(),
+    customMdxConfig(),
+    statebuilder({
+      transformStores: ['eDefineAsync'],
+      autoKey: true,
+    }),
+  ],
   optimizeDeps: {
     exclude: ['@codemirror/state', '@codemirror/view'],
   },
