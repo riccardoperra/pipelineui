@@ -36,9 +36,7 @@ export default function EditorPage(props: RouteSectionProps) {
               user,
             }}
           >
-            <StateProvider>
-              <Editor type={'scratch'} />
-            </StateProvider>
+            <Editor type={'scratch'} />
           </EditorContext.Provider>
         )}
       </Show>

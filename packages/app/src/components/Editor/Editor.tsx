@@ -31,6 +31,7 @@ export interface EditorProps {
 }
 
 export function Editor(props: EditorProps) {
+  'use stateprovider';
   const editorUi = provideState(EditorUiStore);
   const editor = provideState(EditorStore);
 

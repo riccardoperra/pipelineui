@@ -5,7 +5,7 @@ import {
   type RouteDefinition,
   type RouteSectionProps,
 } from '@solidjs/router';
-import {provideState, StateProvider} from 'statebuilder';
+import {provideState} from 'statebuilder';
 import {Editor} from '~/components/Editor/Editor';
 import {
   EditorContext,
@@ -68,9 +68,7 @@ export default function EditorPage(props: RouteSectionProps) {
         user,
       }}
     >
-      <StateProvider>
-        <Editor type={'repository'} />
-      </StateProvider>
+      <Editor type={'repository'} />
     </EditorContext.Provider>
   );
 }

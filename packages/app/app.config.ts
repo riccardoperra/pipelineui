@@ -24,6 +24,9 @@ const defaultConfig: ViteCustomizableConfig = {
     statebuilder({
       transformStores: ['eDefineAsync'],
       autoKey: true,
+      experimental: {
+        transformStateProviderDirective: true,
+      },
     }),
   ],
   optimizeDeps: {
