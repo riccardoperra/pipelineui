@@ -96,14 +96,15 @@ export const EditorStore = defineStore<EditorState>(() => ({
     };
   })
   .extend((_, context) => {
+    const editorContext = useContext(EditorContext)!;
+
     context.hooks.onInit(() => {
-      const context = useContext(EditorContext)!;
       // Support reactivity when using hybrid routing
       createEffect(
         on(
-          () => context.source,
+          () => editorContext.source,
           source => {
-            _.initEditSession(context.source).then();
+            _.initEditSession(editorContext.source).then();
           },
           // {defer: true},
         ),
@@ -111,13 +112,22 @@ export const EditorStore = defineStore<EditorState>(() => ({
 
       createEffect(
         on(
-          () => context.remoteId,
+          () => editorContext.remoteId,
           remoteId => {
             _.set('remoteId', remoteId);
           },
         ),
       );
     });
+
+    return {
+      scratch() {
+        return editorContext.scratch?.();
+      },
+      canEditCurrent() {
+        return editorContext.scratch?.()?.canEdit === true;
+      },
+    };
   })
   .extend(
     withProxyCommands<{

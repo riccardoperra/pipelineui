@@ -15,6 +15,7 @@ import {createScratchFork, updateScratch} from '../../../lib/scratchApi';
 import {EditorContext} from '../editor.context';
 import {EditorUiStore} from '../../../store/editor/ui.store';
 import * as styles from './EditorHeader.css';
+import {EditorHeaderCurrentUser} from './CurrentUser/CurrentUser';
 
 export interface EditorHeaderProps {
   showBack: boolean;
@@ -105,8 +106,8 @@ export function EditorHeader(props: EditorHeaderProps) {
 
         {props.name}
 
-        <Show when={user()}>
-          <div class={styles.headerRightSide}>
+        <div class={styles.headerRightSide}>
+          <Show when={user()}>
             <Show
               fallback={
                 <>
@@ -116,26 +117,30 @@ export function EditorHeader(props: EditorHeaderProps) {
               when={editorStore.get.remoteId}
             >
               {remoteId => (
-                <form
-                  action={updateScratch.with(
-                    remoteId(),
-                    editorStore.yamlSession.source(),
-                  )}
-                  method={'post'}
-                >
-                  <Button
-                    type={'submit'}
-                    theme={'primary'}
-                    size={'sm'}
-                    loading={isUpdating.pending}
+                <Show when={editorStore.scratch()?.canEdit}>
+                  <form
+                    action={updateScratch.with(
+                      remoteId(),
+                      editorStore.yamlSession.source(),
+                    )}
+                    method={'post'}
                   >
-                    Save
-                  </Button>
-                </form>
+                    <Button
+                      type={'submit'}
+                      theme={'primary'}
+                      size={'sm'}
+                      loading={isUpdating.pending}
+                    >
+                      Save
+                    </Button>
+                  </form>
+                </Show>
               )}
             </Show>
-          </div>
-        </Show>
+          </Show>
+
+          <EditorHeaderCurrentUser user={user() ?? null} />
+        </div>
       </header>
       <div class={styles.subHeader}>
         <EditorHeaderActionButton

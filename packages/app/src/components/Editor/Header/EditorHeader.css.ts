@@ -51,6 +51,7 @@ export const subHeaderRightContent = style({
 export const headerRightSide = style({
   marginLeft: 'auto',
   display: 'flex',
+  alignItems: 'center',
   gap: appTheme.spacing['2'],
 });
 
