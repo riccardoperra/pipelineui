@@ -1,5 +1,5 @@
 import {AccessorWithLatest, createAsync} from '@solidjs/router';
-import {createEffect, createSignal, on, Setter} from 'solid-js';
+import {createComputed, createSignal, on, Setter} from 'solid-js';
 import {create} from 'statebuilder';
 
 export interface AsyncSignalState<T> {
@@ -32,7 +32,7 @@ function makeAsyncSignal<T>(
     options?.initialValue,
   );
 
-  createEffect(
+  createComputed(
     on(asyncState, latest => {
       // Sync latest signal retrieved by asyncState in order to be available globally after navigation
       setSignal(() => latest);
@@ -51,5 +51,6 @@ function makeAsyncSignal<T>(
  * Define an async signal.
  *
  * @experimental TODO port to statebuilder?
+ *
  */
 export const eDefineAsync = create('asyncSignal', makeAsyncSignal);

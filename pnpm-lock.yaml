@@ -161,8 +161,8 @@ importers:
         specifier: ^0.0.7
         version: 0.0.7(patch_hash=wongdwyww6mzxros5anf6ruhb4)(solid-js@1.9.3)(vite@5.4.10(@types/node@22.8.5)(terser@5.34.1))
       statebuilder:
-        specifier: ^0.7.2
-        version: 0.7.2
+        specifier: ^0.7.3
+        version: 0.7.3
       unique-names-generator:
         specifier: ^4.7.1
         version: 4.7.1
@@ -5442,8 +5442,8 @@ packages:
   statebuilder@0.6.2:
     resolution: {integrity: sha512-GLq0GKh/++3tQ3R9VsQ488Ma+KANSxWwGtVsqKlgX7VNfx3zS1CRrPCpfnbZBdNUQFOgiEFHt9TfNldPs93miw==}
 
-  statebuilder@0.7.2:
-    resolution: {integrity: sha512-bQG6qfZlQ6xFio+6wccpjpDQWPxk4WCRyzRteCDltGgxb+DqCP7vk55pkfvBDseazplF0oGztgtDN/l8BySZsQ==}
+  statebuilder@0.7.3:
+    resolution: {integrity: sha512-K9D+pkE/PxFZu70V3Mc+/ebXb+gRIZrStewKf4R69TUTZNsj4VOXpMfCwrRjogkbGc4KQ+Ne8CzbHC0BgB8j1g==}
 
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
@@ -12383,7 +12383,7 @@ snapshots:
       rxjs: 7.8.1
       solid-js: 1.9.3
 
-  statebuilder@0.7.2:
+  statebuilder@0.7.3:
     dependencies:
       '@babel/parser': 7.26.2
       '@solid-primitives/event-bus': 1.0.11(solid-js@1.9.3)
