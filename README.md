@@ -5,10 +5,9 @@
 
 ---
 
-Pipeline UI is a visual editor for creating and managing GitHub Actions workflows.
-Built with SolidStart, this tool simplifies the process of defining GitHub pipelines
-by allowing users to visually editing and update workflows. It automatically generates and
-updates the YAML configuration files, ensuring seamless integration with GitHub.
+Pipeline UI is a free, open-source visual editor for visualizing, creating and managing GitHub Actions workflows.
+Built with SolidStart, this tool simplifies the process of creating GitHub pipelines
+by allowing users to visually check, edit and update workflows.
 
 > [!NOTE]
 >
@@ -28,7 +27,7 @@ This project will be submitted for these two hackathons:
 - [SolidHack 2024](https://hack.solidjs.com/)
 - [AppWrite's Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024)
 
-Since they have two different deadlines, it will be subdivided into two branches until the two hackathon ends:
+Since they have two different deadlines, development will be subdivided into two branches until the two hackathon ends:
 
 - [main](https://github.com/riccardoperra/pipelineui/tree/main): Source code to be submitted for SolidHack
 - [appwrite](https://github.com/riccardoperra/pipelineui/tree/appwrite): Source code to be submitted for Appwrite Hackathon
@@ -80,7 +79,7 @@ of your repository.
 
 If you haven't an existing workflow file, you can create it from scratch if you're authenticated.
 
-Workflow files are persisted into [AppWrite Cloud](https://appwrite.io/) and **are publicly readable to everyone that has the link**.
+Workflow files are persisted into [AppWrite Cloud](https://appwrite.io/) and **are publicly readable to everyone that now the shareable link**.
 
 ![Create scratches](./docs/577shots_so.png)
 
@@ -97,8 +96,6 @@ The core features of this project can be summarized in a few points:
 - Appwrite Database integration with SolidStart server function
 - CodeMirror with LSP via web-worker and linter integration
 - MDX routes for /about pages
-
-A brief introduction with a list of some core external dependencies that should be listed here for the awesome work.
 
 ### User interface
 
