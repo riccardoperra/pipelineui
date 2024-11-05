@@ -13,9 +13,25 @@ export const homeLayoutWrapper = style({
   },
   width: '100%',
   height: '100vh',
-  background: `linear-gradient(90deg,#8882 1px,transparent 0),linear-gradient(180deg,#8882 1px,transparent 0)`,
   backgroundColor: '#0c0c0cba',
-  backgroundSize: `${size * scale}px ${size * scale}px`,
+  '::before': {
+    content: "''",
+    vars: {
+      '--line': '#a1a1a1',
+      '--size': `${size * scale}px`,
+    },
+    height: '100%',
+    width: '100%',
+    position: 'fixed',
+    background:
+      'linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size), linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size)',
+    WebkitMask: 'linear-gradient(-5deg, transparent 35%, white)',
+    mask: 'linear-gradient(-5deg, transparent 35%, white)',
+    top: '0',
+    transformStyle: 'flat',
+    pointerEvents: 'none',
+    zIndex: '-1',
+  },
 });
 
 export const homeContainer = style({
