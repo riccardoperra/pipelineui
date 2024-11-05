@@ -1,6 +1,6 @@
 import {type GenericStoreApi, makePlugin} from 'statebuilder';
 import {type Accessor, createSignal, JSX} from 'solid-js';
-import YAML, {Document, type ParsedNode} from 'yaml';
+import YAML, {Document, YAMLMap, type ParsedNode} from 'yaml';
 
 export type YAMLDocument = Document.Parsed<ParsedNode, true>;
 
@@ -33,6 +33,34 @@ export const withYamlDocumentSession = () => {
         setInitialSource(yaml.toString() ?? '');
       };
 
+      const order = [
+        'name',
+        'run-name',
+        'on',
+        'permissions',
+        'env',
+        'defaults',
+        'concurrency',
+        'jobs',
+      ];
+
+      const yamlApplyPropertiesReordering = (doc: YAMLDocument) => {
+        const contents = doc.contents;
+        if (!(contents instanceof YAML.YAMLMap)) {
+          return;
+        }
+
+        // TODO: optimize subscribing to slices. this should not be done every time...
+        contents.items = contents.items.sort((a, b) => {
+          const indexA = order.indexOf(a.key.toString());
+          const indexB = order.indexOf(b.key.toString());
+          if (indexA === -1 && indexB === -1) return 0;
+          if (indexA === -1) return 1;
+          if (indexB === -1) return -1;
+          return indexA - indexB;
+        });
+      };
+
       const yamlUpdater = (cb: (yaml: YAMLDocument) => boolean | void) => {
         // TODO: handle errors?
         const doc = yaml();
@@ -41,7 +69,9 @@ export const withYamlDocumentSession = () => {
           return;
         }
         const result = cb(doc);
+
         if (result === undefined || result) {
+          yamlApplyPropertiesReordering(doc);
           setNotifier({});
         }
       };
