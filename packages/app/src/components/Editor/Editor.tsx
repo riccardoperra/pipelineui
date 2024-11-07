@@ -1,5 +1,14 @@
 import Resizable from '@corvu/resizable';
-import {For, lazy, Match, Show, Suspense, Switch, useContext} from 'solid-js';
+import {
+  createEffect,
+  For,
+  lazy,
+  Match,
+  Show,
+  Suspense,
+  Switch,
+  useContext,
+} from 'solid-js';
 import {provideState} from 'statebuilder';
 import * as fallbackStyles from '~/ui/components/Fallback.css';
 import {OverlayLoader} from '~/ui/components/Loader/Loader';
@@ -34,6 +43,10 @@ export function Editor(props: EditorProps) {
   'use stateprovider';
   const editorUi = provideState(EditorUiStore);
   const editor = provideState(EditorStore);
+
+  createEffect(() => {
+    console.log({props});
+  });
 
   return (
     <div class={styles.wrapper}>

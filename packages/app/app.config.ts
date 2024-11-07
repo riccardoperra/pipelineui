@@ -15,7 +15,7 @@ import remarkGfm from 'remark-gfm';
 
 import {rehypeBlockquote} from './rehype-custom/rehypeCustomBlockquote';
 
-import {statebuilder} from 'statebuilder/vite';
+import {statebuilder} from 'statebuilder/compiler';
 
 const defaultConfig: ViteCustomizableConfig = {
   plugins: [
