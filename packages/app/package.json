@@ -1,6 +1,12 @@
 {
   "name": "@pipelineui/app",
   "type": "module",
+  "author": {
+    "name": "Riccardo Perra",
+    "email": "riccardo.perra@icloud.com",
+    "url": "https://github.com/riccardoperra"
+  },
+  "license": "MIT",
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
