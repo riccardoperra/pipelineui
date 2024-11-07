@@ -15,8 +15,12 @@
     "patch-parser": "pnpm patch-commit ./workflow-parser-patch"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Riccardo Perra",
+    "email": "riccardo.perra@icloud.com",
+    "url": "https://github.com/riccardoperra"
+  },
+  "license": "MIT",
   "dependencies": {
     "@actions/expressions": "^0.3.13",
     "@actions/languageserver": "^0.3.13",

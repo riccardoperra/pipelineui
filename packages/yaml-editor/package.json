@@ -14,8 +14,12 @@
     }
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Riccardo Perra",
+    "email": "riccardo.perra@icloud.com",
+    "url": "https://github.com/riccardoperra"
+  },
+  "license": "MIT",
   "dependencies": {
     "@codemirror/autocomplete": "^6.18.2",
     "@codemirror/commands": "^6.7.1",

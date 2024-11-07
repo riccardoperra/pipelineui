@@ -161,8 +161,8 @@ importers:
         specifier: ^0.0.7
         version: 0.0.7(patch_hash=wongdwyww6mzxros5anf6ruhb4)(solid-js@1.9.3)(vite@5.4.10(@types/node@22.8.5)(terser@5.34.1))
       statebuilder:
-        specifier: ^0.7.3
-        version: 0.7.3
+        specifier: ^0.7.7
+        version: 0.7.7
       unique-names-generator:
         specifier: ^4.7.1
         version: 4.7.1
@@ -5442,8 +5442,8 @@ packages:
   statebuilder@0.6.2:
     resolution: {integrity: sha512-GLq0GKh/++3tQ3R9VsQ488Ma+KANSxWwGtVsqKlgX7VNfx3zS1CRrPCpfnbZBdNUQFOgiEFHt9TfNldPs93miw==}
 
-  statebuilder@0.7.3:
-    resolution: {integrity: sha512-K9D+pkE/PxFZu70V3Mc+/ebXb+gRIZrStewKf4R69TUTZNsj4VOXpMfCwrRjogkbGc4KQ+Ne8CzbHC0BgB8j1g==}
+  statebuilder@0.7.7:
+    resolution: {integrity: sha512-l7/HQdLBtoZMSriiXOFM4wf6nlZo49M4MyUTubHKQwj/UiE++dtVMSYys7CCYcXgHaqEoOb17zO/nXIaHpI23Q==}
 
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
@@ -6380,12 +6380,12 @@ snapshots:
 
   '@babel/helper-module-imports@7.18.6':
     dependencies:
-      '@babel/types': 7.25.6
+      '@babel/types': 7.26.0
 
   '@babel/helper-module-imports@7.24.7':
     dependencies:
       '@babel/traverse': 7.25.6
-      '@babel/types': 7.25.6
+      '@babel/types': 7.26.0
     transitivePeerDependencies:
       - supports-color
 
@@ -6404,7 +6404,7 @@ snapshots:
   '@babel/helper-simple-access@7.24.7':
     dependencies:
       '@babel/traverse': 7.25.6
-      '@babel/types': 7.25.6
+      '@babel/types': 7.26.0
     transitivePeerDependencies:
       - supports-color
 
@@ -6530,14 +6530,14 @@ snapshots:
   '@babel/template@7.25.0':
     dependencies:
       '@babel/code-frame': 7.24.7
-      '@babel/parser': 7.25.6
+      '@babel/parser': 7.26.2
       '@babel/types': 7.25.6
 
   '@babel/traverse@7.25.6':
     dependencies:
       '@babel/code-frame': 7.24.7
       '@babel/generator': 7.25.6
-      '@babel/parser': 7.25.6
+      '@babel/parser': 7.26.2
       '@babel/template': 7.25.0
       '@babel/types': 7.25.6
       debug: 4.3.7
@@ -8246,16 +8246,16 @@ snapshots:
 
   '@types/babel__generator@7.6.8':
     dependencies:
-      '@babel/types': 7.25.6
+      '@babel/types': 7.26.0
 
   '@types/babel__template@7.4.4':
     dependencies:
-      '@babel/parser': 7.25.6
-      '@babel/types': 7.25.6
+      '@babel/parser': 7.26.2
+      '@babel/types': 7.26.0
 
   '@types/babel__traverse@7.20.6':
     dependencies:
-      '@babel/types': 7.25.6
+      '@babel/types': 7.26.0
 
   '@types/braces@3.0.4': {}
 
@@ -8837,7 +8837,7 @@ snapshots:
   babel-plugin-jest-hoist@29.6.3:
     dependencies:
       '@babel/template': 7.25.0
-      '@babel/types': 7.25.6
+      '@babel/types': 7.26.0
       '@types/babel__core': 7.20.5
       '@types/babel__traverse': 7.20.6
 
@@ -8846,7 +8846,7 @@ snapshots:
       '@babel/core': 7.25.2
       '@babel/helper-module-imports': 7.18.6
       '@babel/plugin-syntax-jsx': 7.24.7(@babel/core@7.25.2)
-      '@babel/types': 7.25.6
+      '@babel/types': 7.26.0
       html-entities: 2.3.3
       jest-diff: 29.7.0
       jsdom: 25.0.1
@@ -10367,7 +10367,7 @@ snapshots:
   istanbul-lib-instrument@5.2.1:
     dependencies:
       '@babel/core': 7.25.2
-      '@babel/parser': 7.25.6
+      '@babel/parser': 7.26.2
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.2
       semver: 6.3.1
@@ -10377,7 +10377,7 @@ snapshots:
   istanbul-lib-instrument@6.0.3:
     dependencies:
       '@babel/core': 7.25.2
-      '@babel/parser': 7.25.6
+      '@babel/parser': 7.26.2
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.2
       semver: 7.6.3
@@ -12383,7 +12383,7 @@ snapshots:
       rxjs: 7.8.1
       solid-js: 1.9.3
 
-  statebuilder@0.7.3:
+  statebuilder@0.7.7:
     dependencies:
       '@babel/parser': 7.26.2
       '@solid-primitives/event-bus': 1.0.11(solid-js@1.9.3)
