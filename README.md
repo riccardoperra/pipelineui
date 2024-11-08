@@ -7,7 +7,7 @@
 
 Pipeline UI is a free, open-source visual editor for visualizing, creating and managing GitHub Actions workflows.
 Built with SolidStart, this tool simplifies the process of creating GitHub pipelines
-by allowing users to visually check, edit and update workflows.
+by allowing users to visualize, create and update existing CI/CD workflows.
 
 > [!NOTE]
 >
