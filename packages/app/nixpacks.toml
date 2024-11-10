@@ -6,4 +6,4 @@ cmds = [":"]
 
 [phases.build]
 # Noop command
-cmds = ["mv server/vendor server/node_modules"]
+cmds = [":"]
