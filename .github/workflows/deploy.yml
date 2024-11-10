@@ -19,6 +19,9 @@ jobs:
   build:
     environment: ${{((inputs.env == 'main' || github.ref_name == 'main') && 'production') || ((inputs.env == 'appwrite' || github.ref_name == 'appwrite') && 'appwrite' || 0)}}
     runs-on: ubuntu-latest
+    permissions:
+      attestations: write
+      id-token: write
     outputs:
       appArtifactName: app-build-${{github.sha}}
     steps:
@@ -41,12 +44,6 @@ jobs:
         run: |
           pnpm --filter @pipelineui/app build
           cp packages/app/nixpacks.toml packages/app/.output
-
-      - name: Attest
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: |
-            packages/app/.output
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
