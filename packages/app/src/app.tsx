@@ -8,7 +8,7 @@ import './app.css';
 import './global-codeui.css';
 import {I18nProvider} from './locales/i18n';
 
-const {messages: enMessages} = await import('./locales/en.po');
+import {messages as enMessages} from './locales/en.po';
 
 export default function App() {
   const i18n = setupI18n();

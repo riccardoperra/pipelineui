@@ -11,11 +11,15 @@ on:
         options:
           - main
           - appwrite
+env:
+  RAILWAY_ENVIRONMENT: ${{vars.RAILWAY_ENVIRONMENT}}
 
 jobs:
   build:
     environment: ${{((inputs.env == 'main' || github.ref_name == 'main') && 'production') || ((inputs.env == 'appwrite' || github.ref_name == 'appwrite') && 'appwrite' || 0)}}
     runs-on: ubuntu-latest
+    outputs:
+      appArtifactName: app-build-${{github.sha}}
     steps:
       - name: Checkout PR
         uses: actions/checkout@v4
@@ -35,11 +39,35 @@ jobs:
       - name: Build app
         run: |
           pnpm --filter @pipelineui/app build
+          cp packages/app/nixpacks.toml packages/app/.output
 
-      - name: Deploy to Railway
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: |
+            packages/app/.output/**
+          retention-days: 1
+
+  deploy:
+    environment: ${{((inputs.env == 'main' || github.ref_name == 'main') && 'production') || ((inputs.env == 'appwrite' || github.ref_name == 'appwrite') && 'appwrite' || 0)}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+
+      - name: 📥 Setup
+        uses: ./.github/actions/setup-job
+
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/pnpm-install
+
+      - name: Download app build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-build-${{github.sha}}
+          path: artifacts/app
+
+      - name: Deploy app to Railway
         run: |
-          cd packages/app
-          cp nixpacks.toml .output
-          cp .output/server/package.json .output
-          cd .output
-          RAILWAY_TOKEN=${{ secrets.RAILWAY_DEPLOY_TOKEN }} pnpm railway up -s pipelineui-server -e ${{vars.RAILWAY_ENVIRONMENT}}
+          cd artifacts/app
+          RAILWAY_TOKEN=${{ secrets.RAILWAY_DEPLOY_TOKEN }} pnpm railway up -s pipelineui-server -e ${{env.RAILWAY_ENVIRONMENT}}
