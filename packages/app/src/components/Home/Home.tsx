@@ -1,22 +1,12 @@
 import {Button} from '@codeui/kit';
-import {
-  query,
-  createAsync,
-  useSearchParams,
-  useSubmission,
-} from '@solidjs/router';
-import {
-  createMemo,
-  createResource,
-  ErrorBoundary,
-  Match,
-  Show,
-  Suspense,
-  Switch,
-  useTransition,
-} from 'solid-js';
+import {msg} from '@lingui/macro';
+import {query, useSearchParams, useSubmission} from '@solidjs/router';
+import {createResource, Match, Show, Suspense, Switch} from 'solid-js';
+import {provideState} from 'statebuilder';
 import {getGithubData} from '~/lib/githubApi';
-import {loggedInUser} from '~/lib/session';
+import {useI18n} from '~/locales/i18n';
+import {UserStore} from '~/store/user.store';
+import {OverlayLoader} from '~/ui/components/Loader/Loader';
 import {createScratch} from '../../lib/scratchApi';
 import {CurrentUserBar} from './CurrentUser/CurrentUser';
 import {HomeFooter} from './Footer/Footer';
@@ -34,9 +24,6 @@ import {RepoCard} from './RepoCard/RepoCard';
 import {RepoCardFallback} from './RepoCard/RepoCardFallback';
 import {RepoSearch} from './RepoSearch/RepoSearch';
 import {ScratchList} from './ScratchList/ScratchList';
-import {OverlayLoader} from '~/ui/components/Loader/Loader';
-import {provideState} from 'statebuilder';
-import {UserStore} from '~/store/user.store';
 
 export const searchRepo = query(async (path: string | null) => {
   'use server';
@@ -52,6 +39,7 @@ export const searchRepo = query(async (path: string | null) => {
 }, 'repository');
 
 export function Home() {
+  const {_} = useI18n();
   const user = provideState(UserStore);
   const isCreatingScratch = useSubmission(createScratch);
   const [params] = useSearchParams();
@@ -113,13 +101,15 @@ export function Home() {
                   type={'submit'}
                   size={'lg'}
                 >
-                  Create from scratch
+                  {_(msg`Create from scratch`)}
                 </Button>
               </form>
             </Show>
 
             <Show when={user()}>
-              <div class={choiceSeparator}>Your scratches & forks</div>
+              <div class={choiceSeparator}>
+                {_(msg`Your scratches & forks`)}
+              </div>
 
               <ScratchList />
             </Show>

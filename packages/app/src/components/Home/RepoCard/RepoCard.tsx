@@ -4,6 +4,8 @@ import {A} from '@solidjs/router';
 import {For} from 'solid-js';
 import {GithubRepositoryFile, type GithubRepository} from '~/lib/githubApi';
 import * as styles from './RepoCard.css';
+import {useI18n} from '~/locales/i18n';
+import {msg} from '@lingui/macro';
 
 export interface RepoCardProps {
   repo: GithubRepository;
@@ -11,6 +13,8 @@ export interface RepoCardProps {
 }
 
 export function RepoCard(props: RepoCardProps) {
+  const {_} = useI18n();
+
   return (
     <div class={styles.repoCard}>
       <div class={styles.repoCardInfoWrapper}>
@@ -32,7 +36,7 @@ export function RepoCard(props: RepoCardProps) {
               class={styles.repoCardWorkflowItem}
               as={A}
               pill
-              title={`Edit ${workflow.path}`}
+              title={_(msg`Edit ${workflow.path}`)}
               href={`/editor/${props.repo.repo}/${props.repo.defaultBranch}/${workflow.path}`}
               size={'md'}
               theme={'secondary'}

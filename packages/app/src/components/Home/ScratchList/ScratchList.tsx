@@ -17,6 +17,8 @@ import {
   scratchListItemLink,
 } from './ScratchList.css';
 import {ConfirmPopover} from '#ui/components/ConfirmPopover/ConfirmPopover';
+import {useI18n} from '~/locales/i18n';
+import {msg} from '@lingui/macro';
 
 function ScratchListForkLabel(props: {url: string}) {
   const parsedUrl = () => {
@@ -50,12 +52,13 @@ export interface ScratchListItemDeleteActionProps {
 }
 
 function ScratchListItemDeleteAction(props: ScratchListItemDeleteActionProps) {
+  const {_} = useI18n();
   const deleteScratchAction = useAction(deleteScratch);
 
   return (
     <ConfirmPopover
       actionType={'destructive'}
-      description={'Do you want to delete this scratch file?'}
+      description={_(msg`Do you want do delete this scratch file?`)}
       onConfirm={() => {
         deleteScratchAction(props.scratchId).then(props.onDelete);
       }}
@@ -77,6 +80,7 @@ function ScratchListItemDeleteAction(props: ScratchListItemDeleteActionProps) {
 }
 
 export function ScratchList() {
+  const {_} = useI18n();
   const scratches = createAsync(() => listUserScratches(), {
     initialValue: {documents: [], total: 0},
   });
@@ -128,7 +132,7 @@ export function ScratchList() {
                       </Match>
 
                       <Match when={scratch.type === 'scratch'}>
-                        Scratch file
+                        {_(msg`Scratch file`)}
                       </Match>
                     </Switch>
                   </small>

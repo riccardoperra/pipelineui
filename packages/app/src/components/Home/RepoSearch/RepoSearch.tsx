@@ -11,8 +11,11 @@ import {
   submitRepoSubmitButton,
   wrapper,
 } from './RepoSearch.css';
+import {useI18n} from '~/locales/i18n';
+import {defineMessage, msg} from '@lingui/macro';
 
 export function RepoSearch() {
+  const {_} = useI18n();
   const [params, setParams] = useSearchParams();
   const [searchTextValue, setSearchTextValue] = createSignal<string>(
     (params.repo as string) ?? '',
@@ -42,7 +45,12 @@ export function RepoSearch() {
               input: submitRepoInput,
             }}
             size={'lg'}
-            placeholder={'e.g. riccardoperra/codeimage'}
+            placeholder={_(
+              defineMessage({
+                comment: 'Repository search example',
+                message: 'e.g. riccardoperra/codeimage',
+              }),
+            )}
             theme={'filled'}
             value={searchTextValue()}
             onChange={setSearchTextValue}

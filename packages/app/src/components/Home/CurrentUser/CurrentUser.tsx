@@ -11,11 +11,14 @@ import type {Models} from 'appwrite';
 import {Show} from 'solid-js';
 import {logout, signupWithGithub} from '~/lib/session';
 import {badge, currentUser} from './CurrentUser.css';
+import {useI18n} from '~/locales/i18n';
+import {msg} from '@lingui/macro';
 export interface CurrentUserBarProps {
   user: Models.User<any> | null;
 }
 
 export function CurrentUserBar(props: CurrentUserBarProps) {
+  const {_} = useI18n();
   const initials = (user: Models.User<any>) => {
     if (user.name) {
       const [firstName, lastName] = user.name.split(' ');
@@ -43,7 +46,7 @@ export function CurrentUserBar(props: CurrentUserBarProps) {
             type={'submit'}
             loading={isSignup.pending}
           >
-            Signup with Github
+            {_(msg`Signup with GitHub`)}
           </Button>
         </form>
       }
@@ -76,7 +79,7 @@ export function CurrentUserBar(props: CurrentUserBarProps) {
                 logoutAction().then(() => window.location.reload());
               }}
             >
-              Logout
+              {_(msg`Logout`)}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

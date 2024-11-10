@@ -1,3 +1,11 @@
+import {Icon} from '#ui/components/Icon';
+import {Button, IconButton, Tooltip} from '@codeui/kit';
+import {msg} from '@lingui/macro';
+import {provideState} from 'statebuilder';
+import {useI18n} from '~/locales/i18n';
+import {EditorStore} from '~/store/editor/editor.store';
+import {EditorUiStore} from '~/store/editor/ui.store';
+import {CanvasStore} from '../../../store/editor/canvas.store';
 import {
   diagnosticCounter,
   diagnosticCounterBar,
@@ -6,18 +14,12 @@ import {
   statusBar,
   statusBarAction,
 } from './EditorStatusBar.css';
-import {provideState} from 'statebuilder';
-import {CanvasStore} from '../../../store/editor/canvas.store';
-import {Button, IconButton, Tooltip} from '@codeui/kit';
-import {Icon} from '#ui/components/Icon';
-import {EditorStore} from '~/store/editor/editor.store';
-import {EditorUiStore} from '~/store/editor/ui.store';
-import {createEffect} from 'solid-js';
 
 export function EditorStatusBar() {
   const canvasState = provideState(CanvasStore);
   const editorUiStore = provideState(EditorUiStore);
   const editorStore = provideState(EditorStore);
+  const {_} = useI18n();
 
   const size = () => Math.floor(canvasState.get.scale * 100);
 
@@ -37,7 +39,7 @@ export function EditorStatusBar() {
         <div class={diagnosticCounterBar}>
           <Tooltip
             theme={'secondary'}
-            content={`Errors: ${errors()}, Warnings: ${warnings()}`}
+            content={_(msg`Errors: ${errors()}, Warnings: ${warnings()}`)}
           >
             <Button
               class={statusBarAction()}
@@ -66,12 +68,12 @@ export function EditorStatusBar() {
       </div>
 
       <div class={rightSide}>
-        <Tooltip theme={'secondary'} content={'Fit to screen'}>
+        <Tooltip theme={'secondary'} content={_(msg`Fit to screen`)}>
           <IconButton
             size={'xs'}
             theme={'secondary'}
             variant={'ghost'}
-            aria-label={'Fit'}
+            aria-label={_(msg`Fit to screen`)}
             onClick={() => canvasState.fitToCenter()}
           >
             <Icon name={'fit_screen'} />

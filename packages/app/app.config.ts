@@ -16,11 +16,13 @@ import remarkGfm from 'remark-gfm';
 import {rehypeBlockquote} from './rehype-custom/rehypeCustomBlockquote';
 
 import {statebuilder} from 'statebuilder/compiler';
+import {lingui} from '@lingui/vite-plugin';
 
 const defaultConfig: ViteCustomizableConfig = {
   plugins: [
     viteTsConfigPaths(),
     customMdxConfig(),
+    lingui(),
     statebuilder({
       transformStores: ['eDefineAsync'],
       autoKey: true,
@@ -46,6 +48,11 @@ const defaultConfig: ViteCustomizableConfig = {
 
 export default defineConfig({
   middleware: './src/middleware.ts',
+  solid: {
+    babel: {
+      plugins: ['macros'],
+    },
+  },
   server: {
     prerender: {
       routes: ['/about', '/about/supported-workflow-features'],
