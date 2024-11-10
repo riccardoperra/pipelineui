@@ -2,7 +2,7 @@ providers = ["node"]
 
 [phases.install]
 # Noop command
-cmds = [":"]
+cmds = ["cd server && npm install"]
 
 [phases.build]
 # Noop command
