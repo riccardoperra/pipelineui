@@ -20,8 +20,9 @@ jobs:
     environment: ${{((inputs.env == 'main' || github.ref_name == 'main') && 'production') || ((inputs.env == 'appwrite' || github.ref_name == 'appwrite') && 'appwrite' || 0)}}
     runs-on: ubuntu-latest
     permissions:
-      attestations: write
       id-token: write
+      contents: read
+      attestations: write
     outputs:
       appArtifactName: app-build-${{github.sha}}
     steps:
