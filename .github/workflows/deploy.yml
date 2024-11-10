@@ -45,7 +45,10 @@ jobs:
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          path: packages/app/.output/**/*
+          path: |
+            packages/app/.output/**/*
+            packages/app/package.json
+
           name: ${{env.APP_ARTIFACT_NAME}}
           include-hidden-files: true
           retention-days: 1
