@@ -2,7 +2,7 @@ providers = ["node"]
 
 [phases.install]
 # Noop command
-cmds = [":"]
+cmds = ["mv server/vendor server/node_modules"]
 
 [phases.build]
 # Noop command

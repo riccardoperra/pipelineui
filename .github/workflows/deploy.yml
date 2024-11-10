@@ -42,6 +42,12 @@ jobs:
           pnpm --filter @pipelineui/app build
           cp packages/app/nixpacks.toml packages/app/.output
 
+      - name: Attest
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: |
+            packages/app/.output
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
@@ -76,6 +82,5 @@ jobs:
         run: |
           cd artifacts/app
           cp server/package.json ./package.json
-          touch .gitignore
-          touch .dockerignore
+          mv server/node_modules server/vendor
           RAILWAY_TOKEN=${{ secrets.RAILWAY_DEPLOY_TOKEN }} pnpm railway up -s pipelineui-server -e ${{env.RAILWAY_ENVIRONMENT}}
