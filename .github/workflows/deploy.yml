@@ -13,6 +13,7 @@ on:
           - appwrite
 env:
   RAILWAY_ENVIRONMENT: ${{vars.RAILWAY_ENVIRONMENT}}
+  APP_ARTIFACT_NAME: app-${{github.sha}}
 
 jobs:
   build:
@@ -45,6 +46,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: packages/app/.output
+          name: ${{env.APP_ARTIFACT_NAME}}
           include-hidden-files: true
           retention-days: 1
 
@@ -66,7 +68,7 @@ jobs:
       - name: Download app build artifact
         uses: actions/download-artifact@v4
         with:
-          name: app-build-${{github.sha}}
+          name: ${{env.APP_ARTIFACT_NAME}}
           path: artifacts/app
 
       - name: Deploy app to Railway
