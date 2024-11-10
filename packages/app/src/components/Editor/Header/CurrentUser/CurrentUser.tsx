@@ -47,7 +47,7 @@ export function EditorHeaderCurrentUser(props: CurrentUserBarProps) {
             type={'submit'}
             loading={isSignup.pending}
           >
-            {_(msg`Signup with Github.`)}
+            {_(msg`Signup with GitHub`)}
           </Button>
         </form>
       }

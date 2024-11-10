@@ -1,22 +1,11 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2024-11-10 10:40+0100\n"
+"POT-Creation-Date: 2024-11-10 13:06+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
 "Language: en\n"
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Plural-Forms: \n"
-
-#. js-lingui-explicit-id
-#: src/components/Home/RepoSearch/RepoSearch.tsx:49
-#~ msgid "repo_search_example"
-#~ msgstr ""
 
 #: src/components/Home/Footer/Footer.tsx:13
 msgid "About"
@@ -97,12 +86,9 @@ msgstr ""
 msgid "Scratch file"
 msgstr ""
 
+#: src/components/Editor/Header/CurrentUser/CurrentUser.tsx:50
 #: src/components/Home/CurrentUser/CurrentUser.tsx:49
 msgid "Signup with GitHub"
-msgstr ""
-
-#: src/components/Editor/Header/CurrentUser/CurrentUser.tsx:50
-msgid "Signup with Github."
 msgstr ""
 
 #: src/components/Home/Footer/Footer.tsx:21
