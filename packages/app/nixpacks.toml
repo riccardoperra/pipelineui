@@ -1,7 +1,9 @@
 providers = ["node"]
 
 [phases.install]
-cmds = ["npm install --prefix ./server"]
+# Noop command
+cmds = [":"]
 
 [phases.build]
-cmds = ["ls"]
+# Noop command
+cmds = [":"]
