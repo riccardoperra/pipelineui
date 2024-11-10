@@ -1,6 +1,6 @@
-import {PanelAccordion} from '~/components/Editor/layout1/Panel/Form/PanelAccordion/PanelAccordion';
-import {PanelContent} from '~/components/Editor/layout1/Panel/Form/PanelContent';
-import {PanelHeader} from '~/components/Editor/layout1/Panel/Form/PanelHeader';
+import {PanelAccordion} from '~/components/Editor/layout/Panel/Form/PanelAccordion/PanelAccordion';
+import {PanelContent} from '~/components/Editor/layout/Panel/Form/PanelContent';
+import {PanelHeader} from '~/components/Editor/layout/Panel/Form/PanelHeader';
 import {
   DropdownMenu,
   DropdownMenuContent,

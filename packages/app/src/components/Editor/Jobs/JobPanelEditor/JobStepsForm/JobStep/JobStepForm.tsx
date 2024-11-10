@@ -1,8 +1,8 @@
 import * as formStyles from '~/components/Editor/layout/Panel/Form/Form.css';
-import {PanelContent} from '~/components/Editor/layout1/Panel/Form/PanelContent';
-import {PanelDivider} from '~/components/Editor/layout1/Panel/Form/PanelDivider';
-import {PanelHeader} from '~/components/Editor/layout1/Panel/Form/PanelHeader';
-import {FullWidthPanelRow} from '~/components/Editor/layout1/Panel/Form/PanelRow';
+import {PanelContent} from '~/components/Editor/layout/Panel/Form/PanelContent';
+import {PanelDivider} from '~/components/Editor/layout/Panel/Form/PanelDivider';
+import {PanelHeader} from '~/components/Editor/layout/Panel/Form/PanelHeader';
+import {FullWidthPanelRow} from '~/components/Editor/layout/Panel/Form/PanelRow';
 import {
   SegmentedControl,
   SegmentedControlItem,

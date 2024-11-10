@@ -20,7 +20,7 @@ import {EditorHeader} from './Header/Header';
 import {EditorRepositoryHeaderName} from './Header/RepositoryHeaderName';
 import {EditorRepositoryHeaderScratch} from './Header/RepositoryHeaderScratch';
 import {JobPanelEditor} from './Jobs/JobPanelEditor/JobPanelEditor';
-import {EditorResizableHandler} from './layout1/Resizable/Resizable';
+import {EditorResizableHandler} from './layout/Resizable/Resizable';
 import {EditorSidebar} from './LeftSidebar/EditorSidebar';
 import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';
 import {EditorStatusBar} from './StatusBar/StatusBar';

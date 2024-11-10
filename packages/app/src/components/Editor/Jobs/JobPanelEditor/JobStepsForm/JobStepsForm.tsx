@@ -1,5 +1,5 @@
-import {PanelHeader} from '~/components/Editor/layout1/Panel/Form/PanelHeader';
-import {PanelPlusButton} from '~/components/Editor/layout1/Panel/Form/PanelPlusButton';
+import {PanelHeader} from '~/components/Editor/layout/Panel/Form/PanelHeader';
+import {PanelPlusButton} from '~/components/Editor/layout/Panel/Form/PanelPlusButton';
 import {EditorStore} from '~/store/editor/editor.store';
 import {Icon} from '#ui/components/Icon';
 import {

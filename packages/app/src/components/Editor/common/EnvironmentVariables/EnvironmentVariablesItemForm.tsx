@@ -4,10 +4,10 @@ import type {
   StringExpression,
   WorkflowStructureEnvItem,
 } from '~/store/editor/editor.types';
-import {FullWidthPanelRow} from '~/components/Editor/layout1/Panel/Form/PanelRow';
+import {FullWidthPanelRow} from '~/components/Editor/layout/Panel/Form/PanelRow';
 import {Match, Switch} from 'solid-js';
 import {unwrap} from 'solid-js/store';
-import {PanelAccordionItem} from '~/components/Editor/layout1/Panel/Form/PanelAccordion/PanelAccordion';
+import {PanelAccordionItem} from '~/components/Editor/layout/Panel/Form/PanelAccordion/PanelAccordion';
 
 export interface EnvironmentVariablesItemFormProps {
   value: WorkflowStructureEnvItem;

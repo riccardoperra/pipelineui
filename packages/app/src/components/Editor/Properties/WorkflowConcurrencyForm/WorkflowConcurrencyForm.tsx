@@ -1,10 +1,10 @@
-import {PanelHeader} from '../../layout1/Panel/Form/PanelHeader';
+import {PanelHeader} from '../../layout/Panel/Form/PanelHeader';
 import {TextField} from '@codeui/kit';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '~/store/editor/editor.store';
-import {FullWidthPanelRow} from '../../layout1/Panel/Form/PanelRow';
+import {FullWidthPanelRow} from '../../layout/Panel/Form/PanelRow';
 import {formStyles} from '~/components/Editor/layout/Panel/Form/Form.css';
-import {PanelPlusButton} from '~/components/Editor/layout1/Panel/Form/PanelPlusButton';
+import {PanelPlusButton} from '~/components/Editor/layout/Panel/Form/PanelPlusButton';
 
 export interface WorkflowConcurrency {
   group?: string;
