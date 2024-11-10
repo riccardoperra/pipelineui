@@ -40,7 +40,7 @@ export function createNodes(jobs: WorkflowStructureJob[]) {
           return {
             id: `${node.id}`,
             width: 250,
-            height: 150,
+            height: 100,
             properties: {
               'org.eclipse.elk.portConstraints': 'FIXED_ORDER',
             },

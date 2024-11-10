@@ -7,17 +7,21 @@ export const setJobNeeds =
   (jobIdOrIndex: string | number, needs: string[]) => {
     yamlSession.updater(yaml => {
       const job = findJob(yaml, jobIdOrIndex)!;
-      if (!job.has('needs')) {
+      if (!job.has('needs') && needs.length > 0) {
         const seq = new YAMLSeq();
         needs.forEach(need => seq.add(need));
         job.set('needs', seq);
       } else {
-        const needsSeq = job.get('needs') as YAMLSeq;
-        const jsonSeq = needsSeq.toJSON();
-        for (let i = 0; i < jsonSeq.length; i++) {
-          needsSeq.delete(0);
+        if (needs.length === 0) {
+          job.delete('needs');
+        } else {
+          const needsSeq = job.get('needs') as YAMLSeq;
+          const jsonSeq = needsSeq.toJSON();
+          for (let i = 0; i < jsonSeq.length; i++) {
+            needsSeq.delete(0);
+          }
+          needs.forEach(need => needsSeq.add(need));
         }
-        needs.forEach(need => needsSeq.add(need));
       }
     });
   };
