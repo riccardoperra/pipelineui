@@ -30,7 +30,7 @@ jobs:
 
       - name: Extract translation strings
         run: |
-          pnpm intl:extract
+          pnpm --filter=@pipelineui/app intl:extract
 
       - name: Build app
         run: |
