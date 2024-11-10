@@ -75,5 +75,5 @@ jobs:
       - name: Deploy app to Railway
         run: |
           cd artifacts/app
-          ls
+          cp server/package.json ./package.json
           RAILWAY_TOKEN=${{ secrets.RAILWAY_DEPLOY_TOKEN }} pnpm railway up -s pipelineui-server -e ${{env.RAILWAY_ENVIRONMENT}}
