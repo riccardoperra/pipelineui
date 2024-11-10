@@ -1,14 +1,14 @@
 import {provideState} from 'statebuilder';
 import {Match, Show, Switch} from 'solid-js';
 import {JobStepForm} from './JobStepsForm/JobStep/JobStepForm';
-import {PanelGroup} from '#editor-layout/Panel/Form/PanelGroup';
+import {PanelGroup} from '~/components/Editor/layout/Panel/Form/PanelGroup';
 import {PanelEditorStore} from './panel-editor.store';
 import {JobForm} from './JobForm/JobForm';
 import {IconButton} from '@codeui/kit';
 import {Icon} from '#ui/components/Icon';
 import * as styles from './JobPanelEditor.css';
 import {EditorState} from '@codemirror/state';
-import {EditorStore} from '../../../../store/editor/editor.store';
+import {EditorStore} from '~/store/editor/editor.store';
 
 export function JobPanelEditor() {
   const panelStore = provideState(PanelEditorStore);

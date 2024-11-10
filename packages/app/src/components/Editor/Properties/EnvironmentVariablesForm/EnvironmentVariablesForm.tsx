@@ -1,7 +1,7 @@
 import {provideState} from 'statebuilder';
-import {EditorStore} from '../../../../store/editor/editor.store';
-import type {WorkflowStructureEnvItem} from '../../../../store/editor/editor.types';
-import {EnvironmentVariablesForm} from '../../common/EnvironmentVariables/EnvironmentVariablesForm';
+import {EditorStore} from '~/store/editor/editor.store';
+import type {WorkflowStructureEnvItem} from '~/store/editor/editor.types';
+import {EnvironmentVariablesForm} from '~/components/Editor/common/EnvironmentVariables/EnvironmentVariablesForm';
 
 export function PropertiesEnvironmentVariablesForm() {
   const editor = provideState(EditorStore);

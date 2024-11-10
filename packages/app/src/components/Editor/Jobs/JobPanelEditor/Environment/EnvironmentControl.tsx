@@ -12,7 +12,7 @@ import {
   textFieldStyles,
 } from '@codeui/kit';
 import {createSignal, Match, Switch} from 'solid-js';
-import {formStyles} from '#editor-layout/Panel/Form/Form.css';
+import {formStyles} from '~/components/Editor/layout/Panel/Form/Form.css';
 import {
   environmentControlForm,
   environmentControlInput,

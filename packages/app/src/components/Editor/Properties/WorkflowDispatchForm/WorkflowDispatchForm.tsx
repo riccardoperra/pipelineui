@@ -1,12 +1,12 @@
-import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
+import {PanelHeader} from '~/components/Editor/layout/Panel/Form/PanelHeader';
 import {For, Show} from 'solid-js';
 import {WorkflowDispatchItemForm} from './WorkflowDispatchItemForm';
 import {provideState} from 'statebuilder';
-import {EditorStore} from '../../../../store/editor/editor.store';
-import type {WorkflowDispatchInput} from '../../../../store/editor/editor.types';
-import {PanelPlusButton} from '#editor-layout/Panel/Form/PanelPlusButton';
-import {PanelAccordion} from '#editor-layout/Panel/Form/PanelAccordion/PanelAccordion';
-import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
+import {EditorStore} from '~/store/editor/editor.store';
+import type {WorkflowDispatchInput} from '~/store/editor/editor.types';
+import {PanelPlusButton} from '~/components/Editor/layout/Panel/Form/PanelPlusButton';
+import {PanelAccordion} from '~/components/Editor/layout/Panel/Form/PanelAccordion/PanelAccordion';
+import {PanelContent} from '~/components/Editor/layout/Panel/Form/PanelContent';
 
 export function WorkflowDispatchForm() {
   const editor = provideState(EditorStore);

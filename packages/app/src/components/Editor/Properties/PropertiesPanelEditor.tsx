@@ -1,8 +1,8 @@
 import {WorkflowDispatchForm} from './WorkflowDispatchForm/WorkflowDispatchForm';
 import {TriggerForm} from './TriggerForm/TriggerForm';
-import {PanelGroup} from '#editor-layout/Panel/Form/PanelGroup';
+import {PanelGroup} from '~/components/Editor/layout/Panel/Form/PanelGroup';
 import {PropertiesEnvironmentVariablesForm} from './EnvironmentVariablesForm/EnvironmentVariablesForm';
-import {PanelDivider} from '#editor-layout/Panel/Form/PanelDivider';
+import {PanelDivider} from '~/components/Editor/layout/Panel/Form/PanelDivider';
 import {JobsListForm} from './JobsListForm/JobsListForm';
 
 export function PropertiesPanelEditor() {
@@ -10,7 +10,7 @@ export function PropertiesPanelEditor() {
     <PanelGroup noGap>
       <TriggerForm />
 
-      <PanelDivider/>
+      <PanelDivider />
 
       <WorkflowDispatchForm />
 

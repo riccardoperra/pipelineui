@@ -1,8 +1,8 @@
-import * as formStyles from '#editor-layout/Panel/Form/Form.css';
-import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
-import {PanelDivider} from '#editor-layout/Panel/Form/PanelDivider';
-import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
-import {FullWidthPanelRow} from '#editor-layout/Panel/Form/PanelRow';
+import * as formStyles from '~/components/Editor/layout/Panel/Form/Form.css';
+import {PanelContent} from '~/components/Editor/layout/Panel/Form/PanelContent';
+import {PanelDivider} from '~/components/Editor/layout/Panel/Form/PanelDivider';
+import {PanelHeader} from '~/components/Editor/layout/Panel/Form/PanelHeader';
+import {FullWidthPanelRow} from '~/components/Editor/layout/Panel/Form/PanelRow';
 import {
   SegmentedControl,
   SegmentedControlItem,
@@ -16,7 +16,7 @@ import type {
   WorkflowStructureJobActionStep,
   WorkflowStructureJobRunStep,
 } from '~/store/editor/editor.types';
-import {EnvironmentVariablesForm} from '../../../../common/EnvironmentVariables/EnvironmentVariablesForm';
+import {EnvironmentVariablesForm} from '~/components/Editor/common/EnvironmentVariables/EnvironmentVariablesForm';
 import {PanelEditorStore} from '../../panel-editor.store';
 import {ExpressionEditor} from '~/components/Editor/CodeEditor/ExpressionEditor';
 
@@ -100,7 +100,7 @@ export function JobStepForm() {
 
             <Show
               when={
-                jobStep().type === 'action' &&
+                jobStep()?.type === 'action' &&
                 (jobStep() as WorkflowStructureJobActionStep)
               }
             >
@@ -129,7 +129,7 @@ export function JobStepForm() {
 
             <Show
               when={
-                jobStep().type === 'run' &&
+                jobStep()?.type === 'run' &&
                 (jobStep() as WorkflowStructureJobRunStep)
               }
             >

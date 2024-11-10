@@ -15,7 +15,7 @@
     "isolatedModules": true,
     "paths": {
       "~/*": ["./src/*"],
-      "#editor-layout/*": ["src/components/Editor/Layout/*"],
+      "#editor-layout/*": ["src/components/Editor/layout/*"],
       "#ui/*": ["src/ui/*"],
       "#editor-store/*": ["src/components/Editor/store/*"]
     }

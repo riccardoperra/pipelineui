@@ -1,11 +1,11 @@
-import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
-import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
-import {FullWidthPanelRow} from '#editor-layout/Panel/Form/PanelRow';
+import {PanelHeader} from '~/components/Editor/layout/Panel/Form/PanelHeader';
+import {PanelContent} from '~/components/Editor/layout/Panel/Form/PanelContent';
+import {FullWidthPanelRow} from '~/components/Editor/layout/Panel/Form/PanelRow';
 import {Select, TextField} from '@codeui/kit';
 import {EnvironmentControl} from '../Environment/EnvironmentControl';
-import {PanelDivider} from '#editor-layout/Panel/Form/PanelDivider';
+import {PanelDivider} from '~/components/Editor/layout/Panel/Form/PanelDivider';
 import {JobStepsForm} from '../JobStepsForm/JobStepsForm';
-import {formStyles} from '#editor-layout/Panel/Form/Form.css';
+import {formStyles} from '~/components/Editor/layout/Panel/Form/Form.css';
 import {provideState} from 'statebuilder';
 import {PanelEditorStore} from '../panel-editor.store';
 import {EditorStore} from '~/store/editor/editor.store';

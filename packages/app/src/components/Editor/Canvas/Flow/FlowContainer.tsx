@@ -1,7 +1,7 @@
 import * as styles from './FlowContainer.css';
 import {onMount, type ParentProps} from 'solid-js';
 import {provideState} from 'statebuilder';
-import {CanvasStore} from '../../../store/editor/canvas.store';
+import {CanvasStore} from '~/store/editor/canvas.store';
 
 export function FlowContainer(
   props: ParentProps<{

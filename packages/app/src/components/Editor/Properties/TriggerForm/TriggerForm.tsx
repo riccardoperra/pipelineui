@@ -1,6 +1,6 @@
-import {PanelAccordion} from '#editor-layout/Panel/Form/PanelAccordion/PanelAccordion';
-import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
-import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
+import {PanelAccordion} from '~/components/Editor/layout/Panel/Form/PanelAccordion/PanelAccordion';
+import {PanelContent} from '~/components/Editor/layout/Panel/Form/PanelContent';
+import {PanelHeader} from '~/components/Editor/layout/Panel/Form/PanelHeader';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,11 +12,11 @@ import {
 import {createMemo, createSelector, For, Show} from 'solid-js';
 import {provideState} from 'statebuilder';
 import {Icon} from '~/ui/components/Icon';
-import {EditorStore} from '../../../../store/editor/editor.store';
+import {EditorStore} from '~/store/editor/editor.store';
 import {
   AVAILABLE_WORKFLOW_TRIGGER_TYPES,
   WorkflowTypesTriggerEvent,
-} from '../../../../store/editor/editor.types';
+} from '~/store/editor/editor.types';
 import {TriggerItemForm} from './TriggerItemForm';
 
 import * as styles from './TriggerForm.css';

@@ -1,5 +1,5 @@
-import {PanelAccordionItem} from '#editor-layout/Panel/Form/PanelAccordion/PanelAccordion';
-import {FullWidthPanelRow} from '#editor-layout/Panel/Form/PanelRow';
+import {PanelAccordionItem} from '~/components/Editor/layout/Panel/Form/PanelAccordion/PanelAccordion';
+import {FullWidthPanelRow} from '~/components/Editor/layout/Panel/Form/PanelRow';
 import {
   WORKFLOW_TRIGGER_TYPES_CONFIG,
   WorkflowTypesTriggerPullRequest,
@@ -8,11 +8,11 @@ import {
 import {Button, IconButton, Select, TextField} from '@codeui/kit';
 import {createControllableSignal} from '@kobalte/core';
 import {createMemo, createSignal, For, Show} from 'solid-js';
-import {PanelDivider} from '../../Layout/Panel/Form/PanelDivider';
+import {PanelDivider} from '../../layout/Panel/Form/PanelDivider';
 
 import * as styles from './TriggerForm.css';
 import {Icon} from '~/ui/components/Icon';
-import {formStyles} from '#editor-layout/Panel/Form/Form.css';
+import {formStyles} from '~/components/Editor/layout/Panel/Form/Form.css';
 import {L} from 'node_modules/@kobalte/core/dist/listbox-section-630514ef';
 
 export interface TriggerEventItemFormProps {

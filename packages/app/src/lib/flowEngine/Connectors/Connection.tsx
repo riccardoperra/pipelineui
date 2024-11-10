@@ -2,7 +2,10 @@ import {getSmoothStepPath, Position} from '@xyflow/system';
 import {createMemo, Show} from 'solid-js';
 import {BaseEdge} from '../Edge/BaseEdge';
 import {getNodeContext} from '../store';
-import type {FlowConnection, FlowNode} from '../types';
+import type {
+  FlowConnection,
+  FlowNode,
+} from '../../../components/Editor/Flow/engine/types';
 import {connection} from './Connection.css';
 
 export interface ConnectionProps {
