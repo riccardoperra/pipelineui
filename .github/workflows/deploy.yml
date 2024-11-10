@@ -28,6 +28,10 @@ jobs:
         run: |
           pnpm --filter @pipelineui/workflow-parser --filter @pipelineui/workflow-languageserver --filter @pipelineui/yaml-editor build
 
+      - name: Extract translation strings
+        run: |
+          pnpm intl:extract
+
       - name: Build app
         run: |
           pnpm --filter @pipelineui/app build
