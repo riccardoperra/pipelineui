@@ -1,7 +1,7 @@
 providers = ["node"]
 
 [phases.install]
-cmds = ["npm install -g corepack", "corepack enable", "corepack prepare pnpm@9.4.0 --activate", "pnpm install"]
+cmds = ["npm install --prefix ./server"]
 
 [phases.build]
 cmds = ["ls"]

@@ -47,8 +47,6 @@ jobs:
         with:
           path: |
             packages/app/.output/**/*
-            packages/app/.output/server/package.json
-
           name: ${{env.APP_ARTIFACT_NAME}}
           include-hidden-files: true
           retention-days: 1
@@ -77,4 +75,5 @@ jobs:
       - name: Deploy app to Railway
         run: |
           cd artifacts/app
+          ls
           RAILWAY_TOKEN=${{ secrets.RAILWAY_DEPLOY_TOKEN }} pnpm railway up -s pipelineui-server -e ${{env.RAILWAY_ENVIRONMENT}}
