@@ -17,6 +17,7 @@ import {
 } from '@pipelineui/yaml-editor/language-server';
 import {
   createCodeMirror,
+  createEditorControlledValue,
   createLazyCompartmentExtension,
 } from 'solid-codemirror';
 import {createEffect} from 'solid-js';
@@ -45,6 +46,8 @@ export function YamlEditor(props: YamlEditorProps) {
   } = createCodeMirror({
     onValueChange: props.setCode,
   });
+
+  createEditorControlledValue(editorView, () => props.code);
 
   createExtension(() => [
     fleetDark,
@@ -80,23 +83,6 @@ export function YamlEditor(props: YamlEditorProps) {
 
   createEffect(() => {
     props.onMount(editorView());
-  });
-
-  createEffect(() => {
-    const code = props.code;
-    const view = editorView();
-    if (!view) {
-      return;
-    }
-    const to = view.state.doc.length;
-    // TODO: should restore selection
-    editorView().dispatch({
-      changes: {
-        from: 0,
-        to: to,
-        insert: code ?? '',
-      },
-    });
   });
 
   return <div ref={setRef} style={{height: '100%', width: '100%'}}></div>;

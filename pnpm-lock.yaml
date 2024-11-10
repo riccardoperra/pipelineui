@@ -261,9 +261,15 @@ importers:
       '@actions/expressions':
         specifier: ^0.3.13
         version: 0.3.13
+      '@actions/languageservice':
+        specifier: ^0.3.13
+        version: 0.3.13
       '@actions/workflow-parser':
         specifier: ^0.3.13
         version: 0.3.13(patch_hash=4iwhasfxdlew752xdmdu6ekfya)
+      vscode-languageserver-textdocument:
+        specifier: ^1.0.12
+        version: 1.0.12
     devDependencies:
       '@types/node':
         specifier: ^22.8.5

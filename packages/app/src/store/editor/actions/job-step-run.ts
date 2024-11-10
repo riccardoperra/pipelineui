@@ -18,7 +18,14 @@ export const setJobStepRun =
       if (!run) {
         step.delete('run');
       } else {
-        step.set(new Scalar('run'), run);
+        if (!run.endsWith('\n')) {
+          // This removes |- at the start of the script
+          run += `\n`;
+        }
+        const value = new Scalar(run);
+        value.type = 'BLOCK_LITERAL';
+        value.spaceBefore = false;
+        step.set(new Scalar('run'), value);
       }
     });
   };

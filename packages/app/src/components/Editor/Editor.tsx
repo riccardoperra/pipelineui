@@ -24,11 +24,11 @@ import {EditorResizableHandler} from './Layout/Resizable/Resizable';
 import {EditorSidebar} from './LeftSidebar/EditorSidebar';
 import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';
 import {EditorStatusBar} from './StatusBar/StatusBar';
-import {YamlMergeView} from './YamlEditor/MergeView';
+import {YamlMergeView} from './CodeEditor/MergeView';
 import {EditorContext} from './editor.context';
 
 const YamlEditor = lazy(() =>
-  import('./YamlEditor/YamlEditor').then(m => ({default: m.YamlEditor})),
+  import('./CodeEditor/YamlEditor').then(m => ({default: m.YamlEditor})),
 );
 
 const Canvas = lazy(() =>

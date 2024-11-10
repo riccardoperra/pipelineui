@@ -1,3 +1,7 @@
+import * as formStyles from '#editor-layout/Panel/Form/Form.css';
+import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
+import {PanelDivider} from '#editor-layout/Panel/Form/PanelDivider';
+import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
 import {FullWidthPanelRow} from '#editor-layout/Panel/Form/PanelRow';
 import {
   SegmentedControl,
@@ -5,19 +9,16 @@ import {
   TextArea,
   TextField,
 } from '@codeui/kit';
-import * as formStyles from '#editor-layout/Panel/Form/Form.css';
-import {PanelHeader} from '#editor-layout/Panel/Form/PanelHeader';
+import {Show} from 'solid-js';
 import {provideState} from 'statebuilder';
 import {EditorStore} from '~/store/editor/editor.store';
-import {PanelContent} from '#editor-layout/Panel/Form/PanelContent';
-import {Show} from 'solid-js';
 import type {
   WorkflowStructureJobActionStep,
   WorkflowStructureJobRunStep,
 } from '~/store/editor/editor.types';
-import {PanelEditorStore} from '../../panel-editor.store';
-import {PanelDivider} from '#editor-layout/Panel/Form/PanelDivider';
 import {EnvironmentVariablesForm} from '../../../../common/EnvironmentVariables/EnvironmentVariablesForm';
+import {PanelEditorStore} from '../../panel-editor.store';
+import {ExpressionEditor} from '~/components/Editor/CodeEditor/ExpressionEditor';
 
 export function JobStepForm() {
   const {selectedJob, actions, get} = provideState(EditorStore);
@@ -134,27 +135,19 @@ export function JobStepForm() {
             >
               {jobStep => (
                 <FullWidthPanelRow>
-                  <TextArea
-                    slotClasses={{
-                      root: formStyles.inlineInputRoot,
-                      label: formStyles.inlineInputLabel,
-                    }}
-                    options={{
-                      autoResize: true,
-                      rows: 2,
-                    }}
-                    size={'sm'}
-                    theme={'filled'}
-                    label={'Run'}
-                    value={jobStep()?.run}
-                    onChange={run =>
-                      actions.updateJobStepRun({
-                        jobId: selectedJob()!.$nodeId,
-                        stepId: jobStep().$nodeId,
-                        run,
-                      })
-                    }
-                  />
+                  <div class={formStyles.inlineInputRoot}>
+                    <span class={formStyles.inlineInputLabel}>Run</span>
+                    <ExpressionEditor
+                      code={jobStep()?.run}
+                      setCode={code => {
+                        actions.updateJobStepRun({
+                          jobId: selectedJob()!.$nodeId,
+                          stepId: jobStep().$nodeId,
+                          run: code,
+                        });
+                      }}
+                    />
+                  </div>
                 </FullWidthPanelRow>
               )}
             </Show>

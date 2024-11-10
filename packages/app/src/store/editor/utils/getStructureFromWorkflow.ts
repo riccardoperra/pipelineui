@@ -121,6 +121,18 @@ export function getStructureFromWorkflow(
               : {array: []},
             steps: job.steps.map((step, $index) => {
               if ('run' in step) {
+                const value = isBasicExpression(step.run)
+                  ? step.run.source
+                  : isString(step.run)
+                    ? step.run.value
+                    : '';
+
+                const trimmedExpression = (value ?? '')
+                  .split('\n')
+                  .map(line => line.trim())
+                  .filter(line => Boolean(line))
+                  .join('\n');
+
                 return {
                   $index,
                   $nodeId: crypto.randomUUID().toString(),
@@ -130,8 +142,7 @@ export function getStructureFromWorkflow(
                   env: step.env
                     ? getWorkflowStructureEnv(result, step.env)
                     : {array: []},
-                  // @ts-expect-error TODO: fix type
-                  run: step.run['value'],
+                  run: trimmedExpression,
                 };
               } else {
                 return {

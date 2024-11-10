@@ -221,6 +221,7 @@ export const colors = EditorView.theme(
     },
     '::-webkit-scrollbar': {
       width: '12px',
+      height: '12px',
       backgroundColor: 'transparent',
     },
     '::-webkit-scrollbar-thumb': {

@@ -8,6 +8,10 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./languageservice": {
+      "import": "./dist/languageservice.js",
+      "types": "./dist/languageservice.d.ts"
     }
   },
   "scripts": {
@@ -24,7 +28,9 @@
   "license": "MIT",
   "dependencies": {
     "@actions/expressions": "^0.3.13",
-    "@actions/workflow-parser": "^0.3.13"
+    "@actions/languageservice": "^0.3.13",
+    "@actions/workflow-parser": "^0.3.13",
+    "vscode-languageserver-textdocument": "^1.0.12"
   },
   "devDependencies": {
     "@types/node": "^22.8.5",
