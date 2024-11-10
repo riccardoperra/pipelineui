@@ -1,4 +1,4 @@
-import {i18n} from '@lingui/core';
+import {setupI18n} from '@lingui/core';
 import {MetaProvider, Title} from '@solidjs/meta';
 import {Router} from '@solidjs/router';
 import {FileRoutes} from '@solidjs/start/router';
@@ -11,6 +11,7 @@ import {I18nProvider} from './locales/i18n';
 const {messages: enMessages} = await import('./locales/en.po');
 
 export default function App() {
+  const i18n = setupI18n();
   i18n.loadAndActivate({locale: 'en', messages: enMessages});
 
   return (
