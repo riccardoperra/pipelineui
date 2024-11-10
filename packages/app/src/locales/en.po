@@ -26,6 +26,18 @@ msgstr ""
 msgid "Built with"
 msgstr ""
 
+#: src/components/Editor/Header/Header.tsx:79
+msgid "Cancel"
+msgstr ""
+
+#: src/components/Editor/Header/Header.tsx:155
+msgid "Code"
+msgstr ""
+
+#: src/components/Editor/Header/Header.tsx:75
+msgid "Confirm"
+msgstr ""
+
 #: src/components/Home/Home.tsx:104
 msgid "Create from scratch"
 msgstr ""
@@ -43,8 +55,54 @@ msgstr ""
 msgid "Edit {0}"
 msgstr ""
 
+#: src/components/Editor/StatusBar/StatusBar.tsx:42
+msgid "Errors: {0}, Warnings: {1}"
+msgstr ""
+
+#: src/components/Editor/StatusBar/StatusBar.tsx:71
+#: src/components/Editor/StatusBar/StatusBar.tsx:76
+msgid "Fit to screen"
+msgstr ""
+
+#: src/components/Editor/Header/Header.tsx:57
+msgid "Fork"
+msgstr ""
+
+#: src/components/Editor/Header/Header.tsx:63
+msgid "Forking this source will create a new scratch remotely connected to your profile, that can be modified only by you"
+msgstr ""
+
+#: src/components/Editor/Header/Header.tsx:100
+msgid "Go back"
+msgstr ""
+
+#: src/components/Editor/Header/CurrentUser/CurrentUser.tsx:81
+#: src/components/Home/CurrentUser/CurrentUser.tsx:82
+msgid "Logout"
+msgstr ""
+
+#: src/components/Editor/Header/Header.tsx:161
+msgid "Merge view"
+msgstr ""
+
+#: src/components/Editor/Header/Header.tsx:169
+msgid "Properties"
+msgstr ""
+
+#: src/components/Editor/Header/Header.tsx:139
+msgid "Save"
+msgstr ""
+
 #: src/components/Home/ScratchList/ScratchList.tsx:135
 msgid "Scratch file"
+msgstr ""
+
+#: src/components/Home/CurrentUser/CurrentUser.tsx:49
+msgid "Signup with GitHub"
+msgstr ""
+
+#: src/components/Editor/Header/CurrentUser/CurrentUser.tsx:50
+msgid "Signup with Github."
 msgstr ""
 
 #: src/components/Home/Footer/Footer.tsx:21

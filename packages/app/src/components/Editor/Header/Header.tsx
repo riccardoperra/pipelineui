@@ -16,6 +16,8 @@ import {EditorContext} from '../editor.context';
 import {EditorUiStore} from '../../../store/editor/ui.store';
 import * as styles from './EditorHeader.css';
 import {EditorHeaderCurrentUser} from './CurrentUser/CurrentUser';
+import {useI18n} from '~/locales/i18n';
+import {msg} from '@lingui/macro';
 
 export interface EditorHeaderProps {
   showBack: boolean;
@@ -42,6 +44,7 @@ function EditorHeaderActionButton(
 }
 
 function EditorHeaderForkButton() {
+  const {_} = useI18n();
   const [isOpen, setOpen] = createSignal(false);
   const editorStore = provideState(EditorStore);
   const editorContext = useContext(EditorContext)!;
@@ -51,13 +54,14 @@ function EditorHeaderForkButton() {
       <PopoverTrigger
         as={triggerProps => (
           <Button theme={'primary'} {...triggerProps}>
-            Fork
+            {_(msg`Fork`)}
           </Button>
         )}
       />
       <PopoverContent variant={'bordered'}>
-        Forking this source will create a new scratch remotely connected to your
-        profile, that can be modified only by you.
+        {_(
+          msg`Forking this source will create a new scratch remotely connected to your profile, that can be modified only by you`,
+        )}
         <div>
           <form
             method={'post'}
@@ -68,11 +72,11 @@ function EditorHeaderForkButton() {
             )}
           >
             <Button size={'xs'} theme={'primary'} type={'submit'}>
-              Confirm
+              {_(msg`Confirm`)}
             </Button>
           </form>
           <Button size={'xs'} theme={'secondary'}>
-            Cancel
+            {_(msg`Cancel`)}
           </Button>
         </div>
       </PopoverContent>
@@ -81,6 +85,7 @@ function EditorHeaderForkButton() {
 }
 
 export function EditorHeader(props: EditorHeaderProps) {
+  const {_} = useI18n();
   const editorUi = provideState(EditorUiStore);
   const editorStore = provideState(EditorStore);
   const user = provideState(UserStore);
@@ -92,7 +97,7 @@ export function EditorHeader(props: EditorHeaderProps) {
       <header class={styles.header}>
         <Show when={props.showBack}>
           <IconButton
-            aria-label={'Go back'}
+            aria-label={_(msg`Go back`)}
             size={'xs'}
             theme={'secondary'}
             pill
@@ -131,7 +136,7 @@ export function EditorHeader(props: EditorHeaderProps) {
                       size={'sm'}
                       loading={isUpdating.pending}
                     >
-                      Save
+                      {_(msg`Save`)}
                     </Button>
                   </form>
                 </Show>
@@ -147,13 +152,13 @@ export function EditorHeader(props: EditorHeaderProps) {
           active={editorUi.get.leftPanel === 'code'}
           onClick={() => editorUi.actions.toggleLeftPanel('code')}
         >
-          Code
+          {_(msg`Code`)}
         </EditorHeaderActionButton>
         <EditorHeaderActionButton
           active={editorUi.get.leftPanel === 'merge'}
           onClick={() => editorUi.actions.toggleLeftPanel('merge')}
         >
-          Merge view
+          {_(msg`Merge view`)}
         </EditorHeaderActionButton>
 
         <div class={styles.subHeaderRightContent}>
@@ -161,7 +166,7 @@ export function EditorHeader(props: EditorHeaderProps) {
             active={editorUi.get.rightPanel === 'properties'}
             onClick={() => editorUi.actions.toggleRightPanel('properties')}
           >
-            Properties
+            {_(msg`Properties`)}
           </EditorHeaderActionButton>
         </div>
       </div>
