@@ -1,7 +1,7 @@
 import {provideState} from 'statebuilder';
 import {Match, Show, Switch} from 'solid-js';
 import {JobStepForm} from './JobStepsForm/JobStep/JobStepForm';
-import {PanelGroup} from '~/components/Editor/layout/Panel/Form/PanelGroup';
+import {PanelGroup} from '~/components/Editor/layout1/Panel/Form/PanelGroup';
 import {PanelEditorStore} from './panel-editor.store';
 import {JobForm} from './JobForm/JobForm';
 import {IconButton} from '@codeui/kit';

@@ -1,10 +1,10 @@
-import {FullWidthPanelRow} from '~/components/Editor/layout/Panel/Form/PanelRow';
+import {FullWidthPanelRow} from '~/components/Editor/layout1/Panel/Form/PanelRow';
 import {Checkbox, NumberField, Select, TextArea, TextField} from '@codeui/kit';
 import * as styles from '~/components/Editor/layout/Panel/Form/Form.css';
 import {Match, Switch} from 'solid-js';
 import {createControllableSignal} from '@kobalte/core';
 import type {WorkflowDispatchInput} from '~/store/editor/editor.types';
-import {PanelAccordionItem} from '~/components/Editor/layout/Panel/Form/PanelAccordion/PanelAccordion';
+import {PanelAccordionItem} from '~/components/Editor/layout1/Panel/Form/PanelAccordion/PanelAccordion';
 
 export interface WorkflowDispatchItemFormProps {
   value: WorkflowDispatchInput;

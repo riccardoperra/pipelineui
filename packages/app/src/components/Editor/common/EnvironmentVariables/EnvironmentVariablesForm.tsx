@@ -1,10 +1,10 @@
-import {PanelHeader} from '~/components/Editor/layout/Panel/Form/PanelHeader';
+import {PanelHeader} from '~/components/Editor/layout1/Panel/Form/PanelHeader';
 import {For, Show} from 'solid-js';
 import type {WorkflowStructureEnvItem} from '~/store/editor/editor.types';
-import {PanelPlusButton} from '~/components/Editor/layout/Panel/Form/PanelPlusButton';
+import {PanelPlusButton} from '~/components/Editor/layout1/Panel/Form/PanelPlusButton';
 import {EnvironmentVariablesItemForm} from './EnvironmentVariablesItemForm';
-import {PanelAccordion} from '~/components/Editor/layout/Panel/Form/PanelAccordion/PanelAccordion';
-import {PanelContent} from '~/components/Editor/layout/Panel/Form/PanelContent';
+import {PanelAccordion} from '~/components/Editor/layout1/Panel/Form/PanelAccordion/PanelAccordion';
+import {PanelContent} from '~/components/Editor/layout1/Panel/Form/PanelContent';
 
 export interface EnvironmentVariablesFormProps {
   onAddNew: () => void;
