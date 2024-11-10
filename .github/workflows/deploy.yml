@@ -74,7 +74,7 @@ jobs:
 
       - name: Deploy app to Railway
         run: |
+          find -type f -name '.gitignore' -delete
           cd artifacts/app
           cp server/package.json ./package.json
-          mv server/node_modules server/vendor
           RAILWAY_TOKEN=${{ secrets.RAILWAY_DEPLOY_TOKEN }} pnpm railway up -s pipelineui-server -e ${{env.RAILWAY_ENVIRONMENT}}
