@@ -139,6 +139,7 @@ export function JobStepForm() {
                     <span class={formStyles.inlineInputLabel}>Run</span>
                     <ExpressionEditor
                       code={jobStep()?.run}
+                      showLineNumbers={true}
                       setCode={code => {
                         actions.updateJobStepRun({
                           jobId: selectedJob()!.$nodeId,

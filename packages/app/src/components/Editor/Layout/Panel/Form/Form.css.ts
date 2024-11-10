@@ -13,6 +13,7 @@ export const inlineInputRoot = style({
 
 export const inlineInputLabel = style({
   flex: '1 0 85px !important',
+  fontSize: '14px',
 });
 
 export const panelForm = recipe({
