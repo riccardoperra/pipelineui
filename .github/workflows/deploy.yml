@@ -76,4 +76,6 @@ jobs:
         run: |
           cd artifacts/app
           cp server/package.json ./package.json
+          touch .gitignore
+          touch .dockerignore
           RAILWAY_TOKEN=${{ secrets.RAILWAY_DEPLOY_TOKEN }} pnpm railway up -s pipelineui-server -e ${{env.RAILWAY_ENVIRONMENT}}
