@@ -123,9 +123,9 @@ The user interface has been built with:
 
 ### YAML Editor
 
-- [CodeMirror6](https://codemirror.net/): used to display the YAML editor and merge view. The LSP integration is an
-  adapted fork of [codemirror-languageserver](https://github.com/FurqanSoftware/codemirror-languageserver), which was a
-  good starting point to integrate the GitHub workflow language server. Portion of CodeMirror implementation is present in the [@pipelineui/yaml-editor](./packages/yaml-editor)
+- [CodeMirror6](https://codemirror.net/): used to display the YAML editor and merge view. The LSP integration is a revisited version of [codemirror-languageserver](https://github.com/FurqanSoftware/codemirror-languageserver), which was a
+  good starting point to integrate the GitHub workflow language server.
+  - Portion of CodeMirror implementation is present in the [@pipelineui/yaml-editor](./packages/yaml-editor)
 - [actions/languageservices](https://github.com/actions/languageservices): The language service repo for GitHub
   workflows and expressions. This was used to parse the workflow files and validate them, and enhance the editor code
   through linting and hover-in code documentation.

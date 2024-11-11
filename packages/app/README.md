@@ -18,3 +18,11 @@ Everything you need to build a Solid project, powered by [`solid-start`](https:/
 ### GitHub API
 
 This project uses [ungh](https://github.com/unjs/ungh) from UnJS in order to call GitHub API.
+
+### State Management
+
+This project uses [statebuilder](https://github.com/riccardoperra/statebuilder) to handle local state
+
+### UI Kit
+
+This project uses [@codeui/kit](https://github.com/riccardoperra/codeui) for UI components / design system
