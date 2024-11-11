@@ -21,27 +21,6 @@ by allowing users to visualize, create and update existing CI/CD workflows.
 >
 > Therefore, some features will **undoubtedly be missing** and may be implemented in the future.
 
-## Disclaimer for hackathon entry
-
-This project will be submitted for these two hackathons:
-
-- [SolidHack 2024](https://hack.solidjs.com/)
-- [AppWrite's Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024)
-
-Since they have two different deadlines, development will be subdivided into two branches until the two hackathon ends:
-
-- [main](https://github.com/riccardoperra/pipelineui/tree/main): Source code to be submitted for SolidHack
-- [appwrite](https://github.com/riccardoperra/pipelineui/tree/appwrite): Source code to be submitted for Appwrite Hackathon
-
-Those two branches are linked in a multi-environment railway project which is currently visible to everyone: [Railway Deployment](https://railway.app/project/8e131c67-73c1-4ab6-9fa4-31dfa6c9000e).
-
-GitHub workflow for automated deploy: [deploy.yml](https://github.com/riccardoperra/pipelineui/blob/main/.github/workflows/deploy.yml)
-
-Github environment deployments:
-
-- [Appwrite](https://github.com/riccardoperra/pipelineui/deployments/appwrite)
-- [Production (SolidHack)](https://github.com/riccardoperra/pipelineui/deployments/production)
-
 ## Table of contents
 
 - [Features](#features)
@@ -55,6 +34,7 @@ Github environment deployments:
   - [Backend](#backend)
   - [Other dependencies](#other)
   - [Hosting](#hosting)
+- [Disclaimer for hackathon entry](#disclaimer-for-hackathon-entry)
 
 ## Features
 
@@ -212,3 +192,32 @@ This application is hosted on Railway. Deploy are made via github action CI/CD
 
 - [Workflow file](./.github/workflows/deploy.yml)
 - [See the workflow file inside PipelineUI](https://pipelineui.dev/editor/riccardoperra/pipelineui/main/.github/workflows/deploy.yml)
+
+---
+
+## Disclaimer for hackathon entry
+
+This project will be submitted for these two hackathons:
+
+- [SolidHack 2024](https://hack.solidjs.com/)
+- [AppWrite's Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024)
+
+Since they have two different deadlines, development will be subdivided into two branches until the two hackathon ends:
+
+- [main](https://github.com/riccardoperra/pipelineui/tree/main): Source code to be submitted for SolidHack
+- [appwrite](https://github.com/riccardoperra/pipelineui/tree/appwrite): Source code to be submitted for Appwrite Hackathon
+
+Those two branches are linked in a multi-environment railway project which is currently visible to everyone: [Railway Deployment](https://railway.app/project/8e131c67-73c1-4ab6-9fa4-31dfa6c9000e).
+
+GitHub workflow for automated deploy: [deploy.yml](https://github.com/riccardoperra/pipelineui/blob/main/.github/workflows/deploy.yml)
+
+Github environment deployments:
+
+- [Appwrite](https://github.com/riccardoperra/pipelineui/deployments/appwrite)
+- [Production (SolidHack)](https://github.com/riccardoperra/pipelineui/deployments/production)
+
+---
+
+## LICENSE
+
+MIT © [Riccardo Perra](https://github.com/riccardoperra)
