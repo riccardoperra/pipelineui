@@ -44,7 +44,7 @@ Github environment deployments:
 ## Table of contents
 
 - [Features](#features)
-  - [Available editor features](./packages/app/src/routes/about/supported-workflow-features.mdx)
+  - [Available editor features](./packages/app/src/routes/about/supported-workflow-features.mdx){:target="\_blank"}
 - [Technical info](#-technical-info)
   - [UI](#ui)
   - [GitHub API](#github-api)
