@@ -1,14 +1,10 @@
 {
   "events": {
     "push": {
-      "branches": [
-        "$default-branch"
-      ]
+      "branches": ["$default-branch"]
     },
     "pull_request": {
-      "branches": [
-        "$default-branch"
-      ]
+      "branches": ["$default-branch"]
     }
   },
   "jobs": [
@@ -88,11 +84,7 @@
                   "Key": "node-version",
                   "Value": {
                     "type": 1,
-                    "seq": [
-                      "18.x",
-                      "20.x",
-                      "22.x"
-                    ]
+                    "seq": ["18.x", "20.x", "22.x"]
                   }
                 }
               ]

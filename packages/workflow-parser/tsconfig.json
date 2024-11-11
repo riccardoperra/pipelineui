@@ -1,10 +1,5 @@
 {
-  "include": [
-    "src",
-    "scripts",
-    "test",
-    "workflow-parser/node.ts"
-  ],
+  "include": ["src", "scripts", "test", "workflow-parser/node.ts"],
   "compilerOptions": {
     "module": "esnext",
     "target": "ES2022",

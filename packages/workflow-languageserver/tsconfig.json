@@ -1,13 +1,13 @@
 {
-    "include": ["src", "workflow-parser/node.ts"],
-    "compilerOptions": {
-      "module": "esnext",
-      "target": "ES2022",
-      "esModuleInterop": true,
-      "forceConsistentCasingInFileNames": true,
-      "sourceMap": true,
-      "strict": true,
-      "moduleResolution": "node",
-      "resolveJsonModule": true
-    },
+  "include": ["src", "workflow-parser/node.ts"],
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "ES2022",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   }
+}

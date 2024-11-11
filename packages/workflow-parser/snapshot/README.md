@@ -23,22 +23,25 @@ var trace: TraceWriter;
 
 const result = parseWorkflow(
   {
-    name: "test.yaml",
+    name: 'test.yaml',
     content: `on: push
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - run: echo 'hello'`
+    - run: echo 'hello'`,
   },
-  trace
+  trace,
 );
 ```
 
 `convertWorkflowTemplate` then takes that intermediate representation and converts it to a [`WorkflowTemplate`](./src/model/workflow-template.ts) object, which is a more convenient representation for working with workflows.
 
 ```typescript
-const workflowTemplate = await convertWorkflowTemplate(result.context, result.value);
+const workflowTemplate = await convertWorkflowTemplate(
+  result.context,
+  result.value,
+);
 
 // workflowTemplate.jobs[0].id === "build"
 // workflowTemplate.jobs[0].steps[0].run === "echo 'hello'"
