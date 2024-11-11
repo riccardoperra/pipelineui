@@ -53,7 +53,7 @@ function EditorHeaderForkButton() {
     <Popover open={isOpen()} onOpenChange={setOpen}>
       <PopoverTrigger
         as={triggerProps => (
-          <Button theme={'primary'} {...triggerProps}>
+          <Button theme={'primary'} size={'sm'} {...triggerProps}>
             {_(msg`Fork`)}
           </Button>
         )}

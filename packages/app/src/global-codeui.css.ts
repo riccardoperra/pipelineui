@@ -1,8 +1,10 @@
 import {globalStyle, globalFontFace} from '@vanilla-extract/css';
 import {themeVars} from '@codeui/kit';
 
+import gabaritoFont from '/fonts/Gabarito-VariableFont_wght.ttf?inline';
+
 globalFontFace('Gabarito', {
-  src: 'url(/fonts/Gabarito-VariableFont_wght.ttf)',
+  src: `url(${gabaritoFont})`,
 });
 
 globalStyle('[data-cui-theme=dark] html, body', {

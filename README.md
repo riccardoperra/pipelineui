@@ -15,9 +15,9 @@ by allowing users to visualize, create and update existing CI/CD workflows.
 > and [Appwrite’s Hacktoberfest 2024 Hackathon](https://appwrite.io/blog/post/appwrite-hacktoberfest-hackathon-2024).
 >
 > Although there are some alternative solutions that can help a lot writing workflow files
-> directly from IDE, a core principle to this work was discovering new technologies and apply them for an MVP.
+> directly from IDE, this project mainly is a MVP to discover new technologies
 >
-> The amount of time dedicated is very limited (around ~4 weekends, starting from 1st of October), and the features needed for a complete project are numerous.
+> The amount of time dedicated in this project is very limited, and the features needed for a complete project are numerous.
 > Therefore, some features will **undoubtedly be missing** and may be implemented in the future.
 
 ## Disclaimer for hackathon entry
@@ -34,7 +34,7 @@ Since they have two different deadlines, development will be subdivided into two
 
 Those two branches are linked in a multi-environment railway project which is currently visible to everyone: [Railway Deployment](https://railway.app/project/8e131c67-73c1-4ab6-9fa4-31dfa6c9000e).
 
-GitHub workflow that deploy the app: [deploy.yml](https://github.com/riccardoperra/pipelineui/blob/main/.github/workflows/deploy.yml#L10)
+GitHub workflow that deploy the app: [deploy.yml](https://github.com/riccardoperra/pipelineui/blob/main/.github/workflows/deploy.yml)
 
 Github environment deployments:
 
@@ -44,6 +44,7 @@ Github environment deployments:
 ## Table of contents
 
 - [Features](#features)
+  - [Available editor features](./packages/app/src/routes/about/supported-workflow-features.mdx)
 - [Technical info](#-technical-info)
   - [UI](#ui)
   - [YAML Editor](#yaml-editor)
@@ -88,14 +89,16 @@ Workflow files are persisted into [AppWrite Cloud](https://appwrite.io/) and **a
 PipelineUI is entirely built with [Solid](https://github.com/solidjs/solid) and [SolidStart](https://github.com/solidjs/solid-start)
 with enabled SSR.
 
-The core features of this project can be summarized in a few points:
+The core technical points of this project can be summarized in those bullet items:
 
-- SolidStart server fns calls for session, workflow retrieval and scratches crud
-- SolidStart mutations and server actions
-- Appwrite OAuth integration with SolidStart api routes
-- Appwrite Database integration with SolidStart server function
-- CodeMirror with LSP via web-worker and linter integration
-- MDX routes for /about pages
+- SolidStart SSR with mutations and server functions for session, workflow and scratches crud
+- Language Service Protocol and Linter integration with CodeMirror via web-worker
+- MDX prerendered routes for /about pages
+  - [About](https://pipelineui.dev/about)
+  - [Supported workflow features](https://pipelineui.dev/about/supported-workflow-features)
+- Editor local first state management with statebuilder via plugin, with YAML synchronization
+- Appwrite OAuth integration with SolidStart API routes
+- Appwrite Database integration with SolidStart server functions
 
 ### User interface
 
@@ -143,7 +146,7 @@ The user interface has been built with:
 
 ### Flow diagram
 
-The implemented Flow diagram is very limited and it has been built with solid taking advantage of some other dependencies:
+The implemented Flow diagram is very basic and it has been built with solid taking advantage of some other dependencies:
 
 - [elkjs](https://github.com/kieler/elkjs): ELK layout algorithm, used to calculate the flow item positions
 - [panzoom](https://github.com/anvaka/panzoom): Cross-browser compatible pan and zoom library
@@ -155,25 +158,27 @@ The implemented Flow diagram is very limited and it has been built with solid ta
 
 ### Backend
 
-Backend has been built with [appwrite](https://appwrite.io/), which has been wrapped via solid server functions
-to provide authentication and the database persistence.
+Backend persistence and authentication has been done with [appwrite](https://appwrite.io/).
 
 Used Appwrite features:
 
 - Auth
 - Database
 
-Most of the code is available into [packages/app/lib/server](packages/app/src/lib/server).
+Most of the Appwrite code is available into
+
+- [packages/app/src/lib/server](packages/app/src/lib/server).
+- [packages/app/src/lib/scratchApi.ts](packages/app/src/lib/scratchApi.ts).
+- [packages/app/src/routes/api/oauth.ts](packages/app/src/routes/api/oauth.ts).
 
 ---
 
 ### Other dependencies
 
-This projects also uses some of mine older dependencies that were used to speed up the development.
-These have also been updated to fix the bugs encountered.
+Here's a list of my personal dependencies, which they have been used to be tested and improved during the development.
 
 - [@codeui/kit](https://github.com/riccardoperra/codeui): [CodeImage](https://github.com/riccardoperra/codeimage) design
-  system which wraps Kobalte.
+  system (Kobalte + VanillaExtract)
 - [statebuilder](https://github.com/riccardoperra/statebuilder): Pluggable state management
 - [solid-codemirror](https://github.com/riccardoperra/solid-codemirror): SolidJS adapter for CodeMirror
 

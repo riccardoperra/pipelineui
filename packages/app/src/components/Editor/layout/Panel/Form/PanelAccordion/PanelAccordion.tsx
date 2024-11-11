@@ -31,7 +31,7 @@ export function PanelAccordionItem(props: FlowProps<PanelAccordionItemProps>) {
 
           {props.name}
         </Accordion.Trigger>
-        <IconButton
+        <IconButton<'button'>
           size={'xs'}
           variant={'ghost'}
           theme={'secondary'}

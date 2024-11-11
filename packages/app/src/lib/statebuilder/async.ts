@@ -1,5 +1,18 @@
 import {AccessorWithLatest, createAsync} from '@solidjs/router';
-import {createComputed, createSignal, on, Setter} from 'solid-js';
+import {
+  createComputed,
+  createEffect,
+  createReaction,
+  createRenderEffect,
+  createRoot,
+  createSignal,
+  getOwner,
+  on,
+  onCleanup,
+  Owner,
+  Setter,
+  untrack,
+} from 'solid-js';
 import {create} from 'statebuilder';
 
 export interface AsyncSignalState<T> {
@@ -28,20 +41,31 @@ function makeAsyncSignal<T>(
   },
 ): AsyncSignalState<T | undefined> {
   const asyncState = createAsync(fetcher, options);
+  const [mode, setMode] = createSignal<'auto' | 'manual'>('auto');
   const [signal, setSignal] = createSignal<T | undefined>(
     options?.initialValue,
   );
 
-  createComputed(
-    on(asyncState, latest => {
-      // Sync latest signal retrieved by asyncState in order to be available globally after navigation
-      setSignal(() => latest);
-    }),
-  );
+  createEffect(() => {
+    setSignal(() => asyncState());
+  });
 
-  const state: AsyncSignalState<T | undefined> = Object.assign(signal, {
+  const value = () => {
+    const $mode = mode();
+    if ($mode === 'auto') {
+      return asyncState();
+    }
+    return signal();
+  };
+
+  const set: Setter<T | undefined> = ((arg0: any) => {
+    setMode('manual');
+    setSignal(arg0);
+  }) as Setter<T | undefined>;
+
+  const state: AsyncSignalState<T | undefined> = Object.assign(value, {
     raw: asyncState,
-    set: setSignal,
+    set,
   });
 
   return state;

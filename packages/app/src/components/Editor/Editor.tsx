@@ -1,19 +1,11 @@
 import Resizable from '@corvu/resizable';
-import {
-  createEffect,
-  For,
-  lazy,
-  Match,
-  Show,
-  Suspense,
-  Switch,
-  useContext,
-} from 'solid-js';
+import {lazy, Match, Show, Suspense, Switch} from 'solid-js';
 import {provideState} from 'statebuilder';
-import * as fallbackStyles from '~/ui/components/Fallback.css';
 import {OverlayLoader} from '~/ui/components/Loader/Loader';
 import {EditorStore} from '../../store/editor/editor.store';
 import {EditorUiStore} from '../../store/editor/ui.store';
+import {YamlMergeView} from './CodeEditor/MergeView';
+import {YamlEditorFallback} from './CodeEditor/YamlEditorFallback';
 import {DiagnosticPanel} from './DiagnosticPanel/DiagnosticPanel';
 import * as styles from './Editor.css';
 import {EditorHeader} from './Header/Header';
@@ -24,8 +16,6 @@ import {EditorResizableHandler} from './layout/Resizable/Resizable';
 import {EditorSidebar} from './LeftSidebar/EditorSidebar';
 import {PropertiesPanelEditor} from './Properties/PropertiesPanelEditor';
 import {EditorStatusBar} from './StatusBar/StatusBar';
-import {YamlMergeView} from './CodeEditor/MergeView';
-import {EditorContext} from './editor.context';
 
 const YamlEditor = lazy(() =>
   import('./CodeEditor/YamlEditor').then(m => ({default: m.YamlEditor})),
@@ -43,10 +33,6 @@ export function Editor(props: EditorProps) {
   'use stateprovider';
   const editorUi = provideState(EditorUiStore);
   const editor = provideState(EditorStore);
-
-  createEffect(() => {
-    console.log({props});
-  });
 
   return (
     <div class={styles.wrapper}>
@@ -216,65 +202,6 @@ export function Editor(props: EditorProps) {
       <Suspense>
         <EditorStatusBar />
       </Suspense>
-    </div>
-  );
-}
-
-function YamlEditorFallback() {
-  const editor = useContext(EditorContext);
-  return (
-    <div
-      style={{
-        'margin-top': '12px',
-        display: 'flex',
-        'flex-direction': 'column',
-        gap: '4px',
-      }}
-    >
-      <For each={editor?.source.split('\n')}>
-        {(row, index) => {
-          const match = row.match(/^(\s*)(\S.*)/)!;
-          const leadingWhitespace = match ? match[1] : row;
-          const text = match ? match[2] : null;
-
-          return (
-            <div
-              style={{display: 'flex', 'flex-wrap': 'nowrap', height: '16px'}}
-            >
-              <span
-                class={fallbackStyles.fallback}
-                style={{
-                  'margin-left': '24px',
-                  'margin-right': '16px',
-                  'font-size': '13.5px',
-                  'line-height': '14px',
-                }}
-              >
-                {String(index() + 1).padStart(3, '0')}
-              </span>
-              <span
-                style={{
-                  'font-size': '13.5px',
-                  'line-height': '17px',
-                  'white-space': 'pre-wrap',
-                }}
-              >
-                {leadingWhitespace}
-              </span>
-              <span
-                style={{
-                  'font-size': '13.5px',
-                  'line-height': '17px',
-                  'white-space': 'nowrap',
-                }}
-                class={fallbackStyles.fallback}
-              >
-                {text || leadingWhitespace}
-              </span>
-            </div>
-          );
-        }}
-      </For>
     </div>
   );
 }

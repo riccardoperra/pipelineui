@@ -22,7 +22,7 @@ export function HomeFooter() {
           </A>
         </div>
         <span style={{color: '#ddd'}}>
-          {_(msg`Built with`)}
+          {_(msg`Built with`)}{' '}
           <A class={footerLink} href="https://github.com/solidjs/solid">
             Solid
           </A>{' '}
