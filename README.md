@@ -131,7 +131,11 @@ This project uses [ungh](https://github.com/unjs/ungh) from UnJS in order to cal
 
 ### State Management
 
-This project uses [statebuilder](https://github.com/riccardoperra/statebuilder) to handle local state
+This project uses [statebuilder](https://github.com/riccardoperra/statebuilder) to handle local state.
+
+See some implementations in `store` folder:
+
+- [packages/app/src/store/editor](packages/app/src/store/editor)
 
 ---
 
