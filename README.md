@@ -47,6 +47,8 @@ Github environment deployments:
   - [Available editor features](./packages/app/src/routes/about/supported-workflow-features.mdx)
 - [Technical info](#-technical-info)
   - [UI](#ui)
+  - [GitHub API](#github-api)
+  - [State Management](#state-management)
   - [YAML Editor](#yaml-editor)
   - [Flow diagram](#flow-diagram)
   - [Backend](#backend)
@@ -118,6 +120,18 @@ The user interface has been built with:
 > [Patch file](./patches/@vanilla-extract__vite-plugin@4.0.17.patch)
 >
 > [Custom app config](./packages/app/app.config.ts)
+
+---
+
+### GitHub API
+
+This project uses [ungh](https://github.com/unjs/ungh) from UnJS in order to call GitHub API.
+
+---
+
+### State Management
+
+This project uses [statebuilder](https://github.com/riccardoperra/statebuilder) to handle local state
 
 ---
 
