@@ -6,6 +6,8 @@ import {
 } from './HomeTitle.css';
 import {Icon} from '#ui/components/Icon';
 
+import logo from './logo_for_github_dark.svg';
+
 function Logo() {
   return (
     <svg
@@ -38,7 +40,7 @@ export function HomeTitle() {
   return (
     <div class={mainTitleContainer}>
       <h1 aria-label="PipelineUI - Visual workflow for GitHub">
-        <Logo />
+        <img src={logo} width={246} height={75.05} />
       </h1>
     </div>
   );
