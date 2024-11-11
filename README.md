@@ -83,7 +83,7 @@ If you already have an existing workflow file pushed in your repository, yu can 
 
 If you haven't an existing workflow file, you can create it from scratch (only if you're authenticated)
 
-Workflow files are persisted into [AppWrite Cloud](https://appwrite.io/) and **are publicly readable to everyone that now the shareable link**.
+Workflow files are persisted into [Appwrite Cloud](https://appwrite.io/) and **are publicly readable to everyone that now the shareable link**.
 
 ![Create scratches](./docs/577shots_so.png)
 
