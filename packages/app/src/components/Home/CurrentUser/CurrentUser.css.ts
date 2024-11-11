@@ -14,5 +14,6 @@ export const badge = style({
 });
 
 export const currentUser = style({
-  fontSize: '14px',
+  // TODO: fix this style ordering
+  fontSize: '14px !important',
 });

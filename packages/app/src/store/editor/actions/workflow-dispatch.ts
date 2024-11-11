@@ -30,7 +30,7 @@ export const setWorkflowDispatch =
           workflowDispatch.add(new Pair(new Scalar('inputs'), inputs));
         }
 
-        let {name, ...others} = removeObjectYamlPrivateProperties(data);
+        let {name, ...others} = removeObjectYamlPrivateProperties({...data});
         const inputAtIndex = inputs.items.at(index);
         const input = new YAMLMap<Scalar<string>, unknown>();
         if (!name && fallbackMissingName) {
@@ -47,6 +47,19 @@ export const setWorkflowDispatch =
           return;
         }
         const pair = new Pair(new Scalar(name), input);
+        switch (others.type) {
+          case 'boolean':
+            others.default =
+              others.default === 'true' || others.default === true;
+            break;
+          case 'string':
+            others.default = String(others.default);
+            break;
+          case 'number':
+            others.default = parseInt(others.default, 10);
+            break;
+        }
+
         for (const [key, value] of Object.entries(others)) {
           if (value !== null && value !== undefined) {
             input.set(new Scalar(key), value);

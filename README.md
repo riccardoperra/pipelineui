@@ -134,6 +134,8 @@ This project uses [ungh](https://github.com/unjs/ungh) from UnJS in order to cal
 
 This project uses [statebuilder](https://github.com/riccardoperra/statebuilder) to handle local state.
 
+The editor store uses a command-based approach which granularly update the yaml code imperatively via [yaml](https://www.npmjs.com/package/yaml) package.
+
 See some implementations in `store` folder:
 
 - [packages/app/src/store/editor](packages/app/src/store/editor)

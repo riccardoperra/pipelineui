@@ -122,14 +122,18 @@ export const convertEnvItemFieldToYaml = (
   return value;
 };
 
-export function removeObjectYamlPrivateProperties(object: Record<string, any>) {
+export function removeObjectYamlPrivateProperties<
+  T extends Record<string, any>,
+>(object: T) {
   const clone = structuredClone(object);
   for (const key in clone) {
     if (key[0] === '$') {
       delete clone[key];
     }
   }
-  return clone;
+  return clone as {
+    [K in keyof T]: K extends `$${string}` ? never : T[K];
+  };
 }
 
 export function orderYamlMapItemByKey(

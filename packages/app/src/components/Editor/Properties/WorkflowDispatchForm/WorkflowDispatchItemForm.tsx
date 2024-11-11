@@ -66,23 +66,6 @@ export function WorkflowDispatchItemForm(props: WorkflowDispatchItemFormProps) {
       </FullWidthPanelRow>
 
       <FullWidthPanelRow>
-        <TextArea
-          slotClasses={{
-            root: styles.inlineInputRoot,
-            label: styles.inlineInputLabel,
-          }}
-          options={{
-            autoResize: true,
-          }}
-          size={'sm'}
-          theme={'filled'}
-          label={'Deprecation message'}
-          value={form()?.deprecationMessage}
-          onChange={value => update({deprecationMessage: value})}
-        />
-      </FullWidthPanelRow>
-
-      <FullWidthPanelRow>
         <Select
           aria-label={'Type'}
           options={['string', 'boolean', 'number', 'choice', 'environment']}

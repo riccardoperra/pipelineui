@@ -62,7 +62,8 @@ function EditorHeaderForkButton() {
         {_(
           msg`Forking this source will create a new scratch remotely connected to your profile, that can be modified only by you`,
         )}
-        <div>
+        <div style={{'margin-top': '8px'}}>
+          {/* TODO: fix this inline style */}
           <form
             method={'post'}
             action={createScratchFork.with(
@@ -74,10 +75,15 @@ function EditorHeaderForkButton() {
             <Button size={'xs'} theme={'primary'} type={'submit'}>
               {_(msg`Confirm`)}
             </Button>
+            <Button
+              size={'xs'}
+              theme={'secondary'}
+              type={'button'}
+              onClick={() => setOpen(false)}
+            >
+              {_(msg`Cancel`)}
+            </Button>
           </form>
-          <Button size={'xs'} theme={'secondary'}>
-            {_(msg`Cancel`)}
-          </Button>
         </div>
       </PopoverContent>
     </Popover>
