@@ -55,13 +55,17 @@ export function Home() {
     <Suspense fallback={<OverlayLoader />}>
       <div class={homeLayoutWrapper}>
         <div class={loggedInBar}>
-          <CurrentUserBar user={user() || null} />
+          <Suspense>
+            <CurrentUserBar user={user() || null} />
+          </Suspense>
         </div>
 
         <div class={homeContainer}>
           <HomeTitle />
           <div class={content}>
-            <RepoSearch />
+            <Suspense>
+              <RepoSearch />
+            </Suspense>
 
             <Suspense fallback={<RepoCardFallback />}>
               <Switch>
@@ -90,29 +94,35 @@ export function Home() {
               </Switch>
             </Suspense>
 
-            <Show when={user()}>
-              <div class={choiceSeparator}>Or</div>
+            <Suspense>
+              <Show when={user()}>
+                <div class={choiceSeparator}>Or</div>
 
-              <form action={createScratch.with()} class={form} method={'post'}>
-                <Button
-                  loading={isCreatingScratch.pending}
-                  block
-                  theme={'tertiary'}
-                  type={'submit'}
-                  size={'lg'}
+                <form
+                  action={createScratch.with()}
+                  class={form}
+                  method={'post'}
                 >
-                  {_(msg`Create from scratch`)}
-                </Button>
-              </form>
-            </Show>
+                  <Button
+                    loading={isCreatingScratch.pending}
+                    block
+                    theme={'tertiary'}
+                    type={'submit'}
+                    size={'lg'}
+                  >
+                    {_(msg`Create from scratch`)}
+                  </Button>
+                </form>
+              </Show>
 
-            <Show when={user()}>
-              <div class={choiceSeparator}>
-                {_(msg`Your scratches & forks`)}
-              </div>
+              <Show when={user()}>
+                <div class={choiceSeparator}>
+                  {_(msg`Your scratches & forks`)}
+                </div>
 
-              <ScratchList />
-            </Show>
+                <ScratchList />
+              </Show>
+            </Suspense>
           </div>
 
           <HomeFooter />
