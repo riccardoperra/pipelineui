@@ -18,6 +18,7 @@ by allowing users to visualize, create and update existing CI/CD workflows.
 > directly from IDE, this project mainly is a MVP to discover new technologies
 >
 > The amount of time dedicated in this project is very limited, and the features needed for a complete project are numerous.
+>
 > Therefore, some features will **undoubtedly be missing** and may be implemented in the future.
 
 ## Disclaimer for hackathon entry
@@ -34,7 +35,7 @@ Since they have two different deadlines, development will be subdivided into two
 
 Those two branches are linked in a multi-environment railway project which is currently visible to everyone: [Railway Deployment](https://railway.app/project/8e131c67-73c1-4ab6-9fa4-31dfa6c9000e).
 
-GitHub workflow that deploy the app: [deploy.yml](https://github.com/riccardoperra/pipelineui/blob/main/.github/workflows/deploy.yml)
+GitHub workflow for automated deploy: [deploy.yml](https://github.com/riccardoperra/pipelineui/blob/main/.github/workflows/deploy.yml)
 
 Github environment deployments:
 
@@ -44,7 +45,7 @@ Github environment deployments:
 ## Table of contents
 
 - [Features](#features)
-  - [Available editor features](./packages/app/src/routes/about/supported-workflow-features.mdx){:target="\_blank"}
+  - [Available editor features (External Link)](./packages/app/src/routes/about/supported-workflow-features.mdx)
 - [Technical info](#-technical-info)
   - [UI](#ui)
   - [GitHub API](#github-api)
@@ -67,20 +68,20 @@ Visualize and/or modify your workflow file through a simple UI.
 
 > [!NOTE]
 >
-> [Read here all available editor features](./packages/app/src/routes/about/supported-workflow-features.mdx)
+> [Discover all available editor features](./packages/app/src/routes/about/supported-workflow-features.mdx)
 
 ![Built-in editor](./docs/327shots_so.png)
 
 ### ✅ Search for existing GitHub workflows
 
-What if you already have an existing workflow file pushed in your repository? You can use the built-in search to get all workflows
-of your repository.
+If you already have an existing workflow file pushed in your repository, yu can use the built-in search to retrieve all workflows and
+`fork` them.
 
 ![Search for existing github workflows](./docs/262shots_so.png)
 
 ### ✅ Create your own workflows files
 
-If you haven't an existing workflow file, you can create it from scratch if you're authenticated.
+If you haven't an existing workflow file, you can create it from scratch (only if you're authenticated)
 
 Workflow files are persisted into [AppWrite Cloud](https://appwrite.io/) and **are publicly readable to everyone that now the shareable link**.
 
@@ -94,12 +95,12 @@ with enabled SSR.
 The core technical points of this project can be summarized in those bullet items:
 
 - SolidStart SSR with mutations and server functions for session, workflow and scratches crud
-- Language Service Protocol and Linter integration with CodeMirror via web-worker
 - MDX prerendered routes for /about pages
-  - [About](https://pipelineui.dev/about)
-  - [Supported workflow features](https://pipelineui.dev/about/supported-workflow-features)
-- Editor local first state management with statebuilder via plugin, with YAML synchronization
-- Usage of [Lingui](lingui.dev) for i18n
+  - [pipelineui.dev/about](https://pipelineui.dev/about)
+  - [pipelineui.dev/supported-workflow-features](https://pipelineui.dev/about/supported-workflow-features)
+- Language Service Protocol and linter integration with CodeMirror via web-worker
+- Editor local first state management with [statebuilder](https://github.com/riccardoperra/statebuilder) via plugins
+- Usage of [Lingui](https://lingui.dev) for i18n
 - Appwrite OAuth integration with SolidStart API routes
 - Appwrite Database integration with SolidStart server functions
 

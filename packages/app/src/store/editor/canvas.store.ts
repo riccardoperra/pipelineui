@@ -59,7 +59,6 @@ export const CanvasStore = defineStore<CanvasState>(() => ({
         const instance = _.instance()!;
         const ref = _.ref()!;
         const {x, y, scale} = autocenter(ref);
-        console.log(x, y, scale);
         instance.smoothMoveTo(x, y);
         // instance.smoothZoom(0, 0, scale);
       },
