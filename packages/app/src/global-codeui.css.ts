@@ -1,16 +1,17 @@
 import {globalStyle, globalFontFace} from '@vanilla-extract/css';
 import {themeVars} from '@codeui/kit';
 
-import gabaritoFont from '/fonts/Gabarito-VariableFont_wght.ttf?inline';
+import gabaritoFont from './ui/Gabarito-VariableFont_wght.ttf';
 
 globalFontFace('Gabarito', {
   src: `url(${gabaritoFont})`,
+  fontDisplay: 'swap',
 });
 
 globalStyle('[data-cui-theme=dark] html, body', {
   background: themeVars.accent1,
   color: themeVars.foreground,
-  fontFamily: 'Gabarito',
+  fontFamily: '"Gabarito", "system-ui", "Arial"',
 });
 
 globalStyle('::-webkit-scrollbar', {

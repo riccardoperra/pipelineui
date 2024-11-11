@@ -54,6 +54,7 @@ export default defineConfig({
     },
   },
   server: {
+    compressPublicAssets: true,
     prerender: {
       routes: ['/about', '/about/supported-workflow-features'],
     },

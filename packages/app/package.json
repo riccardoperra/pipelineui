@@ -39,7 +39,6 @@
     "@pipelineui/workflow-languageserver": "workspace:*",
     "@pipelineui/workflow-parser": "workspace:*",
     "@pipelineui/yaml-editor": "workspace:*",
-    "@qualified/codemirror-workspace": "^0.5.0",
     "@solid-primitives/deep": "^0.2.10",
     "@solid-primitives/event-listener": "^2.3.3",
     "@solid-primitives/keyed": "^1.2.3",
