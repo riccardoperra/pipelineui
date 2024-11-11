@@ -126,6 +126,7 @@ See some implementations in `store` folder:
 
 - [CodeMirror6](https://codemirror.net/): used to display the YAML editor and merge view. The LSP integration is a revisited version of [codemirror-languageserver](https://github.com/FurqanSoftware/codemirror-languageserver), which was a
   good starting point to integrate the GitHub workflow language server.
+  - [packages/yaml-editor/src/lsp](https://github.com/riccardoperra/pipelineui/tree/main/packages/yaml-editor/src/lsp)
   - Portion of CodeMirror implementation is present in the [@pipelineui/yaml-editor](./packages/yaml-editor)
 - [actions/languageservices](https://github.com/actions/languageservices): The language service repo for GitHub
   workflows and expressions. This was used to parse the workflow files and validate them, and enhance the editor code
