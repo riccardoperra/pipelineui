@@ -12,14 +12,15 @@ export const scratchList = style({
 export const scratchListItem = style({
   display: 'flex',
   flexDirection: 'row',
-  gap: appTheme.spacing['3'],
+  gap: `${appTheme.spacing['3']} !important`,
   alignItems: 'center',
-  height: '48px',
-  paddingLeft: appTheme.spacing['4'],
-  paddingRight: appTheme.spacing['2'],
+  // TODO: fix style ordering!!!!
+  height: '48px !important',
+  paddingLeft: ` ${appTheme.spacing['4']} !important`,
+  paddingRight: `${appTheme.spacing['2']} !important`,
   textDecoration: 'unset',
-  background: themeVars.accent3,
-  color: themeVars.accent10,
+  background: `${themeVars.accent3} !important`,
+  color: `${themeVars.accent10} !important`,
   position: 'relative',
 });
 
