@@ -97,6 +97,7 @@ The core technical points of this project can be summarized in those bullet item
   - [About](https://pipelineui.dev/about)
   - [Supported workflow features](https://pipelineui.dev/about/supported-workflow-features)
 - Editor local first state management with statebuilder via plugin, with YAML synchronization
+- Usage of [Lingui](lingui.dev) for i18n
 - Appwrite OAuth integration with SolidStart API routes
 - Appwrite Database integration with SolidStart server functions
 
